@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = /home/runner/work/using/using/.
+	fetch = +refs/heads/draft/pre-0:refs/remotes/origin/draft/pre-0
+[branch "draft/pre-0"]
+	remote = origin
+	merge = refs/heads/draft/pre-0
