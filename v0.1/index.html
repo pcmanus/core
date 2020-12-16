@@ -1,294 +1,307 @@
 <!doctype html>
-<script src=/boot.js></script>
+<html data-rendered="true"><head><script src="/boot.js"></script><style>
+      body {
+        background: rgb(6, 15, 47);
+        color: rgb(178, 185, 195);
+        font-size: 18px;
+      }
+
+      main[markdown] {
+        white-space: pre-line;
+        font-family: monospace;
+        max-width: 920px;
+        margin: auto;
+      }
+
+      #view {
+        display: flex;
+        justify-content: center;
+        flex-flow: row nowrap;
+      }
+    </style><script type="module" src="/view-of.js"></script><script type="module" async="" defer="" src="/main.js"></script>
 <title>The @using Directive</title>
 
-<div id=view>
-<main markdown>
-<header>
-  <h1 markdown>The `@using` Directive</h1>
+</head><body><nav class="slices top-left"><a href="/" class="slice">specs.apollo.dev</a><a href="/using/" class="slice">using: The @using Directive</a></nav><div id="view"><div class="toc-placeholder"> </div><ol class="toc"><li data-index-path="1"><a class="toc-link" href="#problem" data-heading-level="2"><span class="a-header-text">Problem</span></a><ol></ol></li><li data-index-path="2"><a class="toc-link" href="#actors" data-heading-level="2"><span class="a-header-text">Actors</span></a><ol><li data-index-path="2.0.1"><a href="#actors-who-may-be-interested-in-the-using-directive" class="toc-link"><p>Actors who may be interested in the <code>@using</code> directive</p>
+</a></li></ol></li><li data-index-path="3"><a class="toc-link" href="#using-within-a-document" data-heading-level="2"><span class="a-header-text"><code>@using</code> within a document</span></a><ol><li data-index-path="3.0.1"><a href="#using-the-using-directive" class="toc-link"><p>Using the <code>@using</code> directive</p>
+</a></li></ol></li><li data-index-path="4"><a class="toc-link" href="#the-using-directive" data-heading-level="2"><span class="a-header-text">The <code>@using</code> directive</span></a><ol><li data-index-path="4.0.1"><a href="#declaration-of-the-using-directive" class="toc-link"><p>Declaration of the <code>@using</code> directive</p>
+</a></li><li data-index-path="4.1"><a class="toc-link" href="#spec" data-heading-level="3"><span class="a-header-text"><code>spec</code></span></a><ol><li data-index-path="4.1.2"><a href="#anatomy-of-a-spec-url" class="toc-link">Basic anatomy of a spec URL</a></li></ol></li><li data-index-path="4.2"><a class="toc-link" href="#prefix" data-heading-level="3"><span class="a-header-text"><code>prefix</code></span></a><ol><li data-index-path="4.2.1"><a href="#using-the-using-directive-with-a-custom-prefix" class="toc-link"><p>Using the <code>@using</code> directive with a custom prefix</p>
+</a></li></ol></li></ol></li><li data-index-path="5"><a class="toc-link" href="#requiring-using-within-a-spec" data-heading-level="2"><span class="a-header-text">Requiring <code>@using</code> within a spec</span></a><ol></ol></li><li data-index-path="6"><a class="toc-link" href="#spec-urls" data-heading-level="2"><span class="a-header-text">Spec URLs</span></a><ol><li data-index-path="6.0.1"><a href="#basic-anatomy-of-a-spec-url" class="toc-link">Basic anatomy of a spec URL</a></li><li data-index-path="6.1"><a class="toc-link" href="#ignore-meaningless-url-components" data-heading-level="3"><span class="a-header-text">Ignore meaningless URL components</span></a><ol><li data-index-path="6.1.2"><a href="#spec-url-ignore-meaningless" class="toc-link">Ignoring meaningless parts of a URL</a></li></ol></li><li data-index-path="6.2"><a class="toc-link" href="#why-is-versioning-in-the-url-not-a-directive-argument" data-heading-level="3"><span class="a-header-text">Why is versioning in the URL, not a directive argument?</span></a><ol></ol></li></ol></li><li data-index-path="7"><a class="toc-link" href="#prefixing" data-heading-level="2"><span class="a-header-text">Prefixing</span></a><ol><li data-index-path="7.0.1"><a href="#using-the-using-directive-with-a-specs-default-prefix" class="toc-link"><p>Using the <code>@using</code> directive with a spec's default prefix</p>
+</a></li><li data-index-path="7.1"><a class="toc-link" href="#elements-which-should-be-prefixed" data-heading-level="3"><span class="a-header-text">Elements which should be prefixed</span></a><ol><li data-index-path="7.1.2"><a href="#Prefixing examples" class="toc-link">Prefixing examples</a></li></ol></li></ol></li><li data-index-path="8"><a class="toc-link" href="#versioning" data-heading-level="2"><span class="a-header-text">Versioning</span></a><ol><li data-index-path="8.0.1"><a href="#examples-of-valid-versions" class="toc-link"><p>Examples of valid versions</p>
+</a></li><li data-index-path="8.1"><a class="toc-link" href="#ordering" data-heading-level="3"><span class="a-header-text">Ordering</span></a><ol></ol></li><li data-index-path="8.2"><a class="toc-link" href="#satisfaction" data-heading-level="3"><span class="a-header-text">Satisfaction</span></a><ol></ol></li><li data-index-path="8.3"><a class="toc-link" href="#referencing-versions-and-activating-implementations" data-heading-level="3"><span class="a-header-text">Referencing versions and activating implementations</span></a><ol></ol></li><li data-index-path="8.4"><a class="toc-link" href="#backus-naur-form-for-versions-and-version-tags" data-heading-level="3"><span class="a-header-text">Backus-Naur Form for versions and version tags</span></a><ol><li data-index-path="8.4.1"><a href="#bnf-grammar-for-semver-specifiers" class="toc-link"><p>BNF grammar for SemVer specifiers</p>
+</a></li></ol></li></ol></li><li data-index-path="9"><a class="toc-link" href="#processing-schemas" data-heading-level="2"><span class="a-header-text">Processing Schemas</span></a><ol><li data-index-path="9.0.1"><a href="#example-processing-pipeline" class="toc-link"><p>Example processing pipeline</p>
+</a></li></ol></li><li data-index-path="10"><a class="toc-link" href="#validations" data-heading-level="2"><span class="a-header-text">Validations</span></a><ol><li data-index-path="10.1"><a class="toc-link" href="#prefix-uniqueness" data-heading-level="3"><span class="a-header-text">Prefix Uniqueness</span></a><ol><li data-index-path="10.1.1"><a href="#Example of unique prefixes" class="toc-link">Example of unique prefixes</a></li><li data-index-path="10.1.2"><a href="#Explicit prefixes allow multiple versions of the same spec to coexist within a Document" class="toc-link">Explicit prefixes allow multiple versions of the same spec to coexist within a Document</a></li><li data-index-path="10.1.3"><a href="#Counter-example of non-unique prefixes with multiple versions of the same spec" class="toc-link">Counter-example of non-unique prefixes with multiple versions of the same spec</a></li><li data-index-path="10.1.4"><a href="#Counter-example of non-unique prefixes" class="toc-link">Counter-example of non-unique prefixes</a></li></ol></li></ol></li></ol>
+<main><header>
+  <h1><p>The <code>@using</code> Directive</p></h1>
   <h2>for declaring specifications used by a schema</h2>
 
-  <table class=spec-md>
-    <tr>
+  <table class="spec-md">
+    <tbody><tr>
       <td>status</td>
-      <td id=spec-md-status>Draft</dd>
-    </tr>
+      <td id="spec-md-status">Draft
+    </td></tr>
     <tr>
       <td>version</td>
-      <td id=spec-md-version>0.1</dd>
-    </tr>
+      <td id="spec-md-version">0.1
+    </td></tr>
     <tr>
       <td>authors</td>
-      <td id=spec-md-authors>
-        <ul class=spec-authors-list>
-          <li><a rel=author href=mailto:ashi@apollographql.com>Ashi Krishnan</a>
-        </ul>
+      <td id="spec-md-authors">
+        <ul class="spec-authors-list">
+          <li><a rel="author" href="mailto:ashi@apollographql.com">Ashi Krishnan</a>
+        </li></ul>
       </td>
     </tr>
-  </table>
+  </tbody></table>
 </header>
-
-## Problem
-
-[GraphQL](https://spec.graphql.org/) provides extension points for user-defined behavior and metadata. These mainly come in the form of new directives, but specifications which build on GraphQL may in principle introduce object types, input objects, scalars, enums, interfaces, and unions as well.
-
-[GraphQL schema documents](https://spec.graphql.org/June2018/#sec-Type-System) do not provide a canonical way to declare the use of specs beyond GraphQL itself. Currently, this information is derived from context, or through some explicit, out-of-document parameter provided to tooling. As a consequence, given only the text of a GraphQL document, there is no reliable way to discern what specifications—and importantly, what version of those specifications—the document conforms to.
-
-This specification provides a solution in the form of a single new directive—the `@using` directive. This directive allows spec authors, schema authors, and schema processors to come to an agreement on which specifications a schema document is using.
-
-## Actors
-
-```mermaid
-#::[Actors who may be interested in the `@using` directive]
-graph TB
-  author("👩🏽‍💻 🤖  &nbsp;Author")-->schema(["📄  Schema"])
-  schema-->proc("🤖 &nbsp;Processor")
-  schema-->reader("👩🏽‍💻  Reader")
-  proc-->output(["📄  Output Schema"])
-```
-
-- **Authors (either human or machine)** write one or more `@using` directives into a schema document to declare that the schema conforms to some set of specifications
-- **Machine processors** read the `@using` directives and compare them to a list of supported specs, activating the spec-mandated appropriate behaviors. Processors generally *pass through* schema elements they do not understand.
-- **Human readers** see the `@using` directives and can follow the URLs to the specification, receiving an explanation of the requirements of the specification and what new directives, types, and other schema objects are available within the document.
-
-## `@using` within a document
-
-The `@using` directive is applied to `schema` declarations to declare that the schema uses a particular spec. For example,
-
-```graphql
-#::[Using the `@using` directive]
-schema @using(spec: "https://spec.example.com/example/v1.0") {
-  query: Query
-}
-```
-
-## The `@using` directive
-
-```graphql
-#::[Declaration of the `@using` directive]
-directive @using(spec: String!, prefix: String)
-  repeatable on SCHEMA
-```
-
-Documents **must** include a definition for the `@using` directive. The provided definition does not have to match the above definition exactly. Instead, it must be *compatible*. A conforming definition may:
-- **Omit optional arguments** if they are never used in the document.
-- **Introduce new directive locations**, the behavior of which is unspecified here.
-- **Introduce new arguments.** New arguments **should** be prefixed, e.g. `example_feature: Bool`. The prefix **should** be the prefix of a spec referenced with this or another `@using` directive within the document.
-
-### `spec`
-
-A URL identifying the spec. When viewed, the URL **should** provide the content of the appropriate version of the specification in some human-readable form. In short, a human reader should be able to click the link and go to the docs for the version in use. It is not required that the *content* be machine-readable in any particular way.
-
-<figure>
+      <h2>
+        <a name="problem" class="a-header" href="#problem" data-heading-level="2"><span class="a-header-text">Problem</span></a>
+      </h2><p><a href="https://spec.graphql.org/">GraphQL</a> provides extension points for user-defined behavior and metadata. These mainly come in the form of new directives, but specifications which build on GraphQL may in principle introduce object types, input objects, scalars, enums, interfaces, and unions as well.</p><p><a href="https://spec.graphql.org/June2018/#sec-Type-System">GraphQL schema documents</a> do not provide a canonical way to declare the use of specs beyond GraphQL itself. Currently, this information is derived from context, or through some explicit, out-of-document parameter provided to tooling. As a consequence, given only the text of a GraphQL document, there is no reliable way to discern what specifications—and importantly, what version of those specifications—the document conforms to.</p><p>This specification provides a solution in the form of a single new directive—the <code>@using</code> directive. This directive allows spec authors, schema authors, and schema processors to come to an agreement on which specifications a schema document is using.</p><h2>
+        <a name="actors" class="a-header" href="#actors" data-heading-level="2"><span class="a-header-text">Actors</span></a>
+      </h2><figure id="actors-who-may-be-interested-in-the-using-directive">
+        <figcaption><a name="actors-who-may-be-interested-in-the-using-directive" href="#actors-who-may-be-interested-in-the-using-directive" class="a-header figure "><p>Actors who may be interested in the <code>@using</code> directive</p>
+</a></figcaption>
+        <div id="actors-who-may-be-interested-in-the-using-directive_diagram" class="mermaid " data-processed="true"><svg id="mermaid-1608152047972" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="350" style="max-width: 304.90625px;" viewBox="0 0 304.90625 350"><style>#mermaid-1608152047972{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#ccc;}#mermaid-1608152047972 .error-icon{fill:#a44141;}#mermaid-1608152047972 .error-text{fill:#ddd;stroke:#ddd;}#mermaid-1608152047972 .edge-thickness-normal{stroke-width:2px;}#mermaid-1608152047972 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1608152047972 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1608152047972 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1608152047972 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1608152047972 .marker{fill:lightgrey;}#mermaid-1608152047972 .marker.cross{stroke:lightgrey;}#mermaid-1608152047972 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1608152047972 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#ccc;}#mermaid-1608152047972 .label text{fill:#ccc;}#mermaid-1608152047972 .node rect,#mermaid-1608152047972 .node circle,#mermaid-1608152047972 .node ellipse,#mermaid-1608152047972 .node polygon,#mermaid-1608152047972 .node path{fill:#1f2020;stroke:#81B1DB;stroke-width:1px;}#mermaid-1608152047972 .node .label{text-align:center;}#mermaid-1608152047972 .node.clickable{cursor:pointer;}#mermaid-1608152047972 .arrowheadPath{fill:lightgrey;}#mermaid-1608152047972 .edgePath .path{stroke:lightgrey;stroke-width:1.5px;}#mermaid-1608152047972 .flowchart-link{stroke:lightgrey;fill:none;}#mermaid-1608152047972 .edgeLabel{background-color:hsl(0,0%,34.4117647059%);text-align:center;}#mermaid-1608152047972 .edgeLabel rect{opacity:0.5;background-color:hsl(0,0%,34.4117647059%);fill:hsl(0,0%,34.4117647059%);}#mermaid-1608152047972 .cluster rect{fill:hsl(180,1.5873015873%,28.3529411765%);stroke:rgba(255,255,255,0.25);stroke-width:1px;}#mermaid-1608152047972 .cluster text{fill:#F9FFFE;}#mermaid-1608152047972 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(20,1.5873015873%,12.3529411765%);border:1px solid rgba(255,255,255,0.25);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1608152047972:root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}#mermaid-1608152047972 flowchart{fill:apa;}</style><g><g class="output"><g class="clusters"></g><g class="edgePaths"><g class="edgePath LS-author LE-schema" id="L-author-schema" style="opacity: 1;"><path class="path" d="M170.1171875,54L170.1171875,79L170.1171875,104" marker-end="url(#arrowhead18)" style="fill:none"></path><defs><marker id="arrowhead18" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowheadPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker></defs></g><g class="edgePath LS-schema LE-proc" id="L-schema-proc" style="opacity: 1;"><path class="path" d="M132.39404296875,150L91.390625,175L91.390625,200" marker-end="url(#arrowhead19)" style="fill:none"></path><defs><marker id="arrowhead19" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowheadPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker></defs></g><g class="edgePath LS-schema LE-reader" id="L-schema-reader" style="opacity: 1;"><path class="path" d="M207.84033203125,150L248.84375,175L248.84375,200" marker-end="url(#arrowhead20)" style="fill:none"></path><defs><marker id="arrowhead20" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowheadPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker></defs></g><g class="edgePath LS-proc LE-output" id="L-proc-output" style="opacity: 1;"><path class="path" d="M91.390625,246L91.390625,271L91.390625,296" marker-end="url(#arrowhead21)" style="fill:none"></path><defs><marker id="arrowhead21" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowheadPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker></defs></g></g><g class="edgeLabels"><g class="edgeLabel" transform="" style="opacity: 1;"><g transform="translate(0,0)" class="label"><rect rx="0" ry="0" width="0" height="0"></rect><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;"><span id="L-L-author-schema" class="edgeLabel L-LS-author' L-LE-schema"></span></div></foreignObject></g></g><g class="edgeLabel" transform="" style="opacity: 1;"><g transform="translate(0,0)" class="label"><rect rx="0" ry="0" width="0" height="0"></rect><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;"><span id="L-L-schema-proc" class="edgeLabel L-LS-schema' L-LE-proc"></span></div></foreignObject></g></g><g class="edgeLabel" transform="" style="opacity: 1;"><g transform="translate(0,0)" class="label"><rect rx="0" ry="0" width="0" height="0"></rect><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;"><span id="L-L-schema-reader" class="edgeLabel L-LS-schema' L-LE-reader"></span></div></foreignObject></g></g><g class="edgeLabel" transform="" style="opacity: 1;"><g transform="translate(0,0)" class="label"><rect rx="0" ry="0" width="0" height="0"></rect><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;"><span id="L-L-proc-output" class="edgeLabel L-LS-proc' L-LE-output"></span></div></foreignObject></g></g></g><g class="nodes"><g class="node default" id="flowchart-author-8" transform="translate(170.1171875,31)" style="opacity: 1;"><rect rx="5" ry="5" x="-62.265625" y="-23" width="124.53125" height="46" class="label-container"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-52.265625,-13)"><foreignObject width="104.53125" height="26"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;">👩🏽‍💻 🤖  &nbsp;Author</div></foreignObject></g></g></g><g class="node default" id="flowchart-schema-9" transform="translate(170.1171875,127)" style="opacity: 1;"><rect rx="23" ry="23" x="-56.046875" y="-23" width="112.09375" height="46" class="label-container"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-40.296875,-13)"><foreignObject width="80.59375" height="26"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;">📄  Schema</div></foreignObject></g></g></g><g class="node default" id="flowchart-proc-11" transform="translate(91.390625,223)" style="opacity: 1;"><rect rx="5" ry="5" x="-59.390625" y="-23" width="118.78125" height="46" class="label-container"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-49.390625,-13)"><foreignObject width="98.78125" height="26"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;">🤖 &nbsp;Processor</div></foreignObject></g></g></g><g class="node default" id="flowchart-reader-13" transform="translate(248.84375,223)" style="opacity: 1;"><rect rx="5" ry="5" x="-48.0625" y="-23" width="96.125" height="46" class="label-container"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-38.0625,-13)"><foreignObject width="76.125" height="26"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;">👩🏽‍💻  Reader</div></foreignObject></g></g></g><g class="node default" id="flowchart-output-15" transform="translate(91.390625,319)" style="opacity: 1;"><rect rx="23" ry="23" x="-83.390625" y="-23" width="166.78125" height="46" class="label-container"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-67.640625,-13)"><foreignObject width="135.28125" height="26"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;">📄  Output Schema</div></foreignObject></g></g></g></g></g></g></svg></div>
+      </figure><ul>
+<li><strong>Authors (either human or machine)</strong> write one or more <code>@using</code> directives into a schema document to declare that the schema conforms to some set of specifications</li>
+<li><strong>Machine processors</strong> read the <code>@using</code> directives and compare them to a list of supported specs, activating the spec-mandated appropriate behaviors. Processors generally <em>pass through</em> schema elements they do not understand.</li>
+<li><strong>Human readers</strong> see the <code>@using</code> directives and can follow the URLs to the specification, receiving an explanation of the requirements of the specification and what new directives, types, and other schema objects are available within the document.</li>
+</ul><h2>
+        <a name="using-within-a-document" class="a-header" href="#using-within-a-document" data-heading-level="2"><span class="a-header-text"><code>@using</code> within a document</span></a>
+      </h2><p>The <code>@using</code> directive is applied to <code>schema</code> declarations to declare that the schema uses a particular spec. For example,</p><figure id="using-the-using-directive">
+        <figcaption><a name="using-the-using-directive" href="#using-the-using-directive" class="a-header code "><p>Using the <code>@using</code> directive</p>
+</a></figcaption>
+        <pre class="  language-graphql"><code class="  language-graphql"><span class="token keyword">schema</span> <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1.0"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span></code></pre>
+      </figure><h2>
+        <a name="the-using-directive" class="a-header" href="#the-using-directive" data-heading-level="2"><span class="a-header-text">The <code>@using</code> directive</span></a>
+      </h2><figure id="declaration-of-the-using-directive">
+        <figcaption><a name="declaration-of-the-using-directive" href="#declaration-of-the-using-directive" class="a-header code "><p>Declaration of the <code>@using</code> directive</p>
+</a></figcaption>
+        <pre class="  language-graphql"><code class="  language-graphql"><span class="token keyword">directive</span> <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> String<span class="token operator">!</span><span class="token punctuation">,</span> <span class="token attr-name">prefix</span><span class="token punctuation">:</span> String<span class="token punctuation">)</span>
+  <span class="token keyword">repeatable</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span></code></pre>
+      </figure><p>Documents <strong>must</strong> include a definition for the <code>@using</code> directive. The provided definition does not have to match the above definition exactly. Instead, it must be <em>compatible</em>. A conforming definition may:</p><ul>
+<li><strong>Omit optional arguments</strong> if they are never used in the document.</li>
+<li><strong>Introduce new directive locations</strong>, the behavior of which is unspecified here.</li>
+<li><strong>Introduce new arguments.</strong> New arguments <strong>should</strong> be prefixed, e.g. <code>example_feature: Bool</code>. The prefix <strong>should</strong> be the prefix of a spec referenced with this or another <code>@using</code> directive within the document.</li>
+</ul><h3>
+        <a name="spec" class="a-header" href="#spec" data-heading-level="3"><span class="a-header-text"><code>spec</code></span></a>
+      </h3><p>A URL identifying the spec. When viewed, the URL <strong>should</strong> provide the content of the appropriate version of the specification in some human-readable form. In short, a human reader should be able to click the link and go to the docs for the version in use. It is not required that the <em>content</em> be machine-readable in any particular way.</p><figure>
   <figcaption>
-    <a name=anatomy-of-a-spec-url href=#anatomy-of-a-spec-url class=a-header>Basic anatomy of a spec URL</a>
+    <a name="anatomy-of-a-spec-url" href="#anatomy-of-a-spec-url" class="a-header">Basic anatomy of a spec URL</a>
   </figcaption>  
-  <code class=anatomy>
-    <span class=pink style='--depth: 2'>http://spec.example.com/a/b/c/<span>exampleSpec<aside>prefix</aside></span><aside>
+  <code class="anatomy">
+    <span class="pink" style="--depth: 2">http://spec.example.com/a/b/c/<span>exampleSpec<aside>prefix</aside></span><aside>
       identity
-    </aside></span>/<span style='--depth: 2' class=green>v1<aside>version</aside></span>
+    </aside></span>/<span style="--depth: 2" class="green">v1<aside>version</aside></span>
   </code>
-</figure>
+</figure><p>Spec URLs contain information about the spec's <a href="#prefixing">prefix</a> and <a href="#versioning">version</a>, and should be generated and processed in accordance with the <a href="#spec-urls">requirements on the structure of spec URLs</a>.</p><h3>
+        <a name="prefix" class="a-header" href="#prefix" data-heading-level="3"><span class="a-header-text"><code>prefix</code></span></a>
+      </h3><p>Change the <a href="#prefixing">prefix</a> for schema elements from this specification.</p><p>When a <code>prefix</code> is provided, processors <strong>must</strong> configure the resulting implementation to replace the default prefix on the names of all <a href="#elements-which-should-be-prefixed">prefixed schema elements</a> with the specified prefix.</p><figure id="using-the-using-directive-with-a-custom-prefix">
+        <figcaption><a name="using-the-using-directive-with-a-custom-prefix" href="#using-the-using-directive-with-a-custom-prefix" class="a-header code "><p>Using the <code>@using</code> directive with a custom prefix</p>
+</a></figcaption>
+        <pre class="  language-graphql"><code class="  language-graphql"><span class="token keyword">schema</span> <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1"</span><span class="token punctuation">,</span> <span class="token attr-name">prefix</span><span class="token punctuation">:</span> <span class="token string">"eg"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
 
-Spec URLs contain information about the spec's [prefix](#prefixing) and [version](#versioning), and should be generated and processed in accordance with the [requirements on the structure of spec URLs](#spec-urls).
+<span class="token keyword">type</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+  <span class="token comment"># Specifying `prefix: "eg"` transforms @example_someDirective from</span>
+  <span class="token comment"># the example spec into @eg_someDirective</span>
+  <span class="token attr-name">name</span><span class="token punctuation">:</span> String <span class="token directive function">@eg_someDirective</span>
+<span class="token punctuation">}</span>
 
-### `prefix`
+<span class="token comment"># Prefix transformation must also be applied to definitions pulled in from</span>
+<span class="token comment"># specifications.</span>
+<span class="token keyword">directive</span> <span class="token directive function">@eg_someDirective</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span></code></pre>
+      </figure><p>This argument has no effect on specs which do not introduce prefixed schema elements.</p><h2>
+        <a name="requiring-using-within-a-spec" class="a-header" href="#requiring-using-within-a-spec" data-heading-level="2"><span class="a-header-text">Requiring <code>@using</code> within a spec</span></a>
+      </h2><p>Specifications <strong>may</strong> include the following language to instruct schema authors to use <code>@using</code> to indicate documents which are intended to conform to the specification:</p><blockquote>
+<p>SPEC_NAME schema documents <strong>must</strong>/<strong>should</strong>/<strong>may</strong> have a <code>schema</code> declaration with a <a href="/using/drafts/pre-0"><code>@using</code> directive</a>
+and the specification URL <code>SPEC_URL</code>:</p>
 
-Change the [prefix](#prefixing) for schema elements from this specification.
+      <figure id="code">
+        
+        <pre class="  language-graphql"><code class="  language-graphql"><span class="token keyword">schema</span> <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token constant">SPEC_URL</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span></code></pre>
+      </figure>
+    </blockquote><p><code>SPEC_NAME</code> and <code>SPEC_URL</code> should be replaced with the names and URLs for the specification. For example:</p><blockquote>
+<p>Example Spec schema documents <strong>must</strong> have a <code>schema</code> declaration with a <a href="/using/drafts/pre-0"><code>@using</code> directive</a>
+and the specification URL <code>https://specs.example.com/example/v1</code>:</p>
 
-When a `prefix` is provided, processors **must** configure the resulting implementation to replace the default prefix on the names of all [prefixed schema elements](#elements-which-should-be-prefixed) with the specified prefix.
-
-```graphql
-#::[Using the `@using` directive with a custom prefix]
-schema @using(spec: "https://spec.example.com/example/v1", prefix: "eg") {
-  query: Query
-}
-
-type User {
-  # Specifying `prefix: "eg"` transforms @example_someDirective from
-  # the example spec into @eg_someDirective
-  name: String @eg_someDirective
-}
-
-# Prefix transformation must also be applied to definitions pulled in from
-# specifications.
-directive @eg_someDirective on FIELD
-```
-
-This argument has no effect on specs which do not introduce prefixed schema elements.
-
-## Requiring `@using` within a spec
-
-Specifications **may** include the following language to instruct schema authors to use `@using` to indicate documents which are intended to conform to the specification:
-
-> SPEC_NAME schema documents **must**/**should**/**may** have a `schema` declaration with a [`@using` directive](/using/drafts/pre-0)
-> and the specification URL `SPEC_URL`:
->
-> ```graphql
-> schema @using(spec: SPEC_URL) {
->   query: Query
-> }
-> ```
-
-`SPEC_NAME` and `SPEC_URL` should be replaced with the names and URLs for the specification. For example:
-
-> Example Spec schema documents **must** have a `schema` declaration with a [`@using` directive](/using/drafts/pre-0)
-> and the specification URL `https://specs.example.com/example/v1`:
->
-> ```graphql
-> schema @using(spec: "https://specs.example.com/example/v1") {
->   query: Query
-> }
-> ```
-
-## Spec URLs
-
-Spec URLs serve two main purposes:
-  - Directing human readers to documentation about the specification(s) in use.
-  - Providing tools with information about the specs in use, along with enough information to select and invoke an implementation
-  
-Spec URLs **should** be [RFC 3986 URLs](https://tools.ietf.org/html/rfc3986). When viewed, the URL **should** provide the content of the selected version of the specification in some human-readable form; a human reader should be able to click the link and go to the correct version of the docs.
-
-Although they are not prohibited from doing so, it's assumed that processors will not load the content of spec URLs. Published specifications are not required to be machine-readable, and [this spec](.) places no requirements on the structure or syntax of the content to be found there.
-
-There are, however, requirements on the structure of the URL itself:
-
-<figure>
+      <figure id="code-1">
+        
+        <pre class="  language-graphql"><code class="  language-graphql"><span class="token keyword">schema</span> <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/example/v1"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span></code></pre>
+      </figure>
+    </blockquote><h2>
+        <a name="spec-urls" class="a-header" href="#spec-urls" data-heading-level="2"><span class="a-header-text">Spec URLs</span></a>
+      </h2><p>Spec URLs serve two main purposes:</p><ul>
+<li>Directing human readers to documentation about the specification(s) in use.</li>
+<li>Providing tools with information about the specs in use, along with enough information to select and invoke an implementation</li>
+</ul><p>Spec URLs <strong>should</strong> be <a href="https://tools.ietf.org/html/rfc3986">RFC 3986 URLs</a>. When viewed, the URL <strong>should</strong> provide the content of the selected version of the specification in some human-readable form; a human reader should be able to click the link and go to the correct version of the docs.</p><p>Although they are not prohibited from doing so, it's assumed that processors will not load the content of spec URLs. Published specifications are not required to be machine-readable, and <a href=".">this spec</a> places no requirements on the structure or syntax of the content to be found there.</p><p>There are, however, requirements on the structure of the URL itself:</p><figure>
   <figcaption>
-    <a name=basic-anatomy-of-a-spec-url href=#basic-anatomy-of-a-spec-url class=a-header>Basic anatomy of a spec URL</a>
+    <a name="basic-anatomy-of-a-spec-url" href="#basic-anatomy-of-a-spec-url" class="a-header">Basic anatomy of a spec URL</a>
   </figcaption>  
-  <code class=anatomy>
-    <span class=pink style='--depth: 2'>https://spec.example.com/a/b/c/<span>exampleSpec<aside>prefix</aside></span><aside>
+  <code class="anatomy">
+    <span class="pink" style="--depth: 2">https://spec.example.com/a/b/c/<span>exampleSpec<aside>prefix</aside></span><aside>
       identity
-    </aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span>
+    </aside></span>/<span style="--depth: 2" class="green">v1.0<aside>version</aside></span>
   </code>
-</figure>
-
-The final two segments of the URL's [path](https://tools.ietf.org/html/rfc3986#section-3.3) **should** contain the spec's [default prefix](#prefix) and a [version tag](#versioning). The content of the URL up to and including the prefix—but excluding the version tag and trailing `/`—is the spec's *identity*. For the above example,
-<dl>
-  <dt markdown>`identity: "https://spec.example.com/a/b/c/exampleSpec"`</dt>
+</figure><p>The final two segments of the URL's <a href="https://tools.ietf.org/html/rfc3986#section-3.3">path</a> <strong>should</strong> contain the spec's <a href="#prefix">default prefix</a> and a <a href="#versioning">version tag</a>. The content of the URL up to and including the prefix—but excluding the version tag and trailing <code>/</code>—is the spec's <em>identity</em>. For the above example,</p><dl>
+  <dt><p><code>identity: "https://spec.example.com/a/b/c/exampleSpec"</code></p></dt>
   <dd>A global identifier for the spec. Processors can treat this as an opaque string identifying the spec (but not the version of the spec) for purposes of selecting an appropriate implementation.</dd>
-  <dt markdown>`prefix: "exampleSpec"`</dt>
-  <dd markdown>The spec's default prefix for purposes of [prefixing](#prefixing) schema elements it defines or extends. URLs for specs which do not employ prefixing will still be interpreted as specifying a default prefix; the default prefix will simply have no effect on implementation behavior.</dd>
-  <dt markdown>`version: "v1.0"`</dt>
-  <dd markdown>The tag for the [version](#versioning) of the spec used to author the document. Processors **must** select an implementation of the spec which can [satisfy](#satisfaction) the specified version.</dd>
-</dl>
-
-The version tag **must** satisfy the [BNF grammar for `‹version tag›`](#backus-naur-form-for-versions-and-version-tags).
-
-### Ignore meaningless URL components
-
-When extracting the URL's `prefix` and `version`, processors **must** ignore any url components which are not assigned a meaning. This spec assigns meaning to the final two components of the [path](https://tools.ietf.org/html/rfc3986#section-3.3). Other URL components—particularly query strings and fragments, if present—**must** be ignored for the purposes of extracting the `prefix` and `version`.
-
-<figure>
+  <dt><p><code>prefix: "exampleSpec"</code></p></dt>
+  <dd><p>The spec's default prefix for purposes of <a href="#prefixing">prefixing</a> schema elements it defines or extends. URLs for specs which do not employ prefixing will still be interpreted as specifying a default prefix; the default prefix will simply have no effect on implementation behavior.</p></dd>
+  <dt><p><code>version: "v1.0"</code></p></dt>
+  <dd><p>The tag for the <a href="#versioning">version</a> of the spec used to author the document. Processors <strong>must</strong> select an implementation of the spec which can <a href="#satisfaction">satisfy</a> the specified version.</p></dd>
+</dl><p>The version tag <strong>must</strong> satisfy the <a href="#backus-naur-form-for-versions-and-version-tags">BNF grammar for <code>‹version tag›</code></a>.</p><h3>
+        <a name="ignore-meaningless-url-components" class="a-header" href="#ignore-meaningless-url-components" data-heading-level="3"><span class="a-header-text">Ignore meaningless URL components</span></a>
+      </h3><p>When extracting the URL's <code>prefix</code> and <code>version</code>, processors <strong>must</strong> ignore any url components which are not assigned a meaning. This spec assigns meaning to the final two components of the <a href="https://tools.ietf.org/html/rfc3986#section-3.3">path</a>. Other URL components—particularly query strings and fragments, if present—<strong>must</strong> be ignored for the purposes of extracting the <code>prefix</code> and <code>version</code>.</p><figure>
   <figcaption>
-    <a name=spec-url-ignore-meaningless href=#spec-url-ignore-meaningless class=a-header>Ignoring meaningless parts of a URL</a>
+    <a name="spec-url-ignore-meaningless" href="#spec-url-ignore-meaningless" class="a-header">Ignoring meaningless parts of a URL</a>
   </figcaption>  
-  <code class=anatomy>
-    <span class=pink style='--depth: 2'>https://example.com/<span>exampleSpec<aside>prefix</aside></span><aside>
+  <code class="anatomy">
+    <span class="pink" style="--depth: 2">https://example.com/<span>exampleSpec<aside>prefix</aside></span><aside>
       identity
-    </aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span><span class=grey>?key=val&k2=v2#fragment<aside>ignored</aside></span>
+    </aside></span>/<span style="--depth: 2" class="green">v1.0<aside>version</aside></span><span class="grey">?key=val&amp;k2=v2#fragment<aside>ignored</aside></span>
   </code>
 </figure>
+      <h3>
+        <a name="why-is-versioning-in-the-url-not-a-directive-argument" class="a-header" href="#why-is-versioning-in-the-url-not-a-directive-argument" data-heading-level="3"><span class="a-header-text">Why is versioning in the URL, not a directive argument?</span></a>
+      </h3><p>The version is in the URL because when a human reader visits the URL, we would like them to be taken to the documentation for the <em>version of the specification in use by this document</em>. Many text editors will turn URLs into hyperlinks, and it's highly desirable that clicking the link takes the user to the correct version of the docs. Putting the version information in a separate argument to the <code>@using</code> directive would require this.</p><h2>
+        <a name="prefixing" class="a-header" href="#prefixing" data-heading-level="2"><span class="a-header-text">Prefixing</span></a>
+      </h2><p>Specifications meant to be referenced via <code>@using</code> <strong>should</strong> prefix any schema elements they introduce. The prefix <strong>must</strong> be a string of characters valid within GraphQL typenames, with the exception of <code>"_"</code>.</p><p>Specs <strong>should</strong> define any new schema elements with names that start with <code>prefix_</code>.</p><figure id="using-the-using-directive-with-a-specs-default-prefix">
+        <figcaption><a name="using-the-using-directive-with-a-specs-default-prefix" href="#using-the-using-directive-with-a-specs-default-prefix" class="a-header code "><p>Using the <code>@using</code> directive with a spec's default prefix</p>
+</a></figcaption>
+        <pre class="  language-graphql"><code class="  language-graphql"><span class="token keyword">schema</span> <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
 
-### Why is versioning in the URL, not a directive argument?
-
-The version is in the URL because when a human reader visits the URL, we would like them to be taken to the documentation for the *version of the specification in use by this document*. Many text editors will turn URLs into hyperlinks, and it's highly desirable that clicking the link takes the user to the correct version of the docs. Putting the version information in a separate argument to the `@using` directive would require this.
-
-## Prefixing
-Specifications meant to be referenced via `@using` **should** prefix any schema elements they introduce. The prefix **must** be a string of characters valid within GraphQL typenames, with the exception of `"_"`.
-
-Specs **should** define any new schema elements with names that start with `prefix_`.
-
-```graphql
-#::[Using the `@using` directive with a spec's default prefix]
-schema @using(spec: "https://spec.example.com/example/v1") {
-  query: Query
-}
-
-type User {
-  name: String @example_someDirective
-               # prefixed directive from the example spec
-}
-```
-
-The language of the spec **should** specify the default prefix and **should** identify locations where the prefix is used. The prefix **should not** be elided within documentation; definitions of schema elements provided within the spec **must** include the default prefix.
-
-### Elements which should be prefixed
-Specs **should** attach their prefix to:
-- the names of any object types, interfaces, unions, enums, or input object types defined in the spec
-- the names of any fields the spec introduces on *foreign types* defined in a different spec
-- the names of any arguments the spec introduces on *foreign directives and fields* defined in a different spec
-- the names of any directives introduced in the spec
-  - specs may introduce one **root directive**, which carries *only* the prefix and no underscore.
-
-<view-of src=prefixing.graphql
-  title='Prefixing examples'
-></view-of>
-
-## Versioning
-
-Specs are versioned with a **subset** of a [Semantic Version Number](https://semver.org/spec/v2.0.0.html) containing only the `major` and `minor` parts. Thus, specifications **should** provide a version of the form `‹major›.‹minor›`, where both integers >= 0.
-
-```
-#::[Examples of valid versions]
-2.2
+<span class="token keyword">type</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">name</span><span class="token punctuation">:</span> String <span class="token directive function">@example_someDirective</span>
+               <span class="token comment"># prefixed directive from the example spec</span>
+<span class="token punctuation">}</span></code></pre>
+      </figure><p>The language of the spec <strong>should</strong> specify the default prefix and <strong>should</strong> identify locations where the prefix is used. The prefix <strong>should not</strong> be elided within documentation; definitions of schema elements provided within the spec <strong>must</strong> include the default prefix.</p><h3>
+        <a name="elements-which-should-be-prefixed" class="a-header" href="#elements-which-should-be-prefixed" data-heading-level="3"><span class="a-header-text">Elements which should be prefixed</span></a>
+      </h3><p>Specs <strong>should</strong> attach their prefix to:</p><ul>
+<li>the names of any object types, interfaces, unions, enums, or input object types defined in the spec</li>
+<li>the names of any fields the spec introduces on <em>foreign types</em> defined in a different spec</li>
+<li>the names of any arguments the spec introduces on <em>foreign directives and fields</em> defined in a different spec</li>
+<li>the names of any directives introduced in the spec<ul>
+<li>specs may introduce one <strong>root directive</strong>, which carries <em>only</em> the prefix and no underscore.</li>
+</ul>
+</li>
+</ul><view-of src="prefixing.graphql" title="Prefixing examples"><view-out>
+    <figure id="Prefixing examples">
+      <figcaption>
+        <a name="Prefixing examples" href="#Prefixing examples" class="a-header code">Prefixing examples</a>
+      </figcaption>
+      <pre><code><ol style="counter-reset: line 0" start="1"><li><span class="token keyword">schema</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/specA/v1.0"</span><span class="token punctuation">)</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/specB/v2.0"</span><span class="token punctuation">,</span> <span class="token attr-name">prefix</span><span class="token punctuation">:</span> <span class="token string">"B"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+</li><li>  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+</li><li><span class="token punctuation">}</span>
+</li><li>
+</li><li><span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>specA_SomeType is a type defined by spec A.
+</li><li>"""
+</li><li><span class="token keyword">type</span> <span class="token class-name">specA_SomeType</span> <span class="token punctuation">{</span>
+</li><li>  <span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>  nativeField is a field defined by specA on a type also defined
+</li><li>  by specA (namely specA_SomeType)
+</li><li>  """
+</li><li>  <span class="token attr-name">nativeField</span><span class="token punctuation">:</span> Int <span class="token directive function">@specA_fieldDirective</span>
+</li><li>
+</li><li>  <span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>  B_foreignField is a field defined by specB on a type defined
+</li><li>  by specA (namely specA_SomeType)
+</li><li>  """
+</li><li>  <span class="token attr-name">B_foreignField</span><span class="token punctuation">:</span> Int
+</li><li><span class="token punctuation">}</span>
+</li><li>
+</li><li><span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>specA_SomeInput is an input defined by spec A.
+</li><li>"""
+</li><li><span class="token keyword">input</span> specA_SomeInput <span class="token punctuation">{</span>
+</li><li>  <span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>  nativeInputField is defined by specA
+</li><li>  """
+</li><li>  <span class="token attr-name">nativeInputField</span><span class="token punctuation">:</span> Int
+</li><li>
+</li><li>  <span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>  B_field is defined by specB as a field on specA_SomeInput
+</li><li>  """
+</li><li>  <span class="token attr-name">B_field</span><span class="token punctuation">:</span> String
+</li><li><span class="token punctuation">}</span>
+</li><li>
+</li><li><span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>specA_Items is defined by spec A
+</li><li>"""
+</li><li><span class="token keyword">enum</span> <span class="token class-name">specA_Items</span> <span class="token punctuation">{</span> <span class="token constant">ONE</span><span class="token punctuation">,</span> <span class="token constant">TWO</span><span class="token punctuation">,</span> <span class="token constant">THREE</span> <span class="token directive function">@B</span> <span class="token punctuation">}</span>
+</li><li>
+</li><li><span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>@B is the root directive defined by specB
+</li><li>
+</li><li>Root directives carry only the prefix of their spec.
+</li><li>"""
+</li><li><span class="token keyword">directive</span> <span class="token directive function">@B</span> <span class="token keyword">on</span> <span class="token class-name">ENUM_VALUE</span>
+</li><li>
+</li><li><span class="token description string">"""<span class="token language-markdown">
+</span></span></li><li>@specA_fieldDirective is a directive defined by specA
+</li><li>"""
+</li><li><span class="token keyword">directive</span> <span class="token directive function">@specA_fieldDirective</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
+</li><li></li></ol></code>
+    </pre></figure>
+  </view-out></view-of>
+      <h2>
+        <a name="versioning" class="a-header" href="#versioning" data-heading-level="2"><span class="a-header-text">Versioning</span></a>
+      </h2><p>Specs are versioned with a <strong>subset</strong> of a <a href="https://semver.org/spec/v2.0.0.html">Semantic Version Number</a> containing only the <code>major</code> and <code>minor</code> parts. Thus, specifications <strong>should</strong> provide a version of the form <code>‹major›.‹minor›</code>, where both integers &gt;= 0.</p><figure id="examples-of-valid-versions">
+        <figcaption><a name="examples-of-valid-versions" href="#examples-of-valid-versions" class="a-header code "><p>Examples of valid versions</p>
+</a></figcaption>
+        <pre class="language-  language-none"><code class="language-  language-none">2.2
 1.0
 1.1
-0.1
-```
-
-As specified by semver, spec authors **should** increment the:
-> - MAJOR version when you make incompatible API changes,
-> - MINOR version when you add functionality in a backwards compatible manner
-
-Patch and pre-release qualifiers are judged to be not particularly meaningful in the context of specifications, which are (by definition) interfaces rather than implementations. The `‹patch›` component of version denotes a bug fix which is backwards compatible—that is, a change to the implementation which does not affect the interface. `‹patch›`-level changes in the version of a spec denote wording clarifications which do not require implementation changes. As such, it is not important to track them for the purposes of version resolution.
-
-As with [semver](https://semver.org/spec/v2.0.0.html), the `0.x` version series is special: there is no expectation of compatibility between versions `0.x` and `0.y`. For example, a processor must not activate implementation `0.4` to satisfy a requested version of `0.2`.
-
-### Ordering
-Versions can be ordered with the following pseudocode:
-
-```typescript
-compareVersions(a: Version, b: Version) -> LESS_THAN | EQUAL | GREATER_THAN {
-  if a.major < b.major {
+0.1</code></pre>
+      </figure><p>As specified by semver, spec authors <strong>should</strong> increment the:</p><blockquote>
+<ul>
+<li>MAJOR version when you make incompatible API changes,</li>
+<li>MINOR version when you add functionality in a backwards compatible manner</li>
+</ul>
+</blockquote><p>Patch and pre-release qualifiers are judged to be not particularly meaningful in the context of specifications, which are (by definition) interfaces rather than implementations. The <code>‹patch›</code> component of version denotes a bug fix which is backwards compatible—that is, a change to the implementation which does not affect the interface. <code>‹patch›</code>-level changes in the version of a spec denote wording clarifications which do not require implementation changes. As such, it is not important to track them for the purposes of version resolution.</p><p>As with <a href="https://semver.org/spec/v2.0.0.html">semver</a>, the <code>0.x</code> version series is special: there is no expectation of compatibility between versions <code>0.x</code> and <code>0.y</code>. For example, a processor must not activate implementation <code>0.4</code> to satisfy a requested version of <code>0.2</code>.</p><h3>
+        <a name="ordering" class="a-header" href="#ordering" data-heading-level="3"><span class="a-header-text">Ordering</span></a>
+      </h3><p>Versions can be ordered with the following pseudocode:</p><figure id="code-2">
+        
+        <pre class="  language-typescript"><code class="  language-typescript">compareVersions(a: Version, b: Version) -&gt; LESS_THAN | EQUAL | GREATER_THAN {
+  if a.major &lt; b.major {
     return LESS_THAN
   }
   if a.major == b.major {
     if a.minor == b.minor { return EQUAL }
-    if a.minor > b.minor { return GREATER_THAN }
+    if a.minor &gt; b.minor { return GREATER_THAN }
     return LESS_THAN
   }
-  if a.major > b.major {
+  if a.major &gt; b.major {
     return GREATER_THAN
   }
-}
-```
-
-Note that this ordering does *not* guarantee that if A > B then A can satisfy a version requirement of B. For example, `2.0 > 1.9`, but `2.0` cannot [satisfy](#satisfying-version-requirements) the requirements of a document which references version `1.9`, since the major version update introduced possibly-breaking changes.
-
-### Satisfaction
-
-Given a version `requested` by a document and an `available` version of an implementation, the following pseudocode will determine if the `available` version can satisfy the `requested` version:
-
-```typescript
-canSatisfy(requested: Version, available: Version) =
-  requested.major == available.major &&
-  (requested.major > 0 && (requested.minor <= available.minor)
-    || (requested.minor == available.minor))
-```
-
-### Referencing versions and activating implementations
-
-Schema documents **must** reference a spec version which supports all the schema elements and behaviors required by the document. As a practical matter, authors should prefer to reference the [lowest](#ordering) versions which can [satisfy](#satisfaction) their requirements, as this imposes the fewest constraints on processors and is thus more likely to be supported.
-
-For every spec they support, processors **must** activate an implementation which can [satisfy](#satisfaction) the version required by the document.
-
-### Backus-Naur Form for versions and version tags
-
-```plaintext
-#::[BNF grammar for SemVer specifiers]
-‹version tag› ::= "v" ‹version›
+}</code></pre>
+      </figure><p>Note that this ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a version requirement of B. For example, <code>2.0 &gt; 1.9</code>, but <code>2.0</code> cannot <a href="#satisfying-version-requirements">satisfy</a> the requirements of a document which references version <code>1.9</code>, since the major version update introduced possibly-breaking changes.</p><h3>
+        <a name="satisfaction" class="a-header" href="#satisfaction" data-heading-level="3"><span class="a-header-text">Satisfaction</span></a>
+      </h3><p>Given a version <code>requested</code> by a document and an <code>available</code> version of an implementation, the following pseudocode will determine if the <code>available</code> version can satisfy the <code>requested</code> version:</p><figure id="code-3">
+        
+        <pre class="  language-typescript"><code class="  language-typescript">canSatisfy(requested: Version, available: Version) =
+  requested.major == available.major &amp;&amp;
+  (requested.major &gt; 0 &amp;&amp; (requested.minor &lt;= available.minor)
+    || (requested.minor == available.minor))</code></pre>
+      </figure><h3>
+        <a name="referencing-versions-and-activating-implementations" class="a-header" href="#referencing-versions-and-activating-implementations" data-heading-level="3"><span class="a-header-text">Referencing versions and activating implementations</span></a>
+      </h3><p>Schema documents <strong>must</strong> reference a spec version which supports all the schema elements and behaviors required by the document. As a practical matter, authors should prefer to reference the <a href="#ordering">lowest</a> versions which can <a href="#satisfaction">satisfy</a> their requirements, as this imposes the fewest constraints on processors and is thus more likely to be supported.</p><p>For every spec they support, processors <strong>must</strong> activate an implementation which can <a href="#satisfaction">satisfy</a> the version required by the document.</p><h3>
+        <a name="backus-naur-form-for-versions-and-version-tags" class="a-header" href="#backus-naur-form-for-versions-and-version-tags" data-heading-level="3"><span class="a-header-text">Backus-Naur Form for versions and version tags</span></a>
+      </h3><figure id="bnf-grammar-for-semver-specifiers">
+        <figcaption><a name="bnf-grammar-for-semver-specifiers" href="#bnf-grammar-for-semver-specifiers" class="a-header code "><p>BNF grammar for SemVer specifiers</p>
+</a></figcaption>
+        <pre class="  language-plaintext"><code class="  language-plaintext">‹version tag› ::= "v" ‹version›
 
 ‹version› ::= ‹major›
             | ‹major› "." ‹minor›
@@ -303,68 +316,77 @@ For every spec they support, processors **must** activate an implementation whic
 
 ‹digit› ::= "0"
           | ‹positive digit›
-‹positive digit› ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-```
-
-## Processing Schemas
-
-```mermaid
-#::[Example processing pipeline]
-graph LR
-  schema(["📄  Input Schema"]):::file-->proc("🤖 &nbsp;Processor")
-  proc-->output(["📄  Output Schema"]):::file
-  classDef file fill:none,color:#eee;
-  style proc fill:none,stroke:fuchsia,color:fuchsia;
-```
-
-A common use case is that of a processor which consumes a valid input schema and generates an output schema.
-
-The general guidance for processor behavior is: don't react to what you don't understand.
-
-Specifically, processors:
-  - **should** pass through `@using` directives which reference unknown spec URLs
-  - **should** pass through prefixed directives, types, and other schema elements  
-
-An exception to this is processors which prepare the schema for final public consumption. Such processors **may** choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives—such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case-by-case basis.
-
-## Validations
-
-### Prefix Uniqueness
-
-**Formal Specification**
-- For each `@using` directive `d` on the SchemaDefinition within the Document,
-  - Let `prefix` be the spec's [prefix](#prefixing) as specified by the directive's `prefix:` argument or, if the argument is not present, the default prefix specified in the [spec url](#spec-urls).   
-  - For each other `@using` directive `e` where `e ≠ d` on the SchemaDefinition within the Document,
-    - Let `otherPrefix` be the spec's [prefix](#prefixing) as specified by the directive's `prefix:` argument or, if the argument is not present, the prefix specified in the [spec url](#spec-urls).
-    - `otherPrefix` must not equal `prefix`
-
-**Explanatory Text**
-
-Prefixes, whether implicit or explicit, must be unique within a document. Valid:
-
-<view-of src=prefixing.graphql#schema
-  title="Example of unique prefixes"
-></view-of>
-
-It is also valid to reference multiple versions of the same spec under different prefixes:
-
-<view-of src=good-unique-prefix-multi.graphql#schema
-  title="Explicit prefixes allow multiple versions of the same spec to coexist within a Document"
-></view-of>
-
-Without the explicit `prefix:`, the above would be invalid:
-
-<view-of src=bad-non-unique-prefix-multi.graphql#schema
-  title="Counter-example of non-unique prefixes with multiple versions of the same spec"
-  class=counter-example
-></view-of>
-
-Different specs with the same prefix are also invalid:
-
-<view-of src=bad-non-unique-prefix.graphql#schema
-  title="Counter-example of non-unique prefixes"
-  class=counter-example
-></view-of>
-
-</main>
+‹positive digit› ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"</code></pre>
+      </figure><h2>
+        <a name="processing-schemas" class="a-header" href="#processing-schemas" data-heading-level="2"><span class="a-header-text">Processing Schemas</span></a>
+      </h2><figure id="example-processing-pipeline">
+        <figcaption><a name="example-processing-pipeline" href="#example-processing-pipeline" class="a-header figure "><p>Example processing pipeline</p>
+</a></figcaption>
+        <div id="example-processing-pipeline_diagram" class="mermaid " data-processed="true"><svg id="mermaid-1608152048034" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" height="62" style="max-width: 555.671875px;" viewBox="0 0 555.671875 62"><style>#mermaid-1608152048034{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;fill:#ccc;}#mermaid-1608152048034 .error-icon{fill:#a44141;}#mermaid-1608152048034 .error-text{fill:#ddd;stroke:#ddd;}#mermaid-1608152048034 .edge-thickness-normal{stroke-width:2px;}#mermaid-1608152048034 .edge-thickness-thick{stroke-width:3.5px;}#mermaid-1608152048034 .edge-pattern-solid{stroke-dasharray:0;}#mermaid-1608152048034 .edge-pattern-dashed{stroke-dasharray:3;}#mermaid-1608152048034 .edge-pattern-dotted{stroke-dasharray:2;}#mermaid-1608152048034 .marker{fill:lightgrey;}#mermaid-1608152048034 .marker.cross{stroke:lightgrey;}#mermaid-1608152048034 svg{font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:16px;}#mermaid-1608152048034 .label{font-family:"trebuchet ms",verdana,arial,sans-serif;color:#ccc;}#mermaid-1608152048034 .label text{fill:#ccc;}#mermaid-1608152048034 .node rect,#mermaid-1608152048034 .node circle,#mermaid-1608152048034 .node ellipse,#mermaid-1608152048034 .node polygon,#mermaid-1608152048034 .node path{fill:#1f2020;stroke:#81B1DB;stroke-width:1px;}#mermaid-1608152048034 .node .label{text-align:center;}#mermaid-1608152048034 .node.clickable{cursor:pointer;}#mermaid-1608152048034 .arrowheadPath{fill:lightgrey;}#mermaid-1608152048034 .edgePath .path{stroke:lightgrey;stroke-width:1.5px;}#mermaid-1608152048034 .flowchart-link{stroke:lightgrey;fill:none;}#mermaid-1608152048034 .edgeLabel{background-color:hsl(0,0%,34.4117647059%);text-align:center;}#mermaid-1608152048034 .edgeLabel rect{opacity:0.5;background-color:hsl(0,0%,34.4117647059%);fill:hsl(0,0%,34.4117647059%);}#mermaid-1608152048034 .cluster rect{fill:hsl(180,1.5873015873%,28.3529411765%);stroke:rgba(255,255,255,0.25);stroke-width:1px;}#mermaid-1608152048034 .cluster text{fill:#F9FFFE;}#mermaid-1608152048034 div.mermaidTooltip{position:absolute;text-align:center;max-width:200px;padding:2px;font-family:"trebuchet ms",verdana,arial,sans-serif;font-size:12px;background:hsl(20,1.5873015873%,12.3529411765%);border:1px solid rgba(255,255,255,0.25);border-radius:2px;pointer-events:none;z-index:100;}#mermaid-1608152048034:root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}#mermaid-1608152048034 .file &gt; *{fill:none !important;color:#eee !important;}#mermaid-1608152048034 .file tspan{fill:#eee !important;}#mermaid-1608152048034 flowchart{fill:apa;}</style><g><g class="output"><g class="clusters"></g><g class="edgePaths"><g class="edgePath LS-schema LE-proc" id="L-schema-proc" style="opacity: 1;"><path class="path" d="M162.109375,31L187.109375,31L212.109375,31" marker-end="url(#arrowhead33)" style="fill:none"></path><defs><marker id="arrowhead33" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowheadPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker></defs></g><g class="edgePath LS-proc LE-output" id="L-proc-output" style="opacity: 1;"><path class="path" d="M330.890625,31L355.890625,31L380.890625,31" marker-end="url(#arrowhead34)" style="fill:none"></path><defs><marker id="arrowhead34" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="strokeWidth" markerWidth="8" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" class="arrowheadPath" style="stroke-width: 1; stroke-dasharray: 1, 0;"></path></marker></defs></g></g><g class="edgeLabels"><g class="edgeLabel" transform="" style="opacity: 1;"><g transform="translate(0,0)" class="label"><rect rx="0" ry="0" width="0" height="0"></rect><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;"><span id="L-L-schema-proc" class="edgeLabel L-LS-schema' L-LE-proc"></span></div></foreignObject></g></g><g class="edgeLabel" transform="" style="opacity: 1;"><g transform="translate(0,0)" class="label"><rect rx="0" ry="0" width="0" height="0"></rect><foreignObject width="0" height="0"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;"><span id="L-L-proc-output" class="edgeLabel L-LS-proc' L-LE-output"></span></div></foreignObject></g></g></g><g class="nodes"><g class="node file" id="flowchart-schema-21" transform="translate(85.0546875,31)" style="opacity: 1;"><rect rx="23" ry="23" x="-77.0546875" y="-23" width="154.109375" height="46" class="label-container"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-61.3046875,-13)"><foreignObject width="122.609375" height="26"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;">📄  Input Schema</div></foreignObject></g></g></g><g class="node default" id="flowchart-proc-22" transform="translate(271.5,31)" style="opacity: 1;"><rect rx="5" ry="5" x="-59.390625" y="-23" width="118.78125" height="46" class="label-container" style="fill:none;stroke:fuchsia;"></rect><g class="label" transform="translate(0,0)"><g style="color:fuchsia;" transform="translate(-49.390625,-13)"><foreignObject width="98.78125" height="26"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;">🤖 &nbsp;Processor</div></foreignObject></g></g></g><g class="node file" id="flowchart-output-24" transform="translate(464.28125,31)" style="opacity: 1;"><rect rx="23" ry="23" x="-83.390625" y="-23" width="166.78125" height="46" class="label-container"></rect><g class="label" transform="translate(0,0)"><g transform="translate(-67.640625,-13)"><foreignObject width="135.28125" height="26"><div xmlns="http://www.w3.org/1999/xhtml" style="display: inline-block; white-space: nowrap;">📄  Output Schema</div></foreignObject></g></g></g></g></g></g></svg></div>
+      </figure><p>A common use case is that of a processor which consumes a valid input schema and generates an output schema.</p><p>The general guidance for processor behavior is: don't react to what you don't understand.</p><p>Specifically, processors:</p><ul>
+<li><strong>should</strong> pass through <code>@using</code> directives which reference unknown spec URLs</li>
+<li><strong>should</strong> pass through prefixed directives, types, and other schema elements  </li>
+</ul><p>An exception to this is processors which prepare the schema for final public consumption. Such processors <strong>may</strong> choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives—such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case-by-case basis.</p><h2>
+        <a name="validations" class="a-header" href="#validations" data-heading-level="2"><span class="a-header-text">Validations</span></a>
+      </h2><h3>
+        <a name="prefix-uniqueness" class="a-header" href="#prefix-uniqueness" data-heading-level="3"><span class="a-header-text">Prefix Uniqueness</span></a>
+      </h3><p><strong>Formal Specification</strong></p><ul>
+<li>For each <code>@using</code> directive <code>d</code> on the SchemaDefinition within the Document,<ul>
+<li>Let <code>prefix</code> be the spec's <a href="#prefixing">prefix</a> as specified by the directive's <code>prefix:</code> argument or, if the argument is not present, the default prefix specified in the <a href="#spec-urls">spec url</a>.   </li>
+<li>For each other <code>@using</code> directive <code>e</code> where <code>e ≠ d</code> on the SchemaDefinition within the Document,<ul>
+<li>Let <code>otherPrefix</code> be the spec's <a href="#prefixing">prefix</a> as specified by the directive's <code>prefix:</code> argument or, if the argument is not present, the prefix specified in the <a href="#spec-urls">spec url</a>.</li>
+<li><code>otherPrefix</code> must not equal <code>prefix</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><p><strong>Explanatory Text</strong></p><p>Prefixes, whether implicit or explicit, must be unique within a document. Valid:</p><view-of src="prefixing.graphql#schema" title="Example of unique prefixes"><view-out>
+    <figure id="Example of unique prefixes">
+      <figcaption>
+        <a name="Example of unique prefixes" href="#Example of unique prefixes" class="a-header code">Example of unique prefixes</a>
+      </figcaption>
+      <pre><code><ol style="counter-reset: line 0" start="1"><li><span class="token keyword">schema</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/specA/v1.0"</span><span class="token punctuation">)</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/specB/v2.0"</span><span class="token punctuation">,</span> <span class="token attr-name">prefix</span><span class="token punctuation">:</span> <span class="token string">"B"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+</li><li>  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+</li><li><span class="token punctuation">}</span></li></ol></code>
+    </pre></figure>
+  </view-out></view-of><p>It is also valid to reference multiple versions of the same spec under different prefixes:</p><view-of src="good-unique-prefix-multi.graphql#schema" title="Explicit prefixes allow multiple versions of the same spec to coexist within a Document"><view-out>
+    <figure id="Explicit prefixes allow multiple versions of the same spec to coexist within a Document">
+      <figcaption>
+        <a name="Explicit prefixes allow multiple versions of the same spec to coexist within a Document" href="#Explicit prefixes allow multiple versions of the same spec to coexist within a Document" class="a-header code">Explicit prefixes allow multiple versions of the same spec to coexist within a Document</a>
+      </figcaption>
+      <pre><code><ol style="counter-reset: line 0" start="1"><li><span class="token keyword">schema</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/1.0"</span><span class="token punctuation">)</span>               <span class="token comment"># prefix is A</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/2.0"</span><span class="token punctuation">,</span> <span class="token attr-name">prefix</span><span class="token punctuation">:</span> <span class="token string">"A2"</span><span class="token punctuation">)</span> <span class="token comment"># prefix is A2</span>
+</li><li><span class="token punctuation">{</span>
+</li><li>  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+</li><li><span class="token punctuation">}</span></li></ol></code>
+    </pre></figure>
+  </view-out></view-of><p>Without the explicit <code>prefix:</code>, the above would be invalid:</p><view-of src="bad-non-unique-prefix-multi.graphql#schema" title="Counter-example of non-unique prefixes with multiple versions of the same spec" class="counter-example"><view-out>
+    <figure id="Counter-example of non-unique prefixes with multiple versions of the same spec">
+      <figcaption>
+        <a name="Counter-example of non-unique prefixes with multiple versions of the same spec" href="#Counter-example of non-unique prefixes with multiple versions of the same spec" class="a-header code">Counter-example of non-unique prefixes with multiple versions of the same spec</a>
+      </figcaption>
+      <pre><code><ol style="counter-reset: line 0" start="1"><li><span class="token keyword">schema</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/1.0"</span><span class="token punctuation">)</span> <span class="token comment"># prefix is A</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/2.0"</span><span class="token punctuation">)</span> <span class="token comment"># prefix is A</span>
+</li><li><span class="token punctuation">{</span>
+</li><li>  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+</li><li><span class="token punctuation">}</span></li></ol></code>
+    </pre></figure>
+  </view-out></view-of><p>Different specs with the same prefix are also invalid:</p><view-of src="bad-non-unique-prefix.graphql#schema" title="Counter-example of non-unique prefixes" class="counter-example"><view-out>
+    <figure id="Counter-example of non-unique prefixes">
+      <figcaption>
+        <a name="Counter-example of non-unique prefixes" href="#Counter-example of non-unique prefixes" class="a-header code">Counter-example of non-unique prefixes</a>
+      </figcaption>
+      <pre><code><ol style="counter-reset: line 0" start="1"><li><span class="token keyword">schema</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/1.0"</span><span class="token punctuation">)</span>              <span class="token comment"># prefix is A</span>
+</li><li>  <span class="token directive function">@using</span><span class="token punctuation">(</span><span class="token attr-name">spec</span><span class="token punctuation">:</span> <span class="token string">"https://www.specs.com/specA/1.1"</span><span class="token punctuation">,</span> <span class="token attr-name">prefix</span><span class="token punctuation">:</span> <span class="token string">"A"</span><span class="token punctuation">)</span> <span class="token comment"># prefix is A</span>
+</li><li><span class="token punctuation">{</span>
+</li><li>  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+</li><li><span class="token punctuation">}</span></li></ol></code>
+    </pre></figure>
+  </view-out></view-of></main>
 </div>
+<script src="https://unpkg.com/prismjs@%5E1/components/prism-typescript.min.js" async=""></script><div class="mermaidTooltip" style="opacity: 0;"></div></body></html>
