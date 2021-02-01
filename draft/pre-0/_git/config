@@ -4,7 +4,7 @@
 	bare = false
 	logallrefupdates = true
 [remote "origin"]
-	url = /home/runner/work/using/using/.
+	url = /home/runner/work/core/core/.
 	fetch = +refs/heads/draft/pre-0:refs/remotes/origin/draft/pre-0
 [branch "draft/pre-0"]
 	remote = origin
