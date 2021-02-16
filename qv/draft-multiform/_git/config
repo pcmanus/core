@@ -1,0 +1,11 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = /home/runner/work/core/core/.
+	fetch = +refs/heads/qv/draft-multiform:refs/remotes/origin/qv/draft-multiform
+[branch "qv/draft-multiform"]
+	remote = origin
+	merge = refs/heads/qv/draft-multiform
