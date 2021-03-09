@@ -1181,12 +1181,12 @@ pre[class*="language-"] {
 <ul>
 <li>Any elements named <code>something__likeThis</code> are <strong>not exported</strong>, unless&#8230;<ul>
 <li>&#8230;the feature which provides them (&rdquo;<code>something</code>&rdquo;) has <code>export: true</code> on its <code>@core(feature:)</code> declaration, <em>or</em></li>
-<li>&#8230;they are annotated with <var data-name="@core__export">@core__export</var> (or explicitly, <code>@core__export(isExport: true)</code>).</li>
+<li>&#8230;they are annotated with <var data-name="@core__export">@core__export</var> (or explicitly, <var data-name="@core__export">@core__export</var><code>(isExport: true)</code>).</li>
 </ul>
 </li>
 <li>Any elements with <code>normalNames</code> are <strong>exported</strong>, unless&#8230;<ul>
-<li>&#8230;the element is annotated with <code>@core__export(isExport: false)</code>, <em>or</em></li>
-<li>&#8230;the element is a directive or directive definition whose name matches the name of a feature, in which case, it is exported only if the entire feature is exported (having been brought in with <code>@core(feature:, export: true)</code>).</li>
+<li>&#8230;the element is annotated with <var data-name="@core__export">@core__export</var><code>(isExport: false)</code>, <em>or</em></li>
+<li>&#8230;the element is a directive or directive definition whose name matches the name of a feature, in which case, it is exported only if the entire feature is exported (having been brought in with <var data-name="@core">@core</var><code>(feature:, export: true)</code>).</li>
 </ul>
 </li>
 </ul>
@@ -1399,7 +1399,7 @@ pre[class*="language-"] {
 <ol>
 <li><strong>must</strong> match the default name of the feature as derived from the feature&rsquo;s specification URL,</li>
 <li><strong>must</strong> be a string of characters valid within GraphQL names, and</li>
-<li><strong>must not</strong> contain the core namespace separator, which is two underscores (<code>&quot;__&quot;</code>).</li>
+<li><strong>must not</strong> contain the core namespace separator, which is two underscores (<span class="spec-string">"__"</span>).</li>
 </ol>
 <p>Prefixed names consist of the name of the feature, followed by two underscores, followed by the name of the element (which can be any valid GraphQL identifier). For instance, the <code>core</code> specification (which you are currently reading) introduces elements named <a href="#core__FeatureUrl"><var data-name="core__FeatureUrl">core__FeatureUrl</var></a> and <a href="#@core__export"><var data-name="@core__export">@core__export</var></a>.</p>
 <p>A feature&rsquo;s <em>root directive</em> is an exception to the prefixing requirements. Feature specifications <strong>may</strong> introduce a single directive which carries only the name of the feature, with no prefix required. For example, the <code>core</code> specification introduces a <code>@core</code> directive. This directive has the same name as the feature (&rdquo;<code>core</code>&rdquo;), and so requires no prefix.</p>
@@ -1569,7 +1569,7 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <p>Any directives, scalars, enums, input objects, and other schema elements defined by specs <strong>may</strong> be <strong>extensible</strong>. This means that their definitions within a core schema document do not have to exactly match definitions provided by specs. Instead, definitions should match all usages within the document.</p>
 <p>Standard extensibility rules:</p>
 <ul>
-<li><strong>Directives</strong> may be defined as taking additional arguments, provided those arguments are <a href="#sec-Prefixing">prefixed</a> with the name of a document feature followed by two underscores (&rdquo;<code>__</code>&rdquo;). These arguments are interpreted as metadata&#8208;on&#8208;metadata, and are routed to the declaring spec for interpretation</li>
+<li><strong>Directives</strong> may be defined as taking additional arguments, provided those arguments are <a href="#sec-Prefixing">prefixed</a> with the name of a document feature followed by two underscores (<span class="spec-string">"__"</span>). These arguments are interpreted as metadata&#8208;on&#8208;metadata, and are routed to the declaring spec for interpretation</li>
 <li><strong>Enums</strong> defined in features may include values of any name. For extensible enums, the space of <strong>unprefixed</strong> names belongs to the document. The space of <strong>prefixed</strong> names belongs to the spec with that prefix, and may be used to pass data between specs.</li>
 <li><strong>Input Objects</strong> may be defined with additional fields, provided those fields are <a href="#sec-Prefixing">prefixed</a> with the name of a feature followed by two underscores.</li>
 </ul>
