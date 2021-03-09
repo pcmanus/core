@@ -1618,14 +1618,14 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <div class="spec-algo" id="CollectFeatures()">
 <span class="spec-call"><a href="#CollectFeatures()" data-name="CollectFeatures">CollectFeatures</a>(<var data-name="document">document</var>)</span><ol>
 <li>Let <var data-name="coreName">coreName</var> be the name of the core feature found via <span class="spec-call"><a href="#Bootstrap()" data-name="Bootstrap">Bootstrap</a>(<var data-name="document">document</var>)</span></li>
-<li>Let <var data-name="namespaces">namespaces</var> be a map of <var data-name="featureName">featureName</var>: <code>String</code> &rarr; <code>Directive</code>, initially empty.</li>
+<li>Let <var data-name="features">features</var> be a map of <var data-name="featureName">featureName</var>: <code>String</code> &rarr; <code>Directive</code>, initially empty.</li>
 <li>For each directive <var data-name="d">d</var> named <code>coreName</code> on the SchemaDefinition within <var data-name="document">document</var>,<ol>
 <li>Let <var data-name="name">name</var> be the spec&rsquo;s <a href="#sec-Prefixing">name</a> as specified by the directive&rsquo;s <code>as:</code> argument or, if the argument is not present, the default name from the <a href="#core__FeatureUrl">feature url</a>.</li>
-<li>If <var data-name="name">name</var> exists within <var data-name="namespaces">namespaces</var>, the <strong><em>Name Uniqueness</em> validation fails</strong>.</li>
-<li>Insert <var data-name="name">name</var> &rArr; <var data-name="d">d</var> into <var data-name="namespaces">namespaces</var></li>
+<li>If <var data-name="name">name</var> exists within <var data-name="features">features</var>, the <strong><em>Name Uniqueness</em> validation fails</strong>.</li>
+<li>Insert <var data-name="name">name</var> &rArr; <var data-name="d">d</var> into <var data-name="features">features</var></li>
 </ol>
 </li>
-<li><strong>Return</strong> <var data-name="namespaces">namespaces</var></li>
+<li><strong>Return</strong> <var data-name="features">features</var></li>
 </ol>
 </div>
 <p>Prefixes, whether implicit or explicit, must be unique within a document. Valid:</p>
@@ -1661,7 +1661,7 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <p>Create a map of <var data-name="element">element</var>: <em>Any Named Element</em> &rarr; <var data-name="feature">feature</var>: <code>Directive</code> | <span class="spec-keyword">null</span>, associating every named schema element within the document with a feature directive, or <span class="spec-keyword">null</span> if it is not associated with a feature.</p>
 <div class="spec-algo" id="AssignFeatures()">
 <span class="spec-call"><a href="#AssignFeatures()" data-name="AssignFeatures">AssignFeatures</a>(<var data-name="document">document</var>)</span><ol>
-<li>Let <var data-name="namespaces">namespaces</var> be the result of collecting namespaces via <span class="spec-call"><a href="#CollectFeatures()" data-name="CollectFeatures">CollectFeatures</a>(<var data-name="document">document</var>)</span></li>
+<li>Let <var data-name="features">features</var> be the result of collecting features via <span class="spec-call"><a href="#CollectFeatures()" data-name="CollectFeatures">CollectFeatures</a>(<var data-name="document">document</var>)</span></li>
 <li>Let <var data-name="assignments">assignments</var> be a map of (<var data-name="element">element</var>: <em>Any Named Element</em>) &rarr; <var data-name="feature">feature</var>: <code>Directive</code> | <span class="spec-keyword">null</span>, initally empty</li>
 <li>For each named schema element <var data-name="e">e</var> within the <var data-name="document">document</var><ol>
 <li>Let <var data-name="name">name</var> be the name of the <var data-name="e">e</var></li>
@@ -1672,7 +1672,7 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 </li>
 <li>If <var data-name="name">name</var> contains the substring <span class="spec-string">"__"</span>,<ol>
 <li>Partition <var data-name="name">name</var> into <code>[</code><var data-name="prefix">prefix</var>, <var data-name="base">base</var><code>]</code> at the first <span class="spec-string">"__"</span> (that is, find the shortest <var data-name="prefix">prefix</var> and longest <var data-name="base">base</var> such that <var data-name="name">name</var> = <var data-name="prefix">prefix</var> + <span class="spec-string">"__"</span> + <var data-name="base">base</var>)</li>
-<li>If <var data-name="prefix">prefix</var> exists within <code>namespaces</code>, insert <var data-name="e">e</var> &rArr; <var data-name="namespaces">namespaces</var><code>[</code><var data-name="prefix">prefix</var><code>]</code> into <var data-name="assignments">assignments</var><ol>
+<li>If <var data-name="prefix">prefix</var> exists within <var data-name="features">features</var>, insert <var data-name="e">e</var> &rArr; <var data-name="features">features</var><code>[</code><var data-name="prefix">prefix</var><code>]</code> into <var data-name="assignments">assignments</var><ol>
 <li>Else, insert <var data-name="e">e</var> &rArr; <span class="spec-keyword">null</span> into <var data-name="assignments">assignments</var></li>
 </ol>
 </li>
