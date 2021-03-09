@@ -1283,15 +1283,14 @@ pre[class*="language-"] {
 <h1><span class="spec-secid" title="link to this section"><a href="#sec-Directives">5</a></span>Directives</h1>
 <section id="@core" secid="5.1">
 <h2 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core">5.1</a></span>@core</h2>
-<figure id="example-1af97"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span>
+<p>Declare a core feature present in this schema.</p>
+<figure id="example-ac1fd"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span>
   <span class="token attr-name">feature</span><span class="token punctuation">:</span> core__FeatureUrl<span class="token operator">!</span><span class="token punctuation">,</span>
   <span class="token attr-name">as</span><span class="token punctuation">:</span> String<span class="token punctuation">,</span>
   <span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token punctuation">)</span>
-  <span class="token keyword">repeatable</span>
-  <span class="token operator">|</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span>
+  <span class="token keyword">repeatable</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span>
 </code></pre>
-</figure><p>Declare a core feature present in this schema.</p>
-<p>Documents <strong>must</strong> include a definition for the <var data-name="@core">@core</var> directive. The provided definition must be <em>compatible</em> with the definition above, but may:</p>
+</figure><p>Documents <strong>must</strong> include a definition for the <var data-name="@core">@core</var> directive. The provided definition must be <em>compatible</em> with the definition above, but may:</p>
 <ul>
 <li><strong>Omit optional arguments</strong> if they are never used in the document,</li>
 <li><strong>Omit locations</strong> where the directive never occurs,</li>
@@ -1355,7 +1354,7 @@ pre[class*="language-"] {
   <span class="token operator">|</span> <span class="token constant">INPUT_OBJECT</span>
   <span class="token operator">|</span> <span class="token constant">INPUT_FIELD_DEFINITION</span>
 </code></pre>
-</figure><p><code>@core__export</code> can occur at any type system location. Elements with <code>@core__export</code> will always be included in the API. Elements with <code>@core__export(isExport: false)</code> will always be excluded from the API.</p>
+</figure><p><var data-name="@core__export">@core__export</var> can occur at any type system location. Elements with <var data-name="@core__export">@core__export</var> will always be included in the API. Elements with <var data-name="@core__export">@core__export</var><code>(isExport: false)</code> will always be excluded from the API.</p>
 <section id="@core__export/isExport-Boolean" secid="5.2.1">
 <h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export/isExport-Boolean">5.2.1</a></span>isExport: Boolean</h3>
 <p>If true, the element is always exported, regardless of whether the feature which defines it is exported. If false, the element is never exported.</p>
