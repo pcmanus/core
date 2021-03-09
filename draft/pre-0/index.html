@@ -1,96 +1,1201 @@
-<!doctype html>
-<script src=/boot.js></script>
-<link rel=stylesheet href=/tron.css>
-<title>Core Schemas</title>
+<!DOCTYPE html>
+<!-- Built with spec-md https://spec-md.com -->
+<html>
+<head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><title>Core Schemas</title>
+<style>
+:root {
+  color: #333333;
+  font-family: var(--body-font-family);
+  font-size: 15px;
+  line-height: 1.5;
+  --body-font-family: Cambria, "Palatino Linotype", Palatino, "Liberation Serif", serif;
+  --mono-font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  --mono-font-size: 13px;
+  --indent: 1rem;
+  --list-indent: 1.5rem;
+  --grammar-indent: 0rem;
+  --highlight-background: #FBF8D0;
+  --highlight-border-color: transparent;
+  --sidebar-width: min(320px, calc(100vw - 48px));
+}
 
-<div id=view>
-<main markdown>
+@media (min-width: 720px) {
+  :root {
+    font-size: 17px;
+    --mono-font-size: 15px;
+    --indent: 2rem;
+    --list-indent: 2rem;
+    --grammar-indent: 2rem;
+  }
+}
+
+body {
+  margin: 3rem 0 3rem;
+}
+
+article {
+  margin: 0 auto;
+}
+
+@media (min-width: 720px) {
+  body {
+    margin: 6rem auto 3rem;
+    padding-left: 75px;
+    padding-right: clamp(0px, calc((100vw - 800px) * 0.25), 75px);
+  }
+
+  article {
+    max-width: 800px;
+  }
+}
+
+/* Selections */
+
+.outdated-selection-link,
+.selection-link {
+  position: absolute;
+  display: block;
+  color: #fff;
+  --selection-background-color: #cacee0;
+  background: var(--selection-background-color);
+  border-radius: 4px;
+  font-size: 36px;
+  height: 23px;
+  line-height: 48px;
+  text-align: center;
+  text-decoration: none;
+  width: 25px;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.outdated-selection-link:hover,
+.selection-link:hover {
+  text-decoration: none;
+}
+
+.outdated-selection-link:before,
+.selection-link:before {
+  border: 5px solid transparent;
+  content: '';
+  height: 0;
+  margin-top: -5px;
+  margin-right: -5px;
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  width: 0;
+}
+
+@media (max-width: 719px) {
+  .outdated-selection-link:before,
+  .selection-link:before {
+    border-bottom-color: var(--selection-background-color);
+    border-top: 0;
+    right: 50%;
+    top: 1px;
+  }
+}
+
+@media (min-width: 720px) {
+  .outdated-selection-link:before,
+  .selection-link:before {
+    border-left-color: var(--selection-background-color);
+    border-right: 0;
+    right: 1px;
+    top: 50%;
+  }
+}
+
+.selection-link:hover {
+  --selection-background-color: #3b5998;
+}
+
+.outdated-selection-link {
+  --selection-background-color: #f0babe;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 27px;
+}
+
+.outdated-selection-link:hover:after {
+  content: "This selection content has changed since this link was created.";
+  font: 9pt/11pt var(--body-font-family);
+  position: absolute;
+  display: block;
+  white-space: nowrap;
+  padding: 2px 5px 1px;
+  top: -20px;
+  background: black;
+  color: white;
+}
+
+/* Links */
+
+a {
+  color: #3B5998;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Images */
+
+img {
+  max-width: 100%;
+}
+
+/* Section headers */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  margin: 3em 0 1em;
+  position: relative;
+}
+
+.spec-definition-head {
+  font-family: var(--mono-font-family);
+}
+
+.spec-definition-head > .spec-secid {
+  font-family: var(--body-font-family);
+}
+
+@media (min-width: 720px) {
+  header > h1 {
+    margin: 6em 0 3em;
+  }
+}
+
+h1 {
+  font-size: 1.5em;
+  margin-top: 5em;
+}
+
+h2, h3 {
+  font-size: 1.25em;
+}
+
+h4, h5, h6 {
+  font-size: 1em;
+}
+
+section {
+  padding-top: 1rem;
+  margin-top: -1rem;
+}
+
+section.subsec > h6 {
+  margin-top: 2em;
+}
+
+section.subsec > h6 > a {
+  color: #333333;
+}
+
+section .spec-secid {
+  margin-right: 1ex;
+}
+
+@media (min-width: 720px) {
+  section .spec-secid {
+    position: absolute;
+    right: 100%;
+    text-align: right;
+    white-space: nowrap;
+  }
+}
+
+footer {
+  font-size: 75%;
+  opacity: 0.5;
+  text-align: center;
+  margin-top: 12rem;
+}
+
+
+/* Table of contents */
+
+.spec-toc {
+  margin: 1rem 0 3rem;
+}
+
+.spec-toc .title {
+  content: 'Contents';
+  display: block;
+  font-weight: bold;
+  margin: 5em 0 1em;
+}
+
+.spec-toc .spec-secid {
+  margin-right: 1ex;
+}
+
+.spec-toc ol {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.spec-toc ol ol {
+  list-style: none;
+  padding-left: 2ex;
+  margin-bottom: 0.25em;
+}
+
+.spec-toc li {
+  position: relative;
+  padding: 5px 0 0 30px;
+  margin: -5px 0 0 -30px;
+}
+
+.spec-toc a {
+  color: #333333;
+}
+
+.spec-toc a:hover {
+  text-decoration: none;
+}
+
+.spec-toc a .spec-secid {
+  color: #3B5998;
+}
+
+.spec-toc a:hover .spec-secid {
+  text-decoration: underline;
+}
+
+.spec-toc .toggle {
+  display: none;
+}
+
+.spec-toc .toggle + label {
+  cursor: pointer;
+  left: 6px;
+  opacity: 1;
+  padding: 5px 6px 5px 7px;
+  position: absolute;
+  top: 6px;
+  transform: rotate(0deg);
+  transition: all 0.18s ease-in-out;
+}
+
+.spec-toc .toggle + label:after {
+  border-color: transparent transparent transparent #bbc;
+  border-style: solid;
+  border-width: 6px 0 6px 7px;
+  content: ' ';
+  display: block;
+  height: 0;
+  width: 0;
+}
+
+@media(pointer: fine) {
+  .spec-toc .toggle + label {
+    left: 10px;
+    padding: 3px 5px 3px 6px;
+    top: 8px;
+  }
+}
+
+.spec-toc .toggle:checked + label {
+  transform: rotate(90deg);
+}
+
+@media(hover: hover) {
+  .spec-toc li:not(:hover) > .toggle:checked + label {
+    opacity: 0;
+  }
+}
+
+.spec-toc .toggle:not(:checked) ~ ol {
+  max-height: 0;
+  overflow: hidden;
+  margin: 0;
+}
+
+
+/* Sidebar */
+
+.spec-sidebar-toggle {
+  display: none;
+}
+
+.spec-sidebar-toggle + label > .spec-sidebar-button {
+  position: fixed;
+  right: 0;
+  top: 0;
+  padding: 10px 15px;
+  font-size: 30px;
+  color: rgba(0,0,0,0.7);
+  z-index: 2;
+  cursor: pointer;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.spec-sidebar-toggle:checked + label:after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+}
+
+.spec-sidebar {
+  display: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: var(--sidebar-width);
+  font-size: 14px;
+  line-height: 1.75;
+  overflow-y: scroll;
+  height: 100%;
+  padding: 0 0 5rem 30px;
+  box-sizing: border-box;
+  background: #f0f0f0;
+  box-shadow:
+    inset 1px 0 rgba(0,0,0,0.05),
+    -4px 0 8px -2px rgba(0,0,0,0.04);
+  overscroll-behavior: contain;
+}
+
+.spec-sidebar {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+.spec-sidebar-toggle:checked ~ .spec-sidebar {
+  display: block;
+}
+
+.spec-sidebar .viewing > a:after {
+  color: #8b9;
+  content: '\2022';
+  margin-left: 1ex;
+}
+
+@media (min-width: 1220px) {
+  .spec-sidebar-toggle + label {
+    display: none;
+  }
+
+  .spec-sidebar {
+    display: block;
+    box-shadow:
+      inset 1px 0 rgba(0,0,0,0.05),
+      inset 4px 0 8px -2px rgba(0,0,0,0.08) !important;
+  }
+
+  body {
+    padding-right: 345px;
+  }
+}
+
+
+/* Notes */
+
+.spec-note {
+  background: #FEFEF3;
+  border-left: solid 4px #F4E925;
+  margin: 1rem -1rem;
+  min-width: 70vw;
+  padding: 8px 1rem 12px calc(1rem - 4px);
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
+  width: fit-content;
+}
+
+@media (min-width: 720px) {
+  .spec-note {
+    min-width: 416px;
+  }
+}
+
+.spec-note > a:first-child {
+  color: #6C6613;
+  display: block;
+  font: italic 11pt/18pt var(--body-font-family);
+  opacity: 0.6;
+  user-select: none;
+}
+
+
+/* Todos */
+
+.spec-todo {
+  color: #666666;
+  margin: 1em 0 1em 5em;
+  min-height: 1em;
+}
+
+.spec-todo::before {
+  content: 'todo';
+  display: block;
+  float: left;
+  margin-left: -5em;
+  text-transform: uppercase;
+}
+
+/* Index table */
+
+.spec-index ol {
+  list-style-type: none;
+  margin: 0 0 0 var(--indent);
+  padding: 0;
+  column-width: 210px;
+  column-gap: var(--indent);
+}
+
+.spec-index ol li {
+  width: min-content;
+}
+
+/* Code */
+
+pre, code {
+  font-family: var(--mono-font-family);
+  font-size: var(--mono-font-size);
+  font-weight: inherit;
+}
+
+code {
+  background: #FAFAFA;
+  margin: -2px -1px;
+  padding: 3px 3px;
+  white-space: pre-wrap;
+}
+
+pre > code {
+  background: none;
+  font-weight: inherit;
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+}
+
+pre {
+  background: #FAFAFA;
+  min-width: 70vw;
+  width: -moz-fit-content;
+  width: -webkit-fit-content;
+  width: fit-content;
+  max-width: calc(100vw - 2rem);
+  overflow-y: scroll;
+}
+
+figure {
+  border-left: solid 4px #E9E9E9;
+  margin: 1rem -1rem;
+  padding: 12px 1rem 12px calc(1rem - 4px);
+}
+
+.mermaid > svg {
+  display: block;
+  margin: auto;
+}
+
+@media (min-width: 720px) {
+  pre {
+    min-width: 40ch;
+  }
+}
+
+.spec-example {
+  background: #FAFAFF;
+  border-left: solid 4px #BBBBFF;
+  padding-top: 8px;
+}
+
+.spec-counter-example {
+  background: #FFFAFA;
+  border-left: solid 4px #FFBBBB;
+  padding-top: 8px;
+}
+
+figcaption {
+  font: italic 11pt/18pt var(--body-font-family);
+  text-align: right;
+}
+
+.spec-example-num {
+  display: block;
+  float: left;
+  opacity: 0.6;
+  user-select: none;
+}
+
+.spec-counter-example > figcaption > a {
+  color: #98593b;
+}
+
+
+/* Tables */
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  background-color: #F9F9F9;
+}
+
+td, th {
+  border: 1px solid #D0D0D0;
+  padding: 0.4em;
+  vertical-align: baseline;
+}
+
+
+/* Lists */
+
+ol, ul {
+  padding-left: var(--list-indent);
+}
+
+li > ol, li > ul {
+  margin-top: 0.25em;
+  margin-bottom: 0.5em;
+}
+
+li + li {
+  margin-top: 0.25em;
+}
+
+li.task {
+  list-style-type: none;
+  position: relative;
+}
+
+li.task > input:first-child {
+  margin-left: 0;
+  position: absolute;
+  transform: translateX(calc(-100% - 1ch));
+}
+
+
+/* Edits */
+
+ins {
+  background-color: rgba(0, 200, 30, 0.08);
+  text-decoration: none;
+}
+
+del {
+  background-color: rgba(200, 0, 0, 0.08);
+}
+
+.spec-added, .spec-removed {
+  border-left: 4px solid;
+  margin-left: -18px;
+  padding-left: 14px;
+}
+
+.spec-added {
+  border-color: #396;
+}
+
+.spec-removed {
+  border-color: #933;
+  text-decoration: line-through;
+}
+
+
+/* Values */
+
+.spec-keyword {
+  font-weight: bold;
+}
+
+.spec-string {
+  font-family: var(--mono-font-family);
+  font-size: 85%;
+  white-space: pre;
+}
+
+var {
+  font-style: italic;
+}
+
+*[data-name] {
+  transition: 0.15s background ease-out, 0.15s border-color ease-out;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  padding: 0 3px;
+  margin: 0 -3px;
+}
+
+
+/* Grammar semantics, algorithms and calls */
+
+.spec-semantic,
+.spec-algo {
+  margin: 1rem 0 1rem var(--grammar-indent);
+}
+
+.spec-semantic > .spec-nt::after,
+.spec-algo > .spec-call:first-child::after {
+  content: ':';
+  font-style: normal;
+  font-weight: bold;
+  margin-left: 1ex;
+}
+
+.spec-semantic ol, .spec-semantic ol ol ol ol,
+.spec-algo ol, .spec-algo ol ol ol ol {
+  list-style-type: decimal;
+}
+
+.spec-semantic ol ol, .spec-semantic ol ol ol ol ol,
+.spec-algo ol ol, .spec-algo ol ol ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.spec-semantic ol ol ol, .spec-semantic ol ol ol ol ol ol,
+.spec-algo ol ol ol, .spec-algo ol ol ol ol ol ol {
+  list-style-type: lower-roman;
+}
+
+.spec-call > a {
+  color: inherit;
+}
+
+
+/* Grammar productions */
+
+.spec-production {
+  margin: 1rem 0 1rem var(--grammar-indent);
+}
+
+.spec-production > .spec-nt::after {
+  content: ':';
+  font-style: normal;
+  font-weight: bold;
+  margin: 0 1ex;
+}
+
+.spec-semantic.d2 > .spec-nt::after,
+.spec-production.d2 > .spec-nt::after {
+  content: '::';
+}
+
+.spec-semantic.d3 > .spec-nt::after,
+.spec-production.d3 > .spec-nt::after {
+  content: ':::';
+}
+
+.spec-production > .spec-rhs {
+  line-height: 1.1;
+  margin: 0.25em 0 0.5em calc(2 * var(--indent));
+  text-indent: calc(-1 * var(--indent));
+}
+
+.spec-semantic > .spec-rhs {
+  display: inline-block;
+  text-indent: calc(-1 * var(--indent));
+  margin-left: calc(1ex + var(--indent));
+}
+
+.spec-rhs > * {
+  text-indent: 0;
+}
+
+.spec-oneof {
+  display: inline;
+}
+
+.spec-oneof::before {
+  content: 'one of';
+  font-style: normal;
+  font-weight: bold;
+}
+
+.spec-oneof-grid {
+  max-width: calc(100vw - 2rem);
+  overflow: scroll;
+  margin: -1ex -1rem;
+  padding: 1ex 1rem;
+}
+
+.spec-oneof-grid > table {
+  margin-left: var(--indent);
+}
+
+.spec-oneof .spec-rhs {
+  border: none;
+  margin: 0;
+  padding: 0 0 0 1rem;
+  vertical-align: baseline;
+  white-space: pre;
+}
+
+.spec-oneof .spec-rhs:first-child {
+  padding: 0;
+}
+
+.spec-rhs .spec-constrained:not(:first-child),
+.spec-rhs .spec-quantified:not(:first-child),
+.spec-rhs .spec-nt:not(:first-child),
+.spec-rhs .spec-t:not(:first-child),
+.spec-rhs .spec-rx:not(:first-child),
+.spec-rhs .spec-prose:not(:first-child),
+.spec-rhs .spec-empty:not(:first-child),
+.spec-rhs .spec-lookahead:not(:first-child) {
+  margin-left: 1ex;
+  display: inline-block;
+}
+
+.spec-condition {
+  font-size: 85%;
+}
+
+.spec-condition::before {
+  content: '[if '
+}
+
+.spec-condition.not::before {
+  content: '[if not '
+}
+
+.spec-condition::after {
+  content: ']'
+}
+
+.spec-empty,
+.spec-prose {
+  color: #666666;
+}
+
+.spec-nt {
+  font-style: italic;
+}
+
+.spec-nt > a {
+  color: inherit;
+}
+
+.spec-quantifiers,
+.spec-params {
+  font-size: 65%;
+  font-style: normal;
+  vertical-align: sub;
+}
+
+.spec-quantifier.list {
+  color: #3348D3;
+}
+
+.spec-quantifier.optional {
+  color: #83238E;
+}
+
+.spec-params,
+.spec-condition {
+  color: #1C7758;
+}
+
+.spec-params::before {
+  content: '[';
+}
+
+.spec-params::after {
+  content: ']';
+}
+
+.spec-quantifier:not(:last-child)::after,
+.spec-param:not(:last-child)::after {
+  color: #666666;
+  content: ', ';
+}
+
+.spec-param.conditional::before {
+  content: '?';
+}
+
+.spec-param.negated::before {
+  content: '!';
+}
+
+.spec-t, .spec-rx {
+  color: #333333;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.spec-butnot::before {
+  color: #666666;
+  content: 'but not';
+  font-family: var(--body-font-family);
+  font-weight: normal;
+  margin-right: 1ex;
+}
+
+.spec-butnot > *:not(:first-child)::before {
+  color: #666666;
+  content: 'or';
+  font-family: var(--body-font-family);
+  font-weight: normal;
+  margin-right: 1ex;
+}
+
+.spec-rhs .spec-oneof::before,
+.spec-rhs .spec-butnot::before {
+  margin-left: 1ex;
+}
+
+.spec-lookahead > * {
+  margin: 0 !important;
+}
+
+.spec-lookahead > *:not(:first-child)::before {
+  color: #666666;
+  content: ', ';
+  font-family: var(--body-font-family);
+  font-style: normal;
+  font-weight: normal;
+}
+
+.spec-lookahead::before {
+  color: #666666;
+  content: '[lookahead = ';
+  font-family: var(--body-font-family);
+  font-style: normal;
+  font-weight: normal;
+}
+
+.spec-lookahead.not::before {
+  content: '[lookahead \2260  ';
+}
+
+.spec-lookahead.set::before {
+  content: '[lookahead \2208  {';
+  margin-right: 0;
+}
+
+.spec-lookahead.set.not::before {
+  content: '[lookahead \2209  {';
+}
+
+.spec-lookahead.ntset::before {
+  content: '[lookahead \2208  ';
+  margin-right: 0;
+}
+
+.spec-lookahead.ntset.not::before {
+  content: '[lookahead \2209  ';
+}
+
+.spec-lookahead::after {
+  color: #666666;
+  content: ']';
+}
+
+.spec-lookahead.set::after {
+  content: '}]';
+}
+</style>
+<style>
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: black;
+	background: none;
+	text-shadow: 0 1px white;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+@media print {
+	code[class*="language-"],
+	pre[class*="language-"] {
+		text-shadow: none;
+	}
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #f5f2f0;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: slategray;
+}
+
+.token.punctuation {
+	color: #999;
+}
+
+.token.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+	color: #9a6e3a;
+	/* This background color was intended by the author of this theme. */
+	background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+	color: #07a;
+}
+
+.token.function,
+.token.class-name {
+	color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+	color: #e90;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+</style>
+<script>(function(){var e,t=document.getElementsByTagName("style")[0].sheet;function n(){e&&(t.deleteRule(e),e=void 0)}document.documentElement.addEventListener("mouseover",(function(o){var a,r=o.target.attributes["data-name"];r&&(a=r.value,n(),e=t.insertRule(`*[data-name="${a}"] {\n      background: var(--highlight-background);\n      border-color: var(--highlight-border-color);\n    }`,t.cssRules.length))})),document.documentElement.addEventListener("mouseout",n);})()</script>
+<script>(function(){var e,t,n,o,r="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";function a(e){d(new URL(e.target.href))}function i(){d(window.location)}function d(e){var t=e.hash.match(/^#sel-([A-Za-z0-9-_]+)$/);if(t){o=t[1];var a=(n=function(e){for(var t=new Array(64),n=0;n<64;n++)t[r.charCodeAt(n)]=n;var o=0,a=p(),i=p(),d=p(),l=v(),c=i.pop(),f=s(a.concat(i)),h=d.pop(),g=s(a.concat(d)),w=document.createRange();return w.setStart(f,c),w.setEnd(g,h),w.isOutdated=void 0!==l&&l!==u(w.toString()),w;function v(){for(var n=0,r=0;o<e.length;){var a=t[e.charCodeAt(o++)];if(n|=(31&a)<<r,r+=5,a<32)return n}}function p(){var e=v();if(null!=e){for(var t=new Array(e),n=0;n<e;n++)t[n]=v();return t}}}(o)).getBoundingClientRect(),i=Math.max(20,Math.floor(.4*(window.innerHeight-a.height)));window.scrollTo(0,window.scrollY+a.y-i);var d=document.getSelection();d.empty(),d.addRange(n),l()}}function l(){if(n){t||(t=document.getElementsByTagName("article")[0]),e||(e=document.createElement("a"),document.body.appendChild(e)),e.href="#sel-"+o,e.onclick=a,e.className=n.isOutdated?"outdated-selection-link":"selection-link",e.innerText=n.isOutdated?"!":"‟";var r=window.innerWidth<720,i=n.getBoundingClientRect();if(r)e.style.left=Math.floor(i.x+i.width/2+window.scrollX-13)+"px",e.style.top=Math.floor(i.bottom+window.scrollY+10)+"px";else{var d=t.getBoundingClientRect().x;e.style.left=Math.floor(d+window.scrollX-37)+"px",e.style.top=Math.floor(i.y+window.scrollY-3)+"px"}}}function c(e){for(var t=[];e!=document.body;){var n=e.parentNode;t.push(Array.prototype.indexOf.call(n.childNodes,e)),e=n}return t.reverse()}function s(e){for(var t=document.body,n=0;n<e.length&&t;n++)t=t.childNodes[e[n]];return t}function u(e){for(var t=2166136261,n=0;n<e.length;++n)t^=e.charCodeAt(n),t+=(t<<1)+(t<<4)+(t<<7)+(t<<8)+(t<<24);return 32767&(t>>15^t)}document.addEventListener("selectionchange",(function(t){var a=document.getSelection();if(a.isCollapsed)e&&(e.parentNode.removeChild(e),e=null);else{var i=a.getRangeAt(0);n&&0===i.compareBoundaryPoints(Range.START_TO_START,n)&&0===i.compareBoundaryPoints(Range.END_TO_END,n)||(o=function(e){var t="",n=c(e.startContainer),o=c(e.endContainer),a=function(e,t){var n=0;for(;n<e.length&&n<t.length&&e[n]===t[n];)n++;return e.slice(0,n)}(n,o);return d(a),d(n.slice(a.length).concat(e.startOffset)),d(o.slice(a.length).concat(e.endOffset)),i(u(e.toString())),t;function i(e){do{t+=r[31&e|(e>31?32:0)],e>>=5}while(e>0)}function d(e){i(e.length);for(var t=0;t<e.length;t++)i(e[t])}}(n=i),l())}})),window.addEventListener("resize",l),window.addEventListener("hashchange",i),window.addEventListener("load",i);})()</script>
+</head>
+<body><article>
 <header>
-  <h1>Core Schemas</h1>
-  <h2>extensible GraphQL schemas for powering data cores</h2>
-
-  <table class=spec-md>
-    <tr>
-      <td>status</td>
-      <td id=spec-md-status>Draft</dd>
-    </tr>
-    <tr>
-      <td>version</td>
-      <td id=spec-md-version>0.1</dd>
-    </tr>
-    <tr>
-      <td>authors</td>
-      <td id=spec-md-authors>
-        <ul class=spec-authors-list>
-          <li><a rel=author href=mailto:ashi@apollographql.com>Ashi Krishnan</a>
-        </ul>
-      </td>
-    </tr>
-  </table>
+<h1>Core Schemas</h1>
+<section id="intro">
+<p><h2>extensible GraphQL schemas for powering data cores</h2></p>
+<table class=spec-data>
+  <tr><td>Status</td><td>Draft</td>
+  <tr><td>Version</td><td>0.1</td>
+</table>
+<link rel=stylesheet href=/apollo-dark.css>
+<link rel=stylesheet href=/tron.css>
+<script type=module async defer src=/install-nav.js></script>
+</section>
+<nav class="spec-toc">
+<div class="title">Contents</div>
+<ol>
+<li><a href="#sec-Problem"><span class="spec-secid">1</span>Problem</a></li>
+<li><a href="#sec-Core-Schemas"><span class="spec-secid">2</span>Core Schemas</a><ol>
+<li><a href="#sec-Parts-of-a-Core-Schema"><span class="spec-secid">2.1</span>Parts of a Core Schema</a></li>
+</ol>
+</li>
+<li><a href="#sec-Roles"><span class="spec-secid">3</span>Roles</a></li>
+<li><a href="#sec-The-Basics"><span class="spec-secid">4</span>The Basics</a><ol>
+<li><a href="#sec-Unspecified-directives-are-passed-through"><span class="spec-secid">4.1</span>Unspecified directives are passed through</a></li>
+<li><a href="#sec-Renaming-core-itself"><span class="spec-secid">4.2</span>Renaming core itself</a></li>
+</ol>
+</li>
+<li><a href="#sec-Directives"><span class="spec-secid">5</span>Directives</a><ol>
+<li><a href="#@core"><span class="spec-secid">5.1</span>@core</a><ol>
+<li><a href="#@core/feature-core__FeatureUrl"><span class="spec-secid">5.1.1</span>feature: core__FeatureUrl</a></li>
+<li><a href="#@core/as-String"><span class="spec-secid">5.1.2</span>as: String</a></li>
+</ol>
+</li>
+<li><a href="#@core__export"><span class="spec-secid">5.2</span>@core__export</a><ol>
+<li><a href="#@core__export/isExport-Boolean"><span class="spec-secid">5.2.1</span>isExport: Boolean</a></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><a href="#sec-Scalars"><span class="spec-secid">6</span>Scalars</a><ol>
+<li><a href="#core__FeatureUrl"><span class="spec-secid">6.1</span>core__FeatureUrl</a><ol>
+<li><a href="#sec-Ignore-meaningless-URL-components"><span class="spec-secid">6.1.1</span>Ignore meaningless URL components</a></li>
+<li><a href="#sec-Why-is-versioning-in-the-URL-not-a-directive-argument-"><span class="spec-secid">6.1.2</span>Why is versioning in the URL, not a directive argument?</a></li>
+</ol>
+</li>
+</ol>
+</li>
+<li><a href="#sec-Prefixing"><span class="spec-secid">7</span>Prefixing</a><ol>
+<li><a href="#sec-Elements-which-must-be-prefixed"><span class="spec-secid">7.1</span>Elements which must be prefixed</a></li>
+</ol>
+</li>
+<li><a href="#sec-Versioning"><span class="spec-secid">8</span>Versioning</a><ol>
+<li><a href="#sec-Ordering"><span class="spec-secid">8.1</span>Ordering</a></li>
+<li><a href="#sec-Satisfaction"><span class="spec-secid">8.2</span>Satisfaction</a></li>
+<li><a href="#sec-Referencing-versions-and-activating-implementations"><span class="spec-secid">8.3</span>Referencing versions and activating implementations</a></li>
+</ol>
+</li>
+<li><a href="#sec-Extensibility"><span class="spec-secid">9</span>Extensibility</a></li>
+<li><a href="#sec-Processing-Schemas"><span class="spec-secid">10</span>Processing Schemas</a></li>
+<li><a href="#sec-Validations-amp-Algorithms"><span class="spec-secid">11</span>Validations &amp; Algorithms</a><ol>
+<li><a href="#sec-Bootstrapping-validates-Has-Core-Feature-"><span class="spec-secid">11.1</span>Bootstrapping (validates Has Core Feature)</a></li>
+<li><a href="#sec-Namespace-Collection-validates-Name-Uniqueness-"><span class="spec-secid">11.2</span>Namespace Collection (validates Name Uniqueness)</a></li>
+<li><a href="#sec-Assign-Namespaces"><span class="spec-secid">11.3</span>Assign Namespaces</a></li>
+<li><a href="#sec-Is-Exported-"><span class="spec-secid">11.4</span>Is Exported?</a></li>
+</ol>
+</li>
+<li><a href="#index"><span class="spec-secid">§</span>Index</a></li>
+</ol>
+</nav>
 </header>
-
-## Problem
-
-[GraphQL](https://spec.graphql.org/) provides directives as a means of attaching user-defined metadata to a GraphQL document. Directives are highly flexible, and can be used to suggest behavior and define features of a graph which are not otherwise evident in the schema.
-
-Alas, *GraphQL does not provide a mechanism to globally identify or version directives*. Given a particular directive—e.g. `@external`—processors are expected to know how to interpret the directive based only on its name, definition within the document, and additional configuration from outside the document. This means that programs interpreting these directives have two options:
-
-  1. rely on a hardcoded interpretation for directives with certain signatures, or
-  2. accept additional configuration about how to interpret directives in the schema.
-
-The first solution is fragile, particularly as GraphQL has no built-in namespacing mechanisms, so the possibility of name collisions always looms.
-
-The second is unfortunate: GraphQL schemas are generally intended to be self-describing, and requiring additional configuration subtly undermines this guarantee: given just a schema, programs do not necessarily know how to interpret it, and certainly not how to serve it. It also creates the possibility for the schema and configuration to fall out of sync, leading to issues which can manifest late in a deployment pipeline.
-
-## Core Schemas
-
-Introducing **core schemas**.
-
+<section id="sec-Problem" secid="1">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Problem">1</a></span>Problem</h1>
+<p><a href="https://spec.graphql.org/">GraphQL</a> provides directives as a means of attaching user&#8208;defined metadata to a GraphQL document. Directives are highly flexible, and can be used to suggest behavior and define features of a graph which are not otherwise evident in the schema.</p>
+<p>Alas, <em>GraphQL does not provide a mechanism to globally identify or version directives</em>. Given a particular directive&mdash;e.g. <code>@external</code>&mdash;processors are expected to know how to interpret the directive based only on its name, definition within the document, and additional configuration from outside the document. This means that programs interpreting these directives have two options:</p>
+<ol>
+<li>rely on a hardcoded interpretation for directives with certain signatures, or</li>
+<li>accept additional configuration about how to interpret directives in the schema.</li>
+</ol>
+<p>The first solution is fragile, particularly as GraphQL has no built&#8208;in namespacing mechanisms, so the possibility of name collisions always looms.</p>
+<p>The second is unfortunate: GraphQL schemas are generally intended to be self&#8208;describing, and requiring additional configuration subtly undermines this guarantee: given just a schema, programs do not necessarily know how to interpret it, and certainly not how to serve it. It also creates the possibility for the schema and configuration to fall out of sync, leading to issues which can manifest late in a deployment pipeline.</p>
+</section>
+<section id="sec-Core-Schemas" secid="2">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Core-Schemas">2</a></span>Core Schemas</h1>
+<p>Introducing <strong>core schemas</strong>.</p>
 <div class=hbox>
   <a class=core>
     <div class=ring></div>
     <div class=nucleus>core schema</div>
   </a>
-</div>
+</div><p>A basic core schema:</p>
+<figure id="example-Basic-core-schema" class="spec-example"><figcaption><a href="#example-Basic-core-schema"><span class="spec-example-num">Example № 1</span>Basic core schema</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1"</span><span class="token punctuation">)</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/example/v1.0"</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
 
-A basic core schema:
+<span class="token keyword">type</span> <span class="token class-name">SomeType</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">field</span><span class="token punctuation">:</span> Int <span class="token directive function">@example</span>
+<span class="token punctuation">}</span>
 
-<view-of src=basic.graphql title='Basic core schema'></view-of>
+<span class="token keyword">directive</span> <span class="token directive function">@example</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
 
-**Core schemas** provide a clear and concise mechanism for schema documents to specify the metadata which they provide. Metadata is grouped into **features**, which typically define directives and associated types (e.g. scalars and inputs which serve as directive inputs). Additionally, core schemas provide:
-  - [**Flexible namespacing rules.**](#prefixing) It is always possible to represent any GraphQL schema within a core schema document. Additionally, documents can [choose the names](#as-string) they use for the features they reference, guaranteeing that namespace collisions can always be resolved.
-  - [**Versioning.**](#versioning) Feature specifications follow [semver-like semantic versioning principles](#versioning), which helps schema processors determine if they are able to correctly interpret a document's metadata.
-  - [**Standard rules for extensibility**](#extensibility) of directives and their associated input types. These rules allow specs to annotate each others' metadata, effectively providing "directives on directives," which are otherwise impossible within GraphQL schemas
+<span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> core__FeatureUrl<span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> String<span class="token punctuation">,</span> <span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token punctuation">)</span>
+  <span class="token keyword">repeatable</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span>
 
-**Core schemas are not a new language.** All core schema documents are valid GraphQL schema documents. However, this specification introduces new requirements, so not all valid GraphQL schemas are valid core schemas.
-
-The broad intention behind core schemas is to provide a *single document* which provides all the necessary configuration of a *data core*—some program which serves the schema to GraphQL clients, primarily by following directives in order to determine how to resolve queries made against that schema.
-
-### Parts of a Core Schema
-
-When talking about a core schema, we can broadly break it into two pieces:
-- an **export schema** (or **API**) consisting of exported schema elements (objects, interfaces, enums, directives, etc.) which **should** be served to clients, and
-- **machinery** consisting of directives and associated input types (such as enums and input objects). Machinery **must not** be served to clients.
-
-This reflects how core schemas are used: a core schema contains a GraphQL interface (the *API*) along with metadata about how to implement that interface (the *machinery*). Exposing the machinery to clients is unnecessary, and may in some cases constitute a security issue (for example, the machinery for a public-facing graph router will likely reference internal services, possibly exposing network internals which should not be visible to the general public).
-
-A key feature of core schemas is that it is always possible to derive the export schema from a core schema document without any knowledge of the features used by the document (with the exception of the `core` feature itself).
-
-Approximately, the process is:
-  - Any elements named `something__likeThis` are **not exported**, unless&#8230;
-    - &#8230;the feature which provides them ("`something`") has `export: true` on its `@core(feature:)` declaration, *or*
-    - &#8230;they are annotated with `@core__export` (or explicitly, `@core__export(isExport: true)`).
-  - Any elements with `normalNames` are **exported**, unless&#8230;
-    - &#8230;the element is annotated with `@core__export(isExport: false)`
-    - &#8230;the element is a directive or directive definition whose name matches the name of a feature, in which case, it is exported only if the entire feature is exported (having been brought in with `@core(feature:, export: true)`).
-
-A formal description is provided by the [is exported](#is-exported) algorithm.
-
-## Roles
-
-```mermaid
-#::[Actors who may be interested in the core schemas]
-graph TB
+<span class="token keyword">scalar</span> <span class="token class-name">core__FeatureUrl</span>
+  <span class="token directive function">@specifiedBy</span><span class="token punctuation">(</span><span class="token attr-name">url</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1#core__FeatureUrl"</span><span class="token punctuation">)</span></code></pre>
+</figure><p><strong>Core schemas</strong> provide a concise mechanism for schema documents to specify the metadata they provide. Metadata is grouped into <strong>features</strong>, which typically define directives and associated types (e.g. scalars and inputs which serve as directive inputs). Additionally, core schemas provide:</p>
+<ul>
+<li><a href="#sec-Prefixing"><strong>Flexible namespacing rules.</strong></a> It is always possible to represent any GraphQL schema within a core schema document. Additionally, documents can <a href="#@core/as-String">choose the names</a> they use for the features they reference, guaranteeing that namespace collisions can always be resolved.</li>
+<li><a href="#sec-Versioning"><strong>Versioning.</strong></a> Feature specifications follow <a href="#sec-Versioning">semver&#8208;like semantic versioning principles</a>, which helps schema processors determine if they are able to correctly interpret a document&rsquo;s metadata.</li>
+<li><a href="#sec-Extensibility"><strong>Standard rules for extensibility</strong></a> of directives and their associated input types. These rules allow specs to annotate each others&rsquo; metadata, effectively providing &ldquo;directives on directives,&rdquo; which are otherwise impossible within GraphQL schemas</li>
+</ul>
+<p><strong>Core schemas are not a new language.</strong> All core schema documents are valid GraphQL schema documents. However, this specification introduces new requirements, so not all valid GraphQL schemas are valid core schemas.</p>
+<p>The broad intention behind core schemas is to provide a <em>single document</em> which provides all the necessary configuration of a <em>data core</em>&mdash;some program which serves the schema to GraphQL clients, primarily by following directives in order to determine how to resolve queries made against that schema.</p>
+<section id="sec-Parts-of-a-Core-Schema" secid="2.1">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Parts-of-a-Core-Schema">2.1</a></span>Parts of a Core Schema</h2>
+<p>When talking about a core schema, we can broadly break it into two pieces:</p>
+<ul>
+<li>an <strong>export schema</strong> (or <strong>API</strong>) consisting of exported schema elements (objects, interfaces, enums, directives, etc.) which <strong>should</strong> be served to clients, and</li>
+<li><strong>machinery</strong> consisting of directives and associated input types (such as enums and input objects). Machinery <strong>must not</strong> be served to clients.</li>
+</ul>
+<p>This reflects how core schemas are used: a core schema contains a GraphQL interface (the <em>API</em>) along with metadata about how to implement that interface (the <em>machinery</em>). Exposing the machinery to clients is unnecessary, and may in some cases constitute a security issue (for example, the machinery for a public&#8208;facing graph router will likely reference internal services, possibly exposing network internals which should not be visible to the general public).</p>
+<p>A key feature of core schemas is that it is always possible to derive the export schema from a core schema document without any knowledge of the features used by the document (with the exception of the <code>core</code> feature itself).</p>
+<p>Approximately, the process is:</p>
+<ul>
+<li>Any elements named <code>something__likeThis</code> are <strong>not exported</strong>, unless&#8230;<ul>
+<li>&#8230;the feature which provides them (&rdquo;<code>something</code>&rdquo;) has <code>export: true</code> on its <code>@core(feature:)</code> declaration, <em>or</em></li>
+<li>&#8230;they are annotated with <var data-name="@core__export">@core__export</var> (or explicitly, <code>@core__export(isExport: true)</code>).</li>
+</ul>
+</li>
+<li>Any elements with <code>normalNames</code> are <strong>exported</strong>, unless&#8230;<ul>
+<li>&#8230;the element is annotated with <code>@core__export(isExport: false)</code>, <em>or</em></li>
+<li>&#8230;the element is a directive or directive definition whose name matches the name of a feature, in which case, it is exported only if the entire feature is exported (having been brought in with <code>@core(feature:, export: true)</code>).</li>
+</ul>
+</li>
+</ul>
+<p>A formal description is provided by the <a href="#sec-Is-Exported-">is exported</a> algorithm.</p>
+</section>
+</section>
+<section id="sec-Roles" secid="3">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Roles">3</a></span>Roles</h1>
+<figure id="fig-Actors-who-may-be-interested-in-the-core-schemas"><figcaption><a href="#fig-Actors-who-may-be-interested-in-the-core-schemas"> Actors who may be interested in the core schemas</a></figcaption><div class=mermaid>graph TB
   author("👩🏽‍💻 🤖  &nbsp;Author")-->schema(["☉ Core Schema"])
   schema-->proc1("🤖 &nbsp;Processor")
   proc1-->output1(["☉ Core Schema[0]"])
@@ -103,469 +1208,589 @@ graph TB
   output1-->reader
   output2-->reader
   final-->reader
-```
-
-- **Authors (either human or machine)** write an initial core schema as specified in this document, including versioned `@core` requests for all directives they use
-- **Machine processors** can process core schemas and output new core schemas. The versioning of directives and associated schema elements provided by the `@core` allows processors to operate on directives they understand and pass through directives they do not.
-- **Human readers** can examine the core schema at various stages of processing. At any stage, they can examine the `@core` directives and follow URLs to the specification, receiving an explanation of the requirements of the specification and what new directives, types, and other schema objects are available within the document.
-- **Data cores** can then pick up the processed core schema and provide some data-layer service with it. Typically this means serving the export schema as a GraphQL endpoint, using metadata defined by machinery to inform how it processes operations it receives. However, data cores may perform other tasks described in the core schema, such as routing to backend services, caching commonly-accessed fields and queries, and so on. The term "data core" is intended to capture this multiplicity of possible activities.
-
-## The Basics
-
-Core schemas:
-  1. **must** be valid GraphQL schema documents,
-  2. **must** contain exactly one `SchemaDefinition`, and
-  3. **must** use the `@core` directive on their schema definition to declare any features they reference by using [`@core(feature:)`](#core) to reference a [well-formed feature URL](#feature-urls).
-
-The first `@core` directive on the schema **must** reference the core spec itself, i.e. this document.
-
-<view-of src=basic.graphql title='Basic core schema using @core and @example'></view-of>
-
-### Unspecified directives are passed through
-
-Existing schemas likely contain definitions for directives which are not versioned, have no specification document, and are intended mainly to be passed through. This is the default behavior for core schema processors:
-
-```graphql
-#::[Unspecified directives are passed through]
-schema
-  @core(feature: "https://lib.apollo.dev/core/v0.1")
-{
-  query: Query
-}
-
-type SomeType {
-  field: Int @another
-}
-
-# `@another` is unspecified. Core processors will not extract metadata from
-# it, but its definition and all usages within the schema will be exposed
-# in the export schema.
-directive @another on FIELD
-```
-
-### Renaming `@core` itself
-
-It is possible to rename the `@core` directive itself with the same `as:` mechanism used for all features:
-
-```graphql
-#::[Renaming `@core` to `@coreSchema`]
-schema
-  @coreSchema(feature: "https://lib.apollo.dev/core/v0.1", as: "coreSchema")
-  @coreSchema(feature: "https://example.com/example/v1.0")
-{
-  query: Query
-}
-
-type SomeType {
-  field: Int @example
-}
-
-directive @example on FIELD
-```
-
-## `@core`
-
-```graphql
-#::[The `@core` directive]
-directive @core(feature: core__FeatureUrl!, as: String, export: Boolean)
-  repeatable on SCHEMA
-```
-
-Declare a core feature present in this schema.
-
-Documents **must** include a definition for the `@core` directive. The provided definition must be *compatible* with the definition above, but may:
-- **Omit optional arguments** if they are never used in the document,
-- **Omit locations** where the directive never occurs,
-- **Introduce new directive locations**, the behavior of which is unspecified here.
-- **Introduce new arguments.** New arguments **must** be prefixed, e.g. `example__extensionArgument: Bool`. The prefix **must** be the name of a feature referenced with this or another `@core` directive within the document.
-- **Use `String` in place of custom scalars.** This is an ease-of-authoring affordance which allows document authors to omit the definitions of custom scalar types provided by features. Processors **must** continue to interpret such arguments and fields according to the encoding and decoding rules of the custom scalar type. For example, the `@core` directive may be defined as follows, with no change to the behavior:
-
-```graphql
-#::[The `@core` directive, defined with `feature: String`]
-directive @core(feature: String)
-```
-
-### `feature: `[core__FeatureUrl](#core__featureurl)
-
-A [feature URL](#core__FeatureUrl) specifying the directive and associated schema elements. When viewed, the URL **should** provide the content of the appropriate version of the specification in some human-readable form. In short, a human reader should be able to click the link and go to the docs for the version in use. There are specific requirements on the format of the URL, but it is not required that the *content* be machine-readable in any particular way.
-
-<figure>
-  <figcaption>
-    <a name=anatomy-of-a-feature-url href=#anatomy-of-a-feature-url class=a-header>Basic anatomy of a feature URL</a>
-  </figcaption>  
-  <code class=anatomy>
-    <span class=pink style='--depth: 2'>http://spec.example.com/a/b/c/<span>exampleSpec<aside>name</aside></span><aside>
-      identity
-    </aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span>
-  </code>
-</figure>
-
-Feature URLs contain information about the spec's [prefix](#prefixing) and [version](#versioning), and should be generated and processed in accordance with the [requirements on the structure of feature URLs](#feature-urls).
-
-### `as: String`
-
-Change the [names](#prefixing) of directives and schema elements from this specification. The specified string **must** be a valid GraphQL identifier and **must not** contain the namespace separator (two underscores, `__`).
-
-When `as:` is provided, processors **must** replace the default name prefix on the names of all [prefixed schema elements](#elements-which-should-be-prefixed) with the specified name.
-
-```graphql
-#::[Using `@core(feature:, as:)` to use a feature with a custom name]
-schema
-  @core(feature: "https://spec.example.com/core/v1.0")
-  @core(feature: "https://spec.example.com/example/v1.0", as: "eg")
-{
-  query: Query
-}
-
-type User {
-  # Specifying `as: "eg"` transforms @example into @eg
-  name: String @eg(data: ITEM)
-}
-
-# Additional specified schema elements must have their prefixes set
-# to the new name.
-#
-# This data enum was specified as `example__Data`, but will be renamed
-# as `eg__Data`:
-enum eg__Data {
-  ITEM
-}
-
-# Name transformation must also be applied to definitions pulled in from
-# specifications.
-directive @eg(data: eg__Data) on FIELD
-
-# (...other definitions omitted...)
-```
-
-## `@core__export`
-
-Control the export of individual schema elements.
-
-```graphql
-#::[The `@core__export` directive]
-directive @core__export(isExport: Boolean = true)
-  repeatable on
-  | SCALAR
-  | OBJECT
-  | FIELD_DEFINITION
-  | ARGUMENT_DEFINITION
-  | INTERFACE
-  | UNION
-  | ENUM
-  | ENUM_VALUE
-  | INPUT_OBJECT
-  | INPUT_FIELD_DEFINITION
-```
-
-`@core__export` can occur at any type system location. Elements with `@core__export` will always be included in the export schema. Elements with `@core__export(isExport: false)` will always be excluded from the export schema.
-
-## `core__FeatureUrl`
-
-```graphql
-#::[Definition of core__FeatureUrl]
-scalar core__FeatureUrl
-  @specifiedBy(url: "https://lib.apollo.dev/core/v0.1#core__featureurl")
-```
-
-Feature URLs serve two main purposes:
-  - Directing human readers to documentation about the feature
-  - Providing tools with information about the specs in use, along with enough information to select and invoke an implementation
-  
-Feature URLs **should** be [RFC 3986 URLs](https://tools.ietf.org/html/rfc3986). When viewed, the URL **should** provide the specification of the selected version of the feature in some human-readable form; a human reader should be able to click the link and go to the correct version of the docs.
-
-Although they are not prohibited from doing so, it's assumed that processors will not load the content of feature URLs. Published specifications are not required to be machine-readable, and [this spec](.) places no requirements on the structure or syntax of the content to be found there.
-
-There are, however, requirements on the structure of the URL itself:
-
-<figure>
-  <figcaption>
-    <a name=basic-anatomy-of-a-feature-url href=#basic-anatomy-of-a-feature-url class=a-header>Basic anatomy of a feature URL</a>
-  </figcaption>  
-  <code class=anatomy>
-    <span class=pink style='--depth: 2'>https://spec.example.com/a/b/c/<span>exampleFeature<aside>name</aside></span><aside>
-      identity
-    </aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span>
-  </code>
-</figure>
-
-The final two segments of the URL's [path](https://tools.ietf.org/html/rfc3986#section-3.3) **must** contain the feature's [default prefix](#prefix) and a [version tag](#versioning). The content of the URL up to and including the prefix—but excluding the version tag and trailing `/`—is the feature's *identity*. For the above example,
-<dl>
-  <dt markdown>`identity: "https://spec.example.com/a/b/c/exampleFeature"`</dt>
-  <dd>A global identifier for the feature. Processors can treat this as an opaque string identifying the feature (but not the version of the feature) for purposes of selecting an appropriate implementation.</dd>
-  <dt markdown>`name: "exampleFeature"`</dt>
-  <dd markdown>The feature's name, for purposes of [prefixing](#prefixing) schema elements it defines or extends.</dd>
-  <dt markdown>`version: "v1.0"`</dt>
-  <dd markdown>The tag for the [version](#versioning) of the feature used to author the document. Processors **must** select an implementation of the feature which can [satisfy](#satisfaction) the specified version.</dd>
-</dl>
-
-The version tag **must** satisfy the [BNF grammar for `‹version tag›`](#backus-naur-form-for-versions-and-version-tags).
-
-### Ignore meaningless URL components
-
-When extracting the URL's `name` and `version`, processors **must** ignore any url components which are not assigned a meaning. This spec assigns meaning to the final two segments of the [path](https://tools.ietf.org/html/rfc3986#section-3.3). Other URL components—particularly query strings and fragments, if present—**must** be ignored for the purposes of extracting the `name` and `version`.
-
-<figure>
-  <figcaption>
-    <a name=feature-url-ignore-meaningless href=#feature-url-ignore-meaningless class=a-header>Ignoring meaningless parts of a URL</a>
-  </figcaption>  
-  <code class=anatomy>
-    <span class=pink style='--depth: 2'>https://example.com/<span>exampleSpec<aside>name</aside></span><aside>
-      identity
-    </aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span><span class=grey>?key=val&k2=v2#fragment<aside>ignored</aside></span>
-  </code>
-</figure>
-
-### Why is versioning in the URL, not a directive argument?
-
-The version is in the URL because when a human reader visits the URL, we would like them to be taken to the documentation for the *version of the feature used by this document*. Many text editors will turn URLs into hyperlinks, and it's highly desirable that clicking the link takes the user to the correct version of the docs. Putting the version information in a separate argument to the `@core` directive would prevent this.
-
-## Prefixing
-
-With the exception of a single root directive, core feature specifications **must** prefix all schema elements they introduce. The prefix:
-1. **must** match the default name of the feature as derived from the feature's specification URL,
-1. **must** be a string of characters valid within GraphQL names, and
-2. **must not** contain the core namespace separator, which is two underscores (`"__"`).
-
-Prefixed names consist of the name of the feature, followed by two underscores, followed by the name of the element (which can be any valid GraphQL identifier). For instance, the `core` specification (which you are currently reading) introduces elements named [`core__FeatureUrl`](#core__featureurl) and `core__export`(#core__export).
-
-A feature's *root directive* is an exception to the prefixing requirements. Feature specifications **may** introduce a single directive which carries only the name of the feature, with no prefix required. For example, the `core` specification introduces a `@core` directive. This directive has the same name as the feature ("`core`"), and so requires no prefix.
-
-```graphql
-#::[Using the `@core` directive with a spec's default name]
-schema @core(feature: "https://spec.example.com/example/v1.0") {
-  query: Query
-}
-
-type User {
-  name: String @example(data: ITEM)
-}
-
-# An enum used to provide structured data to the example spec.
-# It is prefixed with the name of the spec.
-enum example__Data {
-  ITEM
-}
-
-directive @example(data: example__Data) on FIELD
-```
-
-The prefix **must not** be elided within documentation; definitions of schema elements provided within the spec **must** include the default prefix.
-
-### Elements which must be prefixed
-
-Feature specs **must** prefix the following schema elements:
-- the names of any object types, interfaces, unions, enums, or input object types defined by the feature
-- the names of any fields the spec introduces on *foreign types* defined in a different feature
-- the names of any arguments the spec introduces on *foreign directives and fields* defined by a different feature
-- the names of any directives introduced in the spec, with the exception of the *root directive*, which must have the same name as the feature
-
-<view-of src=prefixing.graphql
-  title='Prefixing examples'
-></view-of>
-
-## Versioning
-
-Specs are versioned with a **subset** of a [Semantic Version Number](https://semver.org/spec/v2.0.0.html) containing only the `major` and `minor` parts. Thus, specifications **should** provide a version of the form `‹major›.‹minor›`, where both integers >= 0.
-
-```
-#::[Examples of valid versions]
-2.2
-1.0
-1.1
-0.1
-```
-
-As specified by semver, spec authors **should** increment the:
-> - MAJOR version when you make incompatible API changes,
-> - MINOR version when you add functionality in a backwards compatible manner
-
-Patch and pre-release qualifiers are judged to be not particularly meaningful in the context of core features, which are (by definition) interfaces rather than implementations. The `‹patch›` component of version denotes a bug fix which is backwards compatible—that is, a change to the implementation which does not affect the interface. `‹patch›`-level changes in the version of a spec denote wording clarifications which do not require implementation changes. As such, it is not important to track them for the purposes of version resolution.
-
-As with [semver](https://semver.org/spec/v2.0.0.html), the `0.x` version series is special: there is no expectation of compatibility between versions `0.x` and `0.y`. For example, a processor must not activate implementation `0.4` to satisfy a requested version of `0.2`.
-
-### Ordering
-
-Versions can be ordered with the following pseudocode:
-
-```typescript
-compareVersions(a: Version, b: Version) -> LESS_THAN | EQUAL | GREATER_THAN {
-  if a.major < b.major {
-    return LESS_THAN
-  }
-  if a.major == b.major {
-    if a.minor == b.minor { return EQUAL }
-    if a.minor > b.minor { return GREATER_THAN }
-    return LESS_THAN
-  }
-  if a.major > b.major {
-    return GREATER_THAN
-  }
-}
-```
-
-Note that this ordering does *not* guarantee that if A > B then A can satisfy a version requirement of B. For example, `2.0 > 1.9`, but `2.0` cannot [satisfy](#satisfying-version-requirements) the requirements of a document which references version `1.9`, since the major version update introduced possibly-breaking changes.
-
-### Satisfaction
-
-Given a version `requested` by a document and an `available` version of an implementation, the following pseudocode will determine if the `available` version can satisfy the `requested` version:
-
-```typescript
-canSatisfy(requested: Version, available: Version) =
-  requested.major == available.major &&
-  (requested.major > 0 && (requested.minor <= available.minor)
-    || (requested.minor == available.minor))
-```
-
-### Referencing versions and activating implementations
-
-Schema documents **must** reference a feature version which supports all the schema elements and behaviors required by the document. As a practical matter, authors should generally prefer to reference the [lowest](#ordering) versions which can [satisfy](#satisfaction) their requirements, as this imposes the fewest constraints on processors and is thus more likely to be supported. Authors **may** choose a higher version which they believe has sufficient support.
-
-If a processor chooses to activate support for a feature, the processor **must** activate an implementation which can [satisfy](#satisfaction) the version required by the document.
-
-### Backus-Naur Form for versions and version tags
-
-```plaintext
-#::[BNF grammar for SemVer specifiers]
-‹version tag› ::= "v" ‹version›
-
-‹version› ::= ‹major› "." ‹minor›
-
-‹major› ::= ‹numeric identifier›
-‹minor› ::= ‹numeric identifier›
-‹numeric identifier› ::= "0"
-                       | ‹positive digit›
-                       | ‹positive digit› ‹digits›
-‹digits› ::= ‹digit›
-           | ‹digit› ‹digits›
-
-‹digit› ::= "0"
-          | ‹positive digit›
-‹positive digit› ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
-```
-
-## Extensibility
-
-Any directives, scalars, enums, input objects, and other schema elements defined by specs **may** be **extensible**. This means that their definitions within a core schema document do not have to exactly match definitions provided by specs. Instead, definitions should match all usages within the document.
-
-Standard extensibility rules:
-- **Directives** may be defined as taking additional arguments, provided those arguments are [prefixed](#prefixing) with the name of a document feature followed by two underscores ("`__`"). These arguments are interpreted as metadata-on-metadata, and are routed to the declaring spec for interpretation
-- **Enums** defined in features may include values of any name. For extensible enums, the space of **unprefixed** names belongs to the document. The space of **prefixed** names belongs to the spec with that prefix, and may be used to pass data between specs.
-- **Input Objects** may be defined with additional fields, provided those fields are [prefixed](#prefixing) with the name of a feature followed by two underscores.
-
-## Processing Schemas
-
-```mermaid
-#::[Example processing pipeline]
-graph LR
+</div></figure><ul>
+<li><strong>Authors (either human or machine)</strong> write an initial core schema as specified in this document, including versioned <code>@core</code> requests for all directives they use</li>
+<li><strong>Machine processors</strong> can process core schemas and output new core schemas. The versioning of directives and associated schema elements provided by the <code>@core</code> allows processors to operate on directives they understand and pass through directives they do not.</li>
+<li><strong>Human readers</strong> can examine the core schema at various stages of processing. At any stage, they can examine the <code>@core</code> directives and follow URLs to the specification, receiving an explanation of the requirements of the specification and what new directives, types, and other schema objects are available within the document.</li>
+<li><strong>Data cores</strong> can then pick up the processed core schema and provide some data&#8208;layer service with it. Typically this means serving the export schema as a GraphQL endpoint, using metadata defined by machinery to inform how it processes operations it receives. However, data cores may perform other tasks described in the core schema, such as routing to backend services, caching commonly&#8208;accessed fields and queries, and so on. The term &ldquo;data core&rdquo; is intended to capture this multiplicity of possible activities.</li>
+</ul>
+</section>
+<section id="sec-The-Basics" secid="4">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-The-Basics">4</a></span>The Basics</h1>
+<p>Core schemas:</p>
+<ol>
+<li><strong>must</strong> be valid GraphQL schema documents,</li>
+<li><strong>must</strong> contain exactly one <code>SchemaDefinition</code>, and</li>
+<li><strong>must</strong> use the <var data-name="@core">@core</var> directive on their schema definition to declare any features they reference by using <var data-name="@core">@core</var> to reference a <a href="#core__FeatureUrl">well&#8208;formed feature URL</a>.</li>
+</ol>
+<p>The first <var data-name="@core">@core</var> directive on the schema <strong>must</strong> reference the core spec itself, i.e. this document.</p>
+<figure id="example-Basic-core-schema-using-@core-and" class="spec-example"><figcaption><a href="#example-Basic-core-schema-using-@core-and"><span class="spec-example-num">Example № 2</span>Basic core schema using <var data-name="@core">@core</var> and <code>@example</code></a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1"</span><span class="token punctuation">)</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/example/v1.0"</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token class-name">SomeType</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">field</span><span class="token punctuation">:</span> Int <span class="token directive function">@example</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">directive</span> <span class="token directive function">@example</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
+
+<span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> core__FeatureUrl<span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> String<span class="token punctuation">,</span> <span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token punctuation">)</span>
+  <span class="token keyword">repeatable</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span>
+
+<span class="token keyword">scalar</span> <span class="token class-name">core__FeatureUrl</span>
+  <span class="token directive function">@specifiedBy</span><span class="token punctuation">(</span><span class="token attr-name">url</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1#core__FeatureUrl"</span><span class="token punctuation">)</span></code></pre>
+</figure><section id="sec-Unspecified-directives-are-passed-through" secid="4.1">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Unspecified-directives-are-passed-through">4.1</a></span>Unspecified directives are passed through</h2>
+<p>Existing schemas likely contain definitions for directives which are not versioned, have no specification document, and are intended mainly to be passed through. This is the default behavior for core schema processors:</p>
+<figure id="example-Unspecified-directives-are-passed-through" class="spec-example"><figcaption><a href="#example-Unspecified-directives-are-passed-through"><span class="spec-example-num">Example № 3</span> Unspecified directives are passed through</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1"</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token class-name">SomeType</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">field</span><span class="token punctuation">:</span> Int <span class="token directive function">@another</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># `@another` is unspecified. Core processors will not extract metadata from</span>
+<span class="token comment"># it, but its definition and all usages within the schema will be exposed</span>
+<span class="token comment"># in the export schema.</span>
+<span class="token keyword">directive</span> <span class="token directive function">@another</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
+</code></pre>
+</figure></section>
+<section id="sec-Renaming-core-itself" secid="4.2">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Renaming-core-itself">4.2</a></span>Renaming core itself</h2>
+<p>It is possible to rename the core feature itself with the same <code>as:</code> mechanism used for all features:</p>
+<figure id="example-Renaming-@core-to-@coreSchema" class="spec-example"><figcaption><a href="#example-Renaming-@core-to-@coreSchema"><span class="spec-example-num">Example № 4</span> Renaming <var data-name="@core">@core</var> to <var data-name="@coreSchema">@coreSchema</var></a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@coreSchema</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"coreSchema"</span><span class="token punctuation">)</span>
+  <span class="token directive function">@coreSchema</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://example.com/example/v1.0"</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token class-name">SomeType</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">field</span><span class="token punctuation">:</span> Int <span class="token directive function">@example</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">directive</span> <span class="token directive function">@example</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
+</code></pre>
+</figure></section>
+</section>
+<section id="sec-Directives" secid="5">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Directives">5</a></span>Directives</h1>
+<section id="@core" secid="5.1">
+<h2 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core">5.1</a></span>@core</h2>
+<figure id="example-1af97"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span>
+  <span class="token attr-name">feature</span><span class="token punctuation">:</span> core__FeatureUrl<span class="token operator">!</span><span class="token punctuation">,</span>
+  <span class="token attr-name">as</span><span class="token punctuation">:</span> String<span class="token punctuation">,</span>
+  <span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token punctuation">)</span>
+  <span class="token keyword">repeatable</span>
+  <span class="token operator">|</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span>
+</code></pre>
+</figure><p>Declare a core feature present in this schema.</p>
+<p>Documents <strong>must</strong> include a definition for the <var data-name="@core">@core</var> directive. The provided definition must be <em>compatible</em> with the definition above, but may:</p>
+<ul>
+<li><strong>Omit optional arguments</strong> if they are never used in the document,</li>
+<li><strong>Omit locations</strong> where the directive never occurs,</li>
+<li><strong>Introduce new directive locations</strong>, the behavior of which is unspecified here.</li>
+<li><strong>Introduce new arguments.</strong> New arguments <strong>must</strong> be prefixed, e.g. <code>example__extensionArgument: Bool</code>. The prefix <strong>must</strong> be the name of a feature referenced with this or another <code>@core</code> directive within the document.</li>
+<li><strong>Use <code>String</code> in place of custom scalars.</strong> This is an ease&#8208;of&#8208;authoring affordance which allows document authors to omit the definitions of custom scalar types provided by features. Processors <strong>must</strong> continue to interpret such arguments and fields according to the encoding and decoding rules of the custom scalar type. For example, <var data-name="@core">@core</var> may be defined as follows, with no change to the behavior:</li>
+</ul>
+<figure id="example-@core-definition-taking-a-String-feature" class="spec-example"><figcaption><a href="#example-@core-definition-taking-a-String-feature"><span class="spec-example-num">Example № 5</span> <var data-name="@core">@core</var> definition taking a String feature</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> String<span class="token punctuation">)</span>
+</code></pre>
+</figure><section id="@core/feature-core__FeatureUrl" secid="5.1.1">
+<h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core/feature-core__FeatureUrl">5.1.1</a></span>feature: core__FeatureUrl</h3>
+<p>A <a href="#core__FeatureUrl">feature URL</a> specifying the directive and associated schema elements. When viewed, the URL <strong>should</strong> provide the content of the appropriate version of the specification in some human&#8208;readable form. In short, a human reader should be able to click the link and go to the docs for the version in use. There are <a href="#core__FeatureUrl">specific requirements</a> on the format of the URL, but it is not required that the <em>content</em> be machine&#8208;readable in any particular way.</p>
+<p>Feature URLs contain information about the spec&rsquo;s <a href="#sec-Prefixing">prefix</a> and <a href="#sec-Versioning">version</a>, and should be generated and processed in accordance with the <a href="#core__FeatureUrl">requirements on the structure of feature URLs</a>.</p>
+</section>
+<section id="@core/as-String" secid="5.1.2">
+<h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core/as-String">5.1.2</a></span>as: String</h3>
+<p>Change the <a href="#sec-Prefixing">names</a> of directives and schema elements from this specification. The specified string <strong>must</strong> be a valid GraphQL identifier and <strong>must not</strong> contain the namespace separator (two underscores, <code>__</code>).</p>
+<p>When <code>as:</code> is provided, processors <strong>must</strong> replace the default name prefix on the names of all <a href="#sec-Elements-which-must-be-prefixed">prefixed schema elements</a> with the specified name.</p>
+<figure id="example-Using-@core-feature-as-to-use-a-feature-with-a-custom-name" class="spec-example"><figcaption><a href="#example-Using-@core-feature-as-to-use-a-feature-with-a-custom-name"><span class="spec-example-num">Example № 6</span> Using @core(feature:, as:) to use a feature with a custom name</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/core/v1.0"</span><span class="token punctuation">)</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1.0"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"eg"</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+  <span class="token comment"># Specifying `as: "eg"` transforms @example into @eg</span>
+  <span class="token attr-name">name</span><span class="token punctuation">:</span> String <span class="token directive function">@eg</span><span class="token punctuation">(</span><span class="token attr-name">data</span><span class="token punctuation">:</span> <span class="token constant">ITEM</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># Additional specified schema elements must have their prefixes set</span>
+<span class="token comment"># to the new name.</span>
+<span class="token comment">#</span>
+<span class="token comment"># This data enum was specified as `example__Data`, but will be renamed</span>
+<span class="token comment"># as `eg__Data`:</span>
+<span class="token keyword">enum</span> <span class="token class-name">eg__Data</span> <span class="token punctuation">{</span>
+  <span class="token constant">ITEM</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># Name transformation must also be applied to definitions pulled in from</span>
+<span class="token comment"># specifications.</span>
+<span class="token keyword">directive</span> <span class="token directive function">@eg</span><span class="token punctuation">(</span><span class="token attr-name">data</span><span class="token punctuation">:</span> eg__Data<span class="token punctuation">)</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
+
+<span class="token comment"># (...other definitions omitted...)</span>
+</code></pre>
+</figure></section>
+</section>
+<section id="@core__export" secid="5.2">
+<h2 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export">5.2</a></span>@core__export</h2>
+<p>Control the export of individual schema elements.</p>
+<figure id="example-d2d8d"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core__export</span><span class="token punctuation">(</span><span class="token attr-name">isExport</span><span class="token punctuation">:</span> Boolean <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+  <span class="token keyword">repeatable</span> <span class="token keyword">on</span>
+  <span class="token operator">|</span> <span class="token constant">SCALAR</span>
+  <span class="token operator">|</span> <span class="token constant">OBJECT</span>
+  <span class="token operator">|</span> <span class="token constant">FIELD_DEFINITION</span>
+  <span class="token operator">|</span> <span class="token constant">ARGUMENT_DEFINITION</span>
+  <span class="token operator">|</span> <span class="token constant">INTERFACE</span>
+  <span class="token operator">|</span> <span class="token constant">UNION</span>
+  <span class="token operator">|</span> <span class="token constant">ENUM</span>
+  <span class="token operator">|</span> <span class="token constant">ENUM_VALUE</span>
+  <span class="token operator">|</span> <span class="token constant">INPUT_OBJECT</span>
+  <span class="token operator">|</span> <span class="token constant">INPUT_FIELD_DEFINITION</span>
+</code></pre>
+</figure><p><code>@core__export</code> can occur at any type system location. Elements with <code>@core__export</code> will always be included in the export schema. Elements with <code>@core__export(isExport: false)</code> will always be excluded from the export schema.</p>
+<section id="@core__export/isExport-Boolean" secid="5.2.1">
+<h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export/isExport-Boolean">5.2.1</a></span>isExport: Boolean</h3>
+<p>If true, the element is always exported, regardless of whether the feature which defines it is exported. If false, the element is never exported. </p>
+</section>
+</section>
+</section>
+<section id="sec-Scalars" secid="6">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Scalars">6</a></span>Scalars</h1>
+<section id="core__FeatureUrl" secid="6.1">
+<h2 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#core__FeatureUrl">6.1</a></span>core__FeatureUrl</h2>
+<figure id="example-7752a"><pre class="graphql" data-language="graphql"><code><span class="token keyword">scalar</span> <span class="token class-name">core__FeatureUrl</span>
+  <span class="token directive function">@specifiedBy</span><span class="token punctuation">(</span><span class="token attr-name">url</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1#core__FeatureUrl"</span><span class="token punctuation">)</span>
+</code></pre>
+</figure><p>Feature URLs serve two main purposes:</p>
+<ul>
+<li>Directing human readers to documentation about the feature</li>
+<li>Providing tools with information about the specs in use, along with enough information to select and invoke an implementation Feature URLs <strong>should</strong> be <a href="https://tools.ietf.org/html/rfc3986">RFC 3986 URLs</a>. When viewed, the URL <strong>should</strong> provide the specification of the selected version of the feature in some human&#8208;readable form; a human reader should be able to click the link and go to the correct version of the docs.</li>
+</ul>
+<p>Although they are not prohibited from doing so, it&rsquo;s assumed that processors will not load the content of feature URLs. Published specifications are not required to be machine&#8208;readable, and <a href=".">this spec</a> places no requirements on the structure or syntax of the content to be found there.</p>
+<p>There are, however, requirements on the structure of the URL itself:</p>
+<figure id="fig-Basic-anatomy-of-a-feature-URL"><figcaption><a href="#fig-Basic-anatomy-of-a-feature-URL"> Basic anatomy of a feature URL</a></figcaption><code class=anatomy>  
+  <span class=pink style='--depth: 2'>https://spec.example.com/a/b/c/<span>exampleFeature<aside>name</aside></span><aside>identity</aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span>
+</code>
+</figure><p>The final two segments of the URL&rsquo;s <a href="https://tools.ietf.org/html/rfc3986#section-3.3">path</a> <strong>must</strong> contain the feature&rsquo;s name and a <a href="#sec-Versioning">version tag</a>. The content of the URL up to and including the prefix&mdash;but excluding the version tag and trailing <code>/</code>&mdash;is the feature&rsquo;s <em>identity</em>. For the above example, <dl> <dt><code>identity: &quot;https://spec.example.com/a/b/c/exampleFeature&quot;</code></dt> <dd>A global identifier for the feature. Processors can treat this as an opaque string identifying the feature (but not the version of the feature) for purposes of selecting an appropriate implementation.</dd> <dt><code>name: &quot;exampleFeature&quot;</code></dt> <dd>The feature&rsquo;s name, for purposes of <a href="#sec-Prefixing">prefixing</a> schema elements it defines or extends.</dd> <dt><code>version: &quot;v1.0&quot;</code></dt> <dd>The tag for the <a href="#sec-Versioning">version</a> of the feature used to author the document. Processors <strong>must</strong> select an implementation of the feature which can <a href="#sec-Satisfaction">satisfy</a> the specified version.</dd> </dl></p>
+<p>The version tag <strong>must</strong> be a valid <span class="spec-nt"><a href="#VersionTag" data-name="VersionTag">VersionTag</a></span>.</p>
+<section id="sec-Ignore-meaningless-URL-components" secid="6.1.1">
+<h3><span class="spec-secid" title="link to this section"><a href="#sec-Ignore-meaningless-URL-components">6.1.1</a></span>Ignore meaningless URL components</h3>
+<p>When extracting the URL&rsquo;s <code>name</code> and <code>version</code>, processors <strong>must</strong> ignore any url components which are not assigned a meaning. This spec assigns meaning to the final two segments of the <a href="https://tools.ietf.org/html/rfc3986#section-3.3">path</a>. Other URL components&mdash;particularly query strings and fragments, if present&mdash;<strong>must</strong> be ignored for the purposes of extracting the <code>name</code> and <code>version</code>.</p>
+<figure id="fig-Ignoring-meaningless-parts-of-a-URL"><figcaption><a href="#fig-Ignoring-meaningless-parts-of-a-URL"> Ignoring meaningless parts of a URL</a></figcaption><code class=anatomy>
+  <span class=pink style='--depth: 2'>https://example.com/<span>exampleSpec<aside>name</aside></span><aside>identity</aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span><span class=grey>?key=val&k2=v2#frag<aside>ignored</aside></span>
+</code>
+</figure></section>
+<section id="sec-Why-is-versioning-in-the-URL-not-a-directive-argument-" secid="6.1.2">
+<h3><span class="spec-secid" title="link to this section"><a href="#sec-Why-is-versioning-in-the-URL-not-a-directive-argument-">6.1.2</a></span>Why is versioning in the URL, not a directive argument?</h3>
+<p>The version is in the URL because when a human reader visits the URL, we would like them to be taken to the documentation for the <em>version of the feature used by this document</em>. Many text editors will turn URLs into hyperlinks, and it&rsquo;s highly desirable that clicking the link takes the user to the correct version of the docs. Putting the version information in a separate argument to the <code>@core</code> directive would prevent this.</p>
+</section>
+</section>
+</section>
+<section id="sec-Prefixing" secid="7">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Prefixing">7</a></span>Prefixing</h1>
+<p>With the exception of a single root directive, core feature specifications <strong>must</strong> prefix all schema elements they introduce. The prefix:</p>
+<ol>
+<li><strong>must</strong> match the default name of the feature as derived from the feature&rsquo;s specification URL,</li>
+<li><strong>must</strong> be a string of characters valid within GraphQL names, and</li>
+<li><strong>must not</strong> contain the core namespace separator, which is two underscores (<code>&quot;__&quot;</code>).</li>
+</ol>
+<p>Prefixed names consist of the name of the feature, followed by two underscores, followed by the name of the element (which can be any valid GraphQL identifier). For instance, the <code>core</code> specification (which you are currently reading) introduces elements named <a href="#core__FeatureUrl"><var data-name="core__FeatureUrl">core__FeatureUrl</var></a> and <a href="#@core__export"><var data-name="@core__export">@core__export</var></a>.</p>
+<p>A feature&rsquo;s <em>root directive</em> is an exception to the prefixing requirements. Feature specifications <strong>may</strong> introduce a single directive which carries only the name of the feature, with no prefix required. For example, the <code>core</code> specification introduces a <code>@core</code> directive. This directive has the same name as the feature (&rdquo;<code>core</code>&rdquo;), and so requires no prefix.</p>
+<figure id="example-Using-the-@core-directive-with-a-spec-s-default-name" class="spec-example"><figcaption><a href="#example-Using-the-@core-directive-with-a-spec-s-default-name"><span class="spec-example-num">Example № 7</span> Using the @core directive with a spec&rsquo;s default name</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1.0"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
+
+<span class="token keyword">type</span> <span class="token class-name">User</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">name</span><span class="token punctuation">:</span> String <span class="token directive function">@example</span><span class="token punctuation">(</span><span class="token attr-name">data</span><span class="token punctuation">:</span> <span class="token constant">ITEM</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># An enum used to provide structured data to the example spec.</span>
+<span class="token comment"># It is prefixed with the name of the spec.</span>
+<span class="token keyword">enum</span> <span class="token class-name">example__Data</span> <span class="token punctuation">{</span>
+  <span class="token constant">ITEM</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">directive</span> <span class="token directive function">@example</span><span class="token punctuation">(</span><span class="token attr-name">data</span><span class="token punctuation">:</span> example__Data<span class="token punctuation">)</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
+</code></pre>
+</figure><p>The prefix <strong>must not</strong> be elided within documentation; definitions of schema elements provided within the spec <strong>must</strong> include the default prefix.</p>
+<section id="sec-Elements-which-must-be-prefixed" secid="7.1">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Elements-which-must-be-prefixed">7.1</a></span>Elements which must be prefixed</h2>
+<p>Feature specs <strong>must</strong> prefix the following schema elements:</p>
+<ul>
+<li>the names of any object types, interfaces, unions, enums, or input object types defined by the feature</li>
+<li>the names of any fields the spec introduces on <em>foreign types</em> defined in a different feature</li>
+<li>the names of any arguments the spec introduces on <em>foreign directives and fields</em> defined by a different feature</li>
+<li>the names of any directives introduced in the spec, with the exception of the <em>root directive</em>, which must have the same name as the feature</li>
+</ul>
+<figure id="example-Prefixing-examples" class="spec-example"><figcaption><a href="#example-Prefixing-examples"><span class="spec-example-num">Example № 8</span>Prefixing examples</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/featureA/v1.0"</span><span class="token punctuation">)</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/featureB/v2.0"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"B"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span>
+
+<span class="token description string">"""<span class="token language-markdown">
+featureA_SomeType is a type defined by feature A.
+</span>"""</span>
+<span class="token keyword">type</span> <span class="token class-name">featureA_SomeType</span> <span class="token punctuation">{</span>
+  <span class="token description string">"""<span class="token language-markdown">
+  nativeField is a field defined by featureA on a type also defined
+  by featureA (namely featureA_SomeType)
+  </span>"""</span>
+  <span class="token attr-name">nativeField</span><span class="token punctuation">:</span> Int <span class="token directive function">@featureA__fieldDirective</span>
+
+  <span class="token description string">"""<span class="token language-markdown">
+  B_foreignField is a field defined by featureB on a type defined
+  by featureA (namely featureA_SomeType)
+  </span>"""</span>
+  <span class="token attr-name">B_foreignField</span><span class="token punctuation">:</span> Int
+<span class="token punctuation">}</span>
+
+<span class="token description string">"""<span class="token language-markdown">
+featureA_SomeInput is an input specified by feature A
+</span>"""</span>
+<span class="token keyword">input</span> featureA_SomeInput <span class="token punctuation">{</span>
+  <span class="token description string">"""<span class="token language-markdown">
+  nativeInputField is defined by featureA
+  </span>"""</span>
+  <span class="token attr-name">nativeInputField</span><span class="token punctuation">:</span> Int
+
+  <span class="token description string">"""<span class="token language-markdown">
+  B_field is defined by featureB as a field on featureA_SomeInput
+  </span>"""</span>
+  <span class="token attr-name">B_field</span><span class="token punctuation">:</span> String
+<span class="token punctuation">}</span>
+
+<span class="token description string">"""<span class="token language-markdown">
+featureA_Items is specified by feature A
+</span>"""</span>
+<span class="token keyword">enum</span> <span class="token class-name">featureA_Items</span> <span class="token punctuation">{</span> <span class="token constant">ONE</span><span class="token punctuation">,</span> <span class="token constant">TWO</span><span class="token punctuation">,</span> <span class="token constant">THREE</span> <span class="token directive function">@B</span> <span class="token punctuation">}</span>
+
+<span class="token description string">"""<span class="token language-markdown">
+@B is the root directive defined by featureB
+
+Root directives are named after their feature
+</span>"""</span>
+<span class="token keyword">directive</span> <span class="token directive function">@B</span> <span class="token keyword">on</span> <span class="token class-name">ENUM_VALUE</span>
+
+<span class="token description string">"""<span class="token language-markdown">
+@featureA__fieldDirective is a non-root (prefixed) directive defined by featureA
+</span>"""</span>
+<span class="token keyword">directive</span> <span class="token directive function">@featureA__fieldDirective</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
+
+<span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> core__FeatureUrl<span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> String<span class="token punctuation">,</span> <span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token punctuation">)</span>
+  <span class="token keyword">repeatable</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span>
+
+<span class="token keyword">scalar</span> <span class="token class-name">core__FeatureUrl</span>
+  <span class="token directive function">@specifiedBy</span><span class="token punctuation">(</span><span class="token attr-name">url</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1#core__FeatureUrl"</span><span class="token punctuation">)</span></code></pre>
+</figure></section>
+</section>
+<section id="sec-Versioning" secid="8">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Versioning">8</a></span>Versioning</h1>
+<div class="spec-production" id="VersionTag">
+<span class="spec-nt"><a href="#VersionTag" data-name="VersionTag">VersionTag</a></span><div class="spec-rhs"><span class="spec-prose">v</span><span class="spec-nt"><a href="#Version" data-name="Version">Version</a></span></div>
+</div>
+<div class="spec-production" id="Version">
+<span class="spec-nt"><a href="#Version" data-name="Version">Version</a></span><div class="spec-rhs"><span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span><span class="spec-prose">.</span><span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span></div>
+</div>
+<div class="spec-production" id="Major">
+<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span><div class="spec-rhs"><span class="spec-nt"><a href="#NumericIdentifier" data-name="NumericIdentifier">NumericIdentifier</a></span></div>
+</div>
+<div class="spec-production" id="Minor">
+<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span><div class="spec-rhs"><span class="spec-nt"><a href="#NumericIdentifier" data-name="NumericIdentifier">NumericIdentifier</a></span></div>
+</div>
+<div class="spec-production" id="NumericIdentifier">
+<span class="spec-nt"><a href="#NumericIdentifier" data-name="NumericIdentifier">NumericIdentifier</a></span><div class="spec-rhs"><span class="spec-prose">0</span><span class="spec-t">|</span><span class="spec-nt"><a href="#PositiveDigit" data-name="PositiveDigit">PositiveDigit</a></span><span class="spec-quantified"><span class="spec-nt"><a href="#Digit" data-name="Digit">Digit</a></span><span class="spec-quantifiers"><span class="spec-quantifier list">list</span><span class="spec-quantifier optional">opt</span></span></span></div>
+</div>
+<div class="spec-production" id="Digit">
+<span class="spec-nt"><a href="#Digit" data-name="Digit">Digit</a></span><div class="spec-rhs"><span class="spec-prose">0</span><span class="spec-t">|</span><span class="spec-nt"><a href="#PositiveDigit" data-name="PositiveDigit">PositiveDigit</a></span></div>
+</div>
+<div class="spec-production" id="PositiveDigit">
+<span class="spec-nt"><a href="#PositiveDigit" data-name="PositiveDigit">PositiveDigit</a></span><div class="spec-rhs"><span class="spec-prose">1</span><span class="spec-t">|</span><span class="spec-prose">2</span><span class="spec-t">|</span><span class="spec-prose">3</span><span class="spec-t">|</span><span class="spec-prose">4</span><span class="spec-t">|</span><span class="spec-prose">5</span><span class="spec-t">|</span><span class="spec-prose">6</span><span class="spec-t">|</span><span class="spec-prose">7</span><span class="spec-t">|</span><span class="spec-prose">8</span><span class="spec-t">|</span><span class="spec-prose">9</span></div>
+</div>
+<p>Specs are versioned with a <strong>subset</strong> of a <a href="https://semver.org/spec/v2.0.0.html">Semantic Version Number</a> containing only the major and minor parts. Thus, specifications <strong>should</strong> provide a version of the form <span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span>, where both integers &ge; 0.</p>
+<figure id="example-Valid-version-tags" class="spec-example"><figcaption><a href="#example-Valid-version-tags"><span class="spec-example-num">Example № 9</span> Valid version tags</a></figcaption><pre class="text" data-language="text"><code>v2.2
+v1.0
+v1.1
+v0.1
+</code></pre>
+</figure><p>As specified by semver, spec authors <strong>should</strong> increment the:</p>
+<div class="spec-added"><ul>
+<li>MAJOR version when you make incompatible API changes,</li>
+<li>MINOR version when you add functionality in a backwards compatible manner</li>
+</ul>
+</div>
+<p>Patch and pre&#8208;release qualifiers are judged to be not particularly meaningful in the context of core features, which are (by definition) interfaces rather than implementations. The patch component of a semver denotes a bug fix which is backwards compatible&mdash;that is, a change to the implementation which does not affect the interface. patch&#8208;level changes in the version of a spec denote wording clarifications which do not require implementation changes. As such, it is not important to track them for the purposes of version resolution.</p>
+<p>As with <a href="https://semver.org/spec/v2.0.0.html">semver</a>, the <code>0.x</code> version series is special: there is no expectation of compatibility between versions <code>0.x</code> and <code>0.y</code>. For example, a processor must not activate implementation <code>0.4</code> to satisfy a requested version of <code>0.2</code>.</p>
+<section id="sec-Ordering" secid="8.1">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Ordering">8.1</a></span>Ordering</h2>
+<p>Given <span class="spec-nt"><a href="#Version" data-name="Version">Version</a></span>s <var data-name="a">a</var> and <var data-name="b">b</var>, return whether <var data-name="a">a</var> is <span class="spec-nt"><span data-name="LESS_THAN">LESS_THAN</span></span>, <span class="spec-nt"><span data-name="GREATER_THAN">GREATER_THAN</span></span>, or <span class="spec-nt"><span data-name="EQUAL">EQUAL</span></span> to <var data-name="b">b</var>.</p>
+<div class="spec-algo" id="CompareVersions()">
+<span class="spec-call"><a href="#CompareVersions()" data-name="CompareVersions">CompareVersions</a>(<var data-name="a">a</var>, <var data-name="b">b</var>)</span><ol>
+<li>If <var data-name="a">a</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span> &lt; <var data-name="b">b</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span>, return <span class="spec-nt"><span data-name="LESS_THAN">LESS_THAN</span></span></li>
+<li>If <var data-name="a">a</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span> &gt; <var data-name="b">b</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span>, return <span class="spec-nt"><span data-name="GREATER_THAN">GREATER_THAN</span></span></li>
+<li>If <var data-name="a">a</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span> == <var data-name="b">b</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span>:<ol>
+<li>If <var data-name="a">a</var>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span> == <var data-name="b">b</var>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span>, return <span class="spec-nt"><span data-name="EQUAL">EQUAL</span></span></li>
+<li>If <var data-name="a">a</var>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span> &gt; <var data-name="b">b</var>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span>, return <span class="spec-nt"><span data-name="GREATER_THAN">GREATER_THAN</span></span></li>
+<li>Otherwise, return <span class="spec-nt"><span data-name="LESS_THAN">LESS_THAN</span></span></li>
+</ol>
+</li>
+</ol>
+</div>
+<div id="note-4c6a8" class="spec-note">
+<a href="#note-4c6a8">Note</a>
+This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a version requirement of B. For example, <code>2.0 &gt; 1.9</code>, but <code>2.0</code> cannot <a href="#sec-Satisfaction">satisfy</a> the requirements of a document which references version <code>1.9</code>, since the major version update introduced possibly&#8208;breaking changes.</div>
+</section>
+<section id="sec-Satisfaction" secid="8.2">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Satisfaction">8.2</a></span>Satisfaction</h2>
+<p>Given a version <var data-name="requested">requested</var> by a document and an <var data-name="available">available</var> version of an implementation, the following algorithm will determine if the <var data-name="available">available</var> version can satisfy the <var data-name="requested">requested</var> version:</p>
+<div class="spec-algo" id="Satisfies()">
+<span class="spec-call"><a href="#Satisfies()" data-name="Satisfies">Satisfies</a>(<var data-name="requested">requested</var>, <var data-name="available">available</var>)</span><ol>
+<li>If <var data-name="requested">requested</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span> ≠ <var data-name="available">available</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span>, return <span class="spec-keyword">false</span></li>
+<li>If <var data-name="requested">requested</var>.<span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span> = 0, return <var data-name="requested">requested</var>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span> = <var data-name="available">available</var>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span></li>
+<li>Return <var data-name="requested">requested</var>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span> &le; <var data-name="available">available</var>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span></li>
+</ol>
+</div>
+</section>
+<section id="sec-Referencing-versions-and-activating-implementations" secid="8.3">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Referencing-versions-and-activating-implementations">8.3</a></span>Referencing versions and activating implementations</h2>
+<p>Schema documents <strong>must</strong> reference a feature version which supports all the schema elements and behaviors required by the document. As a practical matter, authors should generally prefer to reference the <a href="#sec-Ordering">lowest</a> versions which can <a href="#sec-Satisfaction">satisfy</a> their requirements, as this imposes the fewest constraints on processors and is thus more likely to be supported. Authors <strong>may</strong> choose a higher version which they believe has sufficient support.</p>
+<p>If a processor chooses to activate support for a feature, the processor <strong>must</strong> activate an implementation which can <a href="#sec-Satisfaction">satisfy</a> the version required by the document.</p>
+</section>
+</section>
+<section id="sec-Extensibility" secid="9">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Extensibility">9</a></span>Extensibility</h1>
+<p>Any directives, scalars, enums, input objects, and other schema elements defined by specs <strong>may</strong> be <strong>extensible</strong>. This means that their definitions within a core schema document do not have to exactly match definitions provided by specs. Instead, definitions should match all usages within the document.</p>
+<p>Standard extensibility rules:</p>
+<ul>
+<li><strong>Directives</strong> may be defined as taking additional arguments, provided those arguments are <a href="#sec-Prefixing">prefixed</a> with the name of a document feature followed by two underscores (&rdquo;<code>__</code>&rdquo;). These arguments are interpreted as metadata&#8208;on&#8208;metadata, and are routed to the declaring spec for interpretation</li>
+<li><strong>Enums</strong> defined in features may include values of any name. For extensible enums, the space of <strong>unprefixed</strong> names belongs to the document. The space of <strong>prefixed</strong> names belongs to the spec with that prefix, and may be used to pass data between specs.</li>
+<li><strong>Input Objects</strong> may be defined with additional fields, provided those fields are <a href="#sec-Prefixing">prefixed</a> with the name of a feature followed by two underscores.</li>
+</ul>
+</section>
+<section id="sec-Processing-Schemas" secid="10">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Processing-Schemas">10</a></span>Processing Schemas</h1>
+<figure id="example-433f8"><div class=mermaid>graph LR
   schema(["📄  Input Schema"]):::file-->proc("🤖 &nbsp;Processor")
   proc-->output(["📄  Output Schema"]):::file
   classDef file fill:none,color:#eee;
   style proc fill:none,stroke:fuchsia,color:fuchsia;
-```
-
-A common use case is that of a processor which consumes a valid input schema and generates an output schema.
-
-The general guidance for processor behavior is: don't react to what you don't understand.
-
-Specifically, processors:
-  - **should** pass through `@core` directives which reference unknown feature URLs
-  - **should** pass through prefixed directives, types, and other schema elements  
-
-An exception to this is processors which prepare the schema for final public consumption. Such processors **may** choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives—such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case-by-case basis.
-
-## Validations &amp; Algorithms
-
-### Bootstrapping *validates* Has Core Feature
-
-Determine the name of the core specification within the document *or* fail the *Has Core Feature* validation.
-
-It is possible to [rename the core feature](#renaming-core-itself) within a document. This process determines the actual name for the core feature if one is present.
-
-**Formal Specification**
-- For each directive `d` on the SchemaDefinition within the Document,
-  - If `d` has a `feature:` argument whose value is "https://lib.apollo.dev/core/v0.1", *and either*:
-    - &#8230;`d` has an `as:` argument whose value is equal to `d`'s name
-    - &#8230;*or* `d` does not have an `as:` argument and `d`'s name is `core`
-    - *then* **Return** `coreName` = `d`'s name
-- If no matching directive was found, the ***Has Core Feature* validation fails**.
-
-### Namespace Collection *validates* Name Uniqueness
-
-Collect a map of `featureName: String -> Directive`, where `Directive` is a `@core(feature:)` Directive which introduces some feature named `featureName` into the document.
-
-**Formal Specification**
-- Given [`coreName`](#bootstrapping-validates-has-core-feature)
-- Let `namespaces` be a map of `featureName: String -> Directive`, initially empty.
-- For each directive `d` named `coreName` on the SchemaDefinition within the Document,
-  - Let `name` be the spec's [name](#prefixing) as specified by the directive's `as:` argument or, if the argument is not present, the default name specified in the [feature url](#feature-urls).
-  - If `name` exists within `namespaces`, the ***Name Uniqueness* validation fails**.
-  - Insert `name => d` into `namespaces`
-- **Return** `namespaces`
-
-**Explanatory Text**
-
-Prefixes, whether implicit or explicit, must be unique within a document. Valid:
-
-<view-of src=prefixing.graphql#schema[0]
-  title="Example of unique prefixes"
-></view-of>
-
-It is also valid to reference multiple versions of the same spec under different prefixes:
-
-<view-of src=prefix-uniqueness.graphql#schema[0]
-  title="Explicit prefixes allow multiple versions of the same spec to coexist within a Document"
-></view-of>
-
-Without the explicit `as:`, the above would be invalid:
-
-<view-of src=prefix-uniqueness.graphql#schema[1]
-  title="Counter-example of non-unique prefixes with multiple versions of the same spec"
-  class=counter-example
-></view-of>
-
-Different specs with the same prefix are also invalid:
-
-<view-of src=prefix-uniqueness.graphql#schema[2]
-  title="Counter-example of non-unique prefixes"
-  class=counter-example
-></view-of>
-
-### Assign Namespaces
-
-Create a map of `element: Any Named Element -> featureName: String | null`, associating every named schema element within the document with the name of a feature, or `null` if it is not associated with a feature.
-
-**Formal Specification**
-- Given [`namespaces`](#namespace-collection-validates-name-uniqueness)
-- Let `assignments` be a map of `element: Any Named Element -> featureName: String | null`, initally empty
-- For each named schema element `e` within the Document,
-  - If `e`'s name begins with `"__"`,
-    - Insert `e => null` into `assignments`
-    - **Continue to next `e`**
-  - If `e`'s name contains the substring `"__"`,
-    - Partition `e`'s name into `[prefix, base]` at the first `"__"` (that is, find the shortest `prefix` and longest `base` such that `e`'s name `= prefix + "__" + base`)
-    - If `prefix` exists within `namespaces`, insert `e => namespaces[prefix]` into `assignments`
-      - Else, insert `e => null` into `assignments`
-    - **Continue to next `e`**
-  - Insert `e => null` into `assignments`
-- **Return `assignments`**
-
-### Is Exported?
-
-Determine if any schema element is [exported](#the-export-schema). A core schema Document's [API](#the-export-schema) is the subset of the entire Document containing only exported elements.
-
-**Formal Specification**
-- Given [`assignments`](#assign-namespaces)
-- Given [`coreName`](#bootstrapping-validates-has-core-feature)
-- Given some schema element `e` within the Document,
-  - For each Directive `d` (if any) on `e`,
-    - If `d`'s name is *coreName*`__export`,
-      - If `d` does not have an `isExport:` argument *or* `isExport:` is `true`, **Return `true`**
-      - If `d` has an `isExport:` argument whose value is `false`, **Return `false`**
-  - If `assignments[e]` is `null`, **Return `true`**
-  - Let `f` be the directive referenced from `assignments[e]`
-  - If `f` has a `export:` argument whose value is `true`, **Return `true`**
-  - Else, **Return `false`**
-
-</main>
+</div></figure><p>A common use case is that of a processor which consumes a valid input schema and generates an output schema.</p>
+<p>The general guidance for processor behavior is: don&rsquo;t react to what you don&rsquo;t understand.</p>
+<p>Specifically, processors:</p>
+<ul>
+<li><strong>should</strong> pass through <code>@core</code> directives which reference unknown feature URLs</li>
+<li><strong>should</strong> pass through prefixed directives, types, and other schema elements </li>
+</ul>
+<p>An exception to this is processors which prepare the schema for final public consumption. Such processors <strong>may</strong> choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives&mdash;such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case&#8208;by&#8208;case basis.</p>
+</section>
+<section id="sec-Validations-amp-Algorithms" secid="11">
+<h1><span class="spec-secid" title="link to this section"><a href="#sec-Validations-amp-Algorithms">11</a></span>Validations &amp; Algorithms</h1>
+<section id="sec-Bootstrapping-validates-Has-Core-Feature-" secid="11.1">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Bootstrapping-validates-Has-Core-Feature-">11.1</a></span>Bootstrapping (validates Has Core Feature)</h2>
+<p>Determine the name of the core specification within the document <em>or</em> fail the <em>Has Core Feature</em> validation.</p>
+<p>It is possible to <a href="#sec-Renaming-core-itself">rename the core feature</a> within a document. This process determines the actual name for the core feature if one is present.</p>
+<div class="spec-algo" id="Bootstrap()">
+<span class="spec-call"><a href="#Bootstrap()" data-name="Bootstrap">Bootstrap</a>(<var data-name="document">document</var>)</span><ol>
+<li>For each directive <var data-name="d">d</var> on the SchemaDefinition within <var data-name="document">document</var>,<ol>
+<li>If <var data-name="d">d</var> has a <code>feature:</code> argument whose value is &ldquo;https://lib.apollo.dev/core/v0.1&rdquo;, <em>and either</em>:<ol>
+<li>&#8230;<var data-name="d">d</var> has an <code>as:</code> argument whose value is equal to <var data-name="d">d</var>&lsquo;s name</li>
+<li>&#8230;<em>or</em> <var data-name="d">d</var> does not have an <code>as:</code> argument and <var data-name="d">d</var>&lsquo;s name is <code>core</code></li>
+<li><em>then</em> <strong>Return</strong> <code>coreName</code> = <var data-name="d">d</var>&lsquo;s name</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>If no matching directive was found, the <strong><em>Has Core Feature</em> validation fails</strong>.</li>
+</ol>
 </div>
+</section>
+<section id="sec-Namespace-Collection-validates-Name-Uniqueness-" secid="11.2">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Namespace-Collection-validates-Name-Uniqueness-">11.2</a></span>Namespace Collection (validates Name Uniqueness)</h2>
+<p>Collect a map of (<var data-name="featureName">featureName</var>: <code>String</code>) &rarr; <code>Directive</code>, where <code>Directive</code> is a <var data-name="@core">@core</var> Directive which introduces the feature named <var data-name="featureName">featureName</var> into the document.</p>
+<div class="spec-algo" id="CollectNamespaces()">
+<span class="spec-call"><a href="#CollectNamespaces()" data-name="CollectNamespaces">CollectNamespaces</a>(<var data-name="document">document</var>)</span><ol>
+<li>Let <var data-name="coreName">coreName</var> be the name of the core feature found via <span class="spec-call"><a href="#Bootstrap()" data-name="Bootstrap">Bootstrap</a>(<var data-name="document">document</var>)</span></li>
+<li>Let <var data-name="namespaces">namespaces</var> be a map of <var data-name="featureName">featureName</var>: <code>String</code> &rarr; <code>Directive</code>, initially empty.</li>
+<li>For each directive <var data-name="d">d</var> named <code>coreName</code> on the SchemaDefinition within <var data-name="document">document</var>,<ol>
+<li>Let <var data-name="name">name</var> be the spec&rsquo;s <a href="#sec-Prefixing">name</a> as specified by the directive&rsquo;s <code>as:</code> argument or, if the argument is not present, the default name from the <a href="#core__FeatureUrl">feature url</a>.</li>
+<li>If <var data-name="name">name</var> exists within <var data-name="namespaces">namespaces</var>, the <strong><em>Name Uniqueness</em> validation fails</strong>.</li>
+<li>Insert <var data-name="name">name</var> &rArr; <var data-name="d">d</var> into <var data-name="namespaces">namespaces</var></li>
+</ol>
+</li>
+<li><strong>Return</strong> <var data-name="namespaces">namespaces</var></li>
+</ol>
+</div>
+<p>Prefixes, whether implicit or explicit, must be unique within a document. Valid:</p>
+<figure id="example-Unique-prefixes" class="spec-example"><figcaption><a href="#example-Unique-prefixes"><span class="spec-example-num">Example № 10</span>Unique prefixes</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/featureA/v1.0"</span><span class="token punctuation">)</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/featureB/v2.0"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"B"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span></code></pre>
+</figure><p>It is also valid to reference multiple versions of the same spec under different prefixes:</p>
+<figure id="example-Explicit-prefixes-allow-multiple-versions-of-the-same-spec-to-coexist-within-a-Document" class="spec-example"><figcaption><a href="#example-Explicit-prefixes-allow-multiple-versions-of-the-same-spec-to-coexist-within-a-Document"><span class="spec-example-num">Example № 11</span>Explicit prefixes allow multiple versions of the same spec to coexist within a Document</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/1.0"</span><span class="token punctuation">)</span>               <span class="token comment"># name is A</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/2.0"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"A2"</span><span class="token punctuation">)</span>     <span class="token comment"># name is A2</span>
+<span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span></code></pre>
+</figure><p>Without the explicit <code>as:</code>, the above would be invalid:</p>
+<figure id="example-Non-unique-prefixes-with-multiple-versions-of-the-same-spec" class="spec-counter-example"><figcaption><a href="#example-Non-unique-prefixes-with-multiple-versions-of-the-same-spec"><span class="spec-example-num">Counter Example № 12</span>Non&#8208;unique prefixes with multiple versions of the same spec</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/1.0"</span><span class="token punctuation">)</span> <span class="token comment"># name is A</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/2.0"</span><span class="token punctuation">)</span> <span class="token comment"># name is A</span>
+<span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span></code></pre>
+</figure><p>Different specs with the same prefix are also invalid:</p>
+<figure id="example-Different-specs-with-non-unique-prefixes" class="spec-counter-example"><figcaption><a href="#example-Different-specs-with-non-unique-prefixes"><span class="spec-example-num">Counter Example № 13</span>Different specs with non&#8208;unique prefixes</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/1.0"</span><span class="token punctuation">)</span>              <span class="token comment"># name is A</span>
+  <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://www.specs.com/specA/1.1"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"A"</span><span class="token punctuation">)</span>     <span class="token comment"># name is A</span>
+<span class="token punctuation">{</span>
+  <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
+<span class="token punctuation">}</span></code></pre>
+</figure></section>
+<section id="sec-Assign-Namespaces" secid="11.3">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Assign-Namespaces">11.3</a></span>Assign Namespaces</h2>
+<p>Create a map of <var data-name="element">element</var>: <em>Any Named Element</em> &rarr; <var data-name="feature">feature</var>: <code>Directive</code> | <span class="spec-keyword">null</span>, associating every named schema element within the document with a feature directive, or <span class="spec-keyword">null</span> if it is not associated with a feature.</p>
+<div class="spec-algo" id="AssignNamespaces()">
+<span class="spec-call"><a href="#AssignNamespaces()" data-name="AssignNamespaces">AssignNamespaces</a>(<var data-name="document">document</var>)</span><ol>
+<li>Let <var data-name="namespaces">namespaces</var> be the result of collecting namespaces via <span class="spec-call"><a href="#CollectNamespaces()" data-name="CollectNamespaces">CollectNamespaces</a>(<var data-name="document">document</var>)</span></li>
+<li>Let <var data-name="assignments">assignments</var> be a map of (<var data-name="element">element</var>: <em>Any Named Element</em>) &rarr; <var data-name="feature">feature</var>: <code>Directive</code> | <span class="spec-keyword">null</span>, initally empty</li>
+<li>For each named schema element <var data-name="e">e</var> within the <var data-name="document">document</var><ol>
+<li>Let <var data-name="name">name</var> be the name of the <var data-name="e">e</var></li>
+<li>If <var data-name="name">name</var> begins with <span class="spec-string">"__"</span>,<ol>
+<li>Insert <var data-name="e">e</var> &rArr; <span class="spec-keyword">null</span> into <var data-name="assignments">assignments</var></li>
+<li><strong>Continue</strong> to next <var data-name="e">e</var></li>
+</ol>
+</li>
+<li>If <var data-name="name">name</var> contains the substring <span class="spec-string">"__"</span>,<ol>
+<li>Partition <var data-name="name">name</var> into <code>[</code><var data-name="prefix">prefix</var>, <var data-name="base">base</var><code>]</code> at the first <span class="spec-string">"__"</span> (that is, find the shortest <var data-name="prefix">prefix</var> and longest <var data-name="base">base</var> such that <var data-name="name">name</var> = <var data-name="prefix">prefix</var> + <span class="spec-string">"__"</span> + <var data-name="base">base</var>)</li>
+<li>If <var data-name="prefix">prefix</var> exists within <code>namespaces</code>, insert <var data-name="e">e</var> &rArr; <var data-name="namespaces">namespaces</var><code>[</code><var data-name="prefix">prefix</var><code>]</code> into <var data-name="assignments">assignments</var><ol>
+<li>Else, insert <var data-name="e">e</var> &rArr; <span class="spec-keyword">null</span> into <var data-name="assignments">assignments</var></li>
+</ol>
+</li>
+<li><strong>Continue</strong> to next <var data-name="e">e</var></li>
+</ol>
+</li>
+<li>Insert <code>e =&gt; null</code> into <var data-name="assignments">assignments</var></li>
+</ol>
+</li>
+<li><strong>Return</strong> <var data-name="assignments">assignments</var></li>
+</ol>
+</div>
+</section>
+<section id="sec-Is-Exported-" secid="11.4">
+<h2><span class="spec-secid" title="link to this section"><a href="#sec-Is-Exported-">11.4</a></span>Is Exported?</h2>
+<p>Determine if any schema element is <a href="#sec-Parts-of-a-Core-Schema">exported</a>. A core schema Document&rsquo;s <a href="#sec-Parts-of-a-Core-Schema">API</a> is the subset of the entire Document containing only exported elements.</p>
+<div class="spec-algo" id="IsExported()">
+<span class="spec-call"><a href="#IsExported()" data-name="IsExported">IsExported</a>(<var data-name="element">element</var>)</span><ol>
+<li>Let <var data-name="coreName">coreName</var> be the name of the core feature found via <span class="spec-call"><a href="#Bootstrap()" data-name="Bootstrap">Bootstrap</a>(<var data-name="document">document</var>)</span></li>
+<li>Let <var data-name="assignments">assignments</var> be the result of assigning namespaces via <span class="spec-call"><a href="#AssignNamespaces()" data-name="AssignNamespaces">AssignNamespaces</a>(<var data-name="document">document</var>)</span></li>
+<li>For each Directive <var data-name="d">d</var> on <var data-name="element">element</var>,<ol>
+<li>If <var data-name="d">d</var>&lsquo;s name is <var data-name="coreName">coreName</var><code>__export</code>,<ol>
+<li>If <var data-name="d">d</var> does not have an <code>isExport:</code> argument <em>or</em> <code>isExport:</code> is <span class="spec-keyword">true</span>, <strong>Return</strong> <span class="spec-keyword">true</span></li>
+<li>If <var data-name="d">d</var> has an <code>isExport:</code> argument whose value is <code>false</code>, <strong>Return <code>false</code></strong></li>
+</ol>
+</li>
+</ol>
+</li>
+<li>If <var data-name="assignments">assignments</var><code>[</code><var data-name="element">element</var><code>]</code> is <span class="spec-keyword">null</span>, <strong>Return</strong> <span class="spec-keyword">true</span></li>
+<li>Let <var data-name="feature">feature</var> be the directive referenced from <var data-name="assignments">assignments</var><code>[</code><var data-name="element">element</var><code>]</code></li>
+<li>If <var data-name="feature">feature</var> has a <code>export:</code> argument whose value is <span class="spec-keyword">true</span>, <strong>Return</strong> <span class="spec-keyword">true</span></li>
+<li>Else, <strong>Return</strong> <span class="spec-keyword">false</span> </li>
+</ol>
+</div>
+</section>
+</section>
+<section id="index" secid="index" class="spec-index"><h1><span class="spec-secid" title="link to the index"><a href="#index">§</a></span>Index</h1><ol><li><a href="#AssignNamespaces()">AssignNamespaces</a></li><li><a href="#Bootstrap()">Bootstrap</a></li><li><a href="#CollectNamespaces()">CollectNamespaces</a></li><li><a href="#CompareVersions()">CompareVersions</a></li><li><a href="#Digit">Digit</a></li><li><a href="#IsExported()">IsExported</a></li><li><a href="#Major">Major</a></li><li><a href="#Minor">Minor</a></li><li><a href="#NumericIdentifier">NumericIdentifier</a></li><li><a href="#PositiveDigit">PositiveDigit</a></li><li><a href="#Satisfies()">Satisfies</a></li><li><a href="#Version">Version</a></li><li><a href="#VersionTag">VersionTag</a></li></ol></section></article>
+<footer>
+Written in <a href="https://spec-md.com" target="_blank">Spec Markdown</a>.</footer>
+<input hidden class="spec-sidebar-toggle" type="checkbox" id="spec-sidebar-toggle" aria-hidden /><label for="spec-sidebar-toggle" aria-hidden><div class="spec-sidebar-button">&#x2630;</div></label>
+<div class="spec-sidebar" aria-hidden>
+<div class="spec-toc">
+<div class="title"><a href="#">Core Schemas</a></div>
+<ol><li id="_sidebar_1"><a href="#sec-Problem"><span class="spec-secid">1</span>Problem</a></li>
+<li id="_sidebar_2"><a href="#sec-Core-Schemas"><span class="spec-secid">2</span>Core Schemas</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_2" /><label for="_toggle_2"></label>
+<ol>
+<li id="_sidebar_2.1"><a href="#sec-Parts-of-a-Core-Schema"><span class="spec-secid">2.1</span>Parts of a Core Schema</a></li>
+</ol>
+</li>
+<li id="_sidebar_3"><a href="#sec-Roles"><span class="spec-secid">3</span>Roles</a></li>
+<li id="_sidebar_4"><a href="#sec-The-Basics"><span class="spec-secid">4</span>The Basics</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_4" /><label for="_toggle_4"></label>
+<ol>
+<li id="_sidebar_4.1"><a href="#sec-Unspecified-directives-are-passed-through"><span class="spec-secid">4.1</span>Unspecified directives are passed through</a></li>
+<li id="_sidebar_4.2"><a href="#sec-Renaming-core-itself"><span class="spec-secid">4.2</span>Renaming core itself</a></li>
+</ol>
+</li>
+<li id="_sidebar_5"><a href="#sec-Directives"><span class="spec-secid">5</span>Directives</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_5" /><label for="_toggle_5"></label>
+<ol>
+<li id="_sidebar_5.1"><a href="#@core"><span class="spec-secid">5.1</span>@core</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_5.1" /><label for="_toggle_5.1"></label>
+<ol>
+<li id="_sidebar_5.1.1"><a href="#@core/feature-core__FeatureUrl"><span class="spec-secid">5.1.1</span>feature: core__FeatureUrl</a></li>
+<li id="_sidebar_5.1.2"><a href="#@core/as-String"><span class="spec-secid">5.1.2</span>as: String</a></li>
+</ol>
+</li>
+<li id="_sidebar_5.2"><a href="#@core__export"><span class="spec-secid">5.2</span>@core__export</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_5.2" /><label for="_toggle_5.2"></label>
+<ol>
+<li id="_sidebar_5.2.1"><a href="#@core__export/isExport-Boolean"><span class="spec-secid">5.2.1</span>isExport: Boolean</a></li>
+</ol>
+</li>
+</ol>
+</li>
+<li id="_sidebar_6"><a href="#sec-Scalars"><span class="spec-secid">6</span>Scalars</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_6" /><label for="_toggle_6"></label>
+<ol>
+<li id="_sidebar_6.1"><a href="#core__FeatureUrl"><span class="spec-secid">6.1</span>core__FeatureUrl</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_6.1" /><label for="_toggle_6.1"></label>
+<ol>
+<li id="_sidebar_6.1.1"><a href="#sec-Ignore-meaningless-URL-components"><span class="spec-secid">6.1.1</span>Ignore meaningless URL components</a></li>
+<li id="_sidebar_6.1.2"><a href="#sec-Why-is-versioning-in-the-URL-not-a-directive-argument-"><span class="spec-secid">6.1.2</span>Why is versioning in the URL, not a directive argument?</a></li>
+</ol>
+</li>
+</ol>
+</li>
+<li id="_sidebar_7"><a href="#sec-Prefixing"><span class="spec-secid">7</span>Prefixing</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_7" /><label for="_toggle_7"></label>
+<ol>
+<li id="_sidebar_7.1"><a href="#sec-Elements-which-must-be-prefixed"><span class="spec-secid">7.1</span>Elements which must be prefixed</a></li>
+</ol>
+</li>
+<li id="_sidebar_8"><a href="#sec-Versioning"><span class="spec-secid">8</span>Versioning</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_8" /><label for="_toggle_8"></label>
+<ol>
+<li id="_sidebar_8.1"><a href="#sec-Ordering"><span class="spec-secid">8.1</span>Ordering</a></li>
+<li id="_sidebar_8.2"><a href="#sec-Satisfaction"><span class="spec-secid">8.2</span>Satisfaction</a></li>
+<li id="_sidebar_8.3"><a href="#sec-Referencing-versions-and-activating-implementations"><span class="spec-secid">8.3</span>Referencing versions and activating implementations</a></li>
+</ol>
+</li>
+<li id="_sidebar_9"><a href="#sec-Extensibility"><span class="spec-secid">9</span>Extensibility</a></li>
+<li id="_sidebar_10"><a href="#sec-Processing-Schemas"><span class="spec-secid">10</span>Processing Schemas</a></li>
+<li id="_sidebar_11"><a href="#sec-Validations-amp-Algorithms"><span class="spec-secid">11</span>Validations &amp; Algorithms</a>
+<input hidden class="toggle" type="checkbox" id="_toggle_11" /><label for="_toggle_11"></label>
+<ol>
+<li id="_sidebar_11.1"><a href="#sec-Bootstrapping-validates-Has-Core-Feature-"><span class="spec-secid">11.1</span>Bootstrapping (validates Has Core Feature)</a></li>
+<li id="_sidebar_11.2"><a href="#sec-Namespace-Collection-validates-Name-Uniqueness-"><span class="spec-secid">11.2</span>Namespace Collection (validates Name Uniqueness)</a></li>
+<li id="_sidebar_11.3"><a href="#sec-Assign-Namespaces"><span class="spec-secid">11.3</span>Assign Namespaces</a></li>
+<li id="_sidebar_11.4"><a href="#sec-Is-Exported-"><span class="spec-secid">11.4</span>Is Exported?</a></li>
+</ol>
+</li>
+<li id="_sidebar_index"><a href="#index"><span class="spec-secid">§</span>Index</a></li>
+</ol>
+</div>
+<script>(function(){var e,t=[],n=document.querySelector('label[for="spec-sidebar-toggle"]');function o(e){e.preventDefault()}n.addEventListener("scroll",o),n.addEventListener("touchmove",o);for(var i=document.getElementsByTagName("section"),r=0;r<i.length;r++)i[r].getAttribute("secid")&&t.push(i[r]);var c=window.scrollY,l=!1;function d(n){for(var o,i=n+document.documentElement.clientHeight/4,r=t.length-1;r>=0;r--)if(t[r].offsetTop<i){o=t[r];break}var c=o&&o.getAttribute("secid");c!==e&&(e&&a(e,!1),c&&a(c,!0),e=c)}function a(e,t){document.getElementById("_sidebar_"+e).className=t?"viewing":"";for(var n=e.split(".");n.length;){var o=document.getElementById("_sidebar_toggle_"+n.join("."));o&&(o.checked=t),n.pop()}}window.addEventListener("scroll",(function(e){c=window.scrollY,l||(l=!0,window.requestAnimationFrame((function(){d(c),l=!1})))})),d(window.scrollY);})()</script>
+</div>
+<script>(function(){(async function(e){const i=document.querySelector(`script[src="${e}"]`);if(i&&i.__loadingPromise)return i.__loadingPromise;const n=document.createElement("script");return n.async=!0,n.defer=!0,n.setAttribute("::save","off"),n.__loadingPromise=new Promise(((e,i)=>{n.onload=e,n.onerror=i})),n.src=e,document.body.appendChild(n),n.__loadingPromise})("https://unpkg.com/mermaid@^8/dist/mermaid.min.js").then((async()=>{const e=window.mermaid;return console.log("initializing mermaid..."),await e.initialize({securityLevel:"loose",theme:"dark",startOnLoad:!0}),e}));})()</script>
+</body>
+</html>
