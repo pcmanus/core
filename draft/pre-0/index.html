@@ -1188,9 +1188,9 @@ pre[class*="language-"] {
   output2-->reader
   final-->reader
 </div></figure><ul>
-<li><strong>Authors (either human or machine)</strong> write an initial core schema as specified in this document, including versioned <code>@core</code> requests for all directives they use</li>
-<li><strong>Machine processors</strong> can process core schemas and output new core schemas. The versioning of directives and associated schema elements provided by the <code>@core</code> allows processors to operate on directives they understand and pass through directives they do not.</li>
-<li><strong>Human readers</strong> can examine the core schema at various stages of processing. At any stage, they can examine the <code>@core</code> directives and follow URLs to the specification, receiving an explanation of the requirements of the specification and what new directives, types, and other schema objects are available within the document.</li>
+<li><strong>Authors (either human or machine)</strong> write an initial core schema as specified in this document, including versioned <var data-name="@core">@core</var> requests for all directives they use</li>
+<li><strong>Machine processors</strong> can process core schemas and output new core schemas. The versioning of directives and associated schema elements provided by the <var data-name="@core">@core</var> allows processors to operate on directives they understand and pass through directives they do not.</li>
+<li><strong>Human readers</strong> can examine the core schema at various stages of processing. At any stage, they can examine the <var data-name="@core">@core</var> directives and follow URLs to the specification, receiving an explanation of the requirements of the specification and what new directives, types, and other schema objects are available within the document.</li>
 <li><strong>Data cores</strong> can then pick up the processed core schema and provide some data&#8208;layer service with it. Typically this means serving the schema&rsquo;s API as a GraphQL endpoint, using metadata defined by machinery to inform how it processes operations it receives. However, data cores may perform other tasks described in the core schema, such as routing to backend services, caching commonly&#8208;accessed fields and queries, and so on. The term &ldquo;data core&rdquo; is intended to capture this multiplicity of possible activities.</li>
 </ul>
 </section>
@@ -1274,7 +1274,7 @@ pre[class*="language-"] {
 <li><strong>Omit optional arguments</strong> if they are never used in the document,</li>
 <li><strong>Omit locations</strong> where the directive never occurs,</li>
 <li><strong>Introduce new directive locations</strong>, the behavior of which is unspecified here.</li>
-<li><strong>Introduce new arguments.</strong> New arguments <strong>must</strong> be prefixed, e.g. <code>example__extensionArgument: Bool</code>. The prefix <strong>must</strong> be the name of a feature referenced with this or another <code>@core</code> directive within the document.</li>
+<li><strong>Introduce new arguments.</strong> New arguments <strong>must</strong> be prefixed, e.g. <code>example__extensionArgument: Bool</code>. The prefix <strong>must</strong> be the name of a feature referenced with this or another <var data-name="@core">@core</var> directive within the document.</li>
 <li><strong>Use <code>String</code> in place of custom scalars.</strong> This is an ease&#8208;of&#8208;authoring affordance which allows document authors to omit the definitions of custom scalar types provided by features. Processors <strong>must</strong> continue to interpret such arguments and fields according to the encoding and decoding rules of the custom scalar type. For example, <var data-name="@core">@core</var> may be defined as follows, with no change to the behavior:</li>
 </ul>
 <figure id="example-@core-definition-taking-a-String-feature" class="spec-example"><figcaption><a href="#example-@core-definition-taking-a-String-feature"><span class="spec-example-num">Example № 5</span> <var data-name="@core">@core</var> definition taking a String feature</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> String<span class="token punctuation">)</span>
@@ -1368,7 +1368,7 @@ pre[class*="language-"] {
 </figure></section>
 <section id="sec-Why-is-versioning-in-the-URL-not-a-directive-argument-" secid="6.1.2">
 <h3><span class="spec-secid" title="link to this section"><a href="#sec-Why-is-versioning-in-the-URL-not-a-directive-argument-">6.1.2</a></span>Why is versioning in the URL, not a directive argument?</h3>
-<p>The version is in the URL because when a human reader visits the URL, we would like them to be taken to the documentation for the <em>version of the feature used by this document</em>. Many text editors will turn URLs into hyperlinks, and it&rsquo;s highly desirable that clicking the link takes the user to the correct version of the docs. Putting the version information in a separate argument to the <code>@core</code> directive would prevent this.</p>
+<p>The version is in the URL because when a human reader visits the URL, we would like them to be taken to the documentation for the <em>version of the feature used by this document</em>. Many text editors will turn URLs into hyperlinks, and it&rsquo;s highly desirable that clicking the link takes the user to the correct version of the docs. Putting the version information in a separate argument to the <var data-name="@core">@core</var> directive would prevent this.</p>
 </section>
 </section>
 </section>
@@ -1381,7 +1381,7 @@ pre[class*="language-"] {
 <li><strong>must not</strong> contain the core namespace separator, which is two underscores (<span class="spec-string">"__"</span>).</li>
 </ol>
 <p>Prefixed names consist of the name of the feature, followed by two underscores, followed by the name of the element (which can be any valid GraphQL identifier). For instance, the <code>core</code> specification (which you are currently reading) introduces elements named <a href="#core__FeatureUrl"><var data-name="core__FeatureUrl">core__FeatureUrl</var></a> and <a href="#@core__export"><var data-name="@core__export">@core__export</var></a>.</p>
-<p>A feature&rsquo;s <em>root directive</em> is an exception to the prefixing requirements. Feature specifications <strong>may</strong> introduce a single directive which carries only the name of the feature, with no prefix required. For example, the <code>core</code> specification introduces a <code>@core</code> directive. This directive has the same name as the feature (&rdquo;<code>core</code>&rdquo;), and so requires no prefix.</p>
+<p>A feature&rsquo;s <em>root directive</em> is an exception to the prefixing requirements. Feature specifications <strong>may</strong> introduce a single directive which carries only the name of the feature, with no prefix required. For example, the <code>core</code> specification introduces a <var data-name="@core">@core</var> directive. This directive has the same name as the feature (&rdquo;<code>core</code>&rdquo;), and so requires no prefix.</p>
 <figure id="example-Using-the-@core-directive-with-a-spec-s-default-name" class="spec-example"><figcaption><a href="#example-Using-the-@core-directive-with-a-spec-s-default-name"><span class="spec-example-num">Example № 7</span> Using the @core directive with a spec&rsquo;s default name</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1.0"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
 <span class="token punctuation">}</span>
@@ -1564,7 +1564,7 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <p>The general guidance for processor behavior is: don&rsquo;t react to what you don&rsquo;t understand.</p>
 <p>Specifically, processors:</p>
 <ul>
-<li><strong>should</strong> pass through <code>@core</code> directives which reference unknown feature URLs</li>
+<li><strong>should</strong> pass through <var data-name="@core">@core</var> directives which reference unknown feature URLs</li>
 <li><strong>should</strong> pass through prefixed directives, types, and other schema elements </li>
 </ul>
 <p>An exception to this is processors which prepare the schema for final public consumption. Such processors <strong>may</strong> choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives&mdash;such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case&#8208;by&#8208;case basis.</p>
