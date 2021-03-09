@@ -1172,11 +1172,11 @@ pre[class*="language-"] {
 <h2><span class="spec-secid" title="link to this section"><a href="#sec-Parts-of-a-Core-Schema">2.1</a></span>Parts of a Core Schema</h2>
 <p>When talking about a core schema, we can broadly break it into two pieces:</p>
 <ul>
-<li>an <strong>export schema</strong> (or <strong>API</strong>) consisting of exported schema elements (objects, interfaces, enums, directives, etc.) which <strong>should</strong> be served to clients, and</li>
-<li><strong>machinery</strong> consisting of directives and associated input types (such as enums and input objects). Machinery <strong>must not</strong> be served to clients.</li>
+<li>an <strong>API</strong> consisting of exported schema elements (objects, interfaces, enums, directives, etc.) which <strong>should</strong> be served to clients, and</li>
+<li><strong>machinery</strong> containing document metadata. This typically consists of directives and associated input types (such as enums and input objects), but may include any schema element. Machinery <strong>must not</strong> be served to clients. Specifically, machinery <strong>must not</strong> be included in introspection responses or used to validate or execute queries.</li>
 </ul>
 <p>This reflects how core schemas are used: a core schema contains a GraphQL interface (the <em>API</em>) along with metadata about how to implement that interface (the <em>machinery</em>). Exposing the machinery to clients is unnecessary, and may in some cases constitute a security issue (for example, the machinery for a public&#8208;facing graph router will likely reference internal services, possibly exposing network internals which should not be visible to the general public).</p>
-<p>A key feature of core schemas is that it is always possible to derive the export schema from a core schema document without any knowledge of the features used by the document (with the exception of the <code>core</code> feature itself).</p>
+<p>A key feature of core schemas is that it is always possible to derive a core schema&rsquo;s API without any knowledge of the features used by the document (with the exception of the <code>core</code> feature itself).</p>
 <p>Approximately, the process is:</p>
 <ul>
 <li>Any elements named <code>something__likeThis</code> are <strong>not exported</strong>, unless&#8230;<ul>
@@ -1212,7 +1212,7 @@ pre[class*="language-"] {
 <li><strong>Authors (either human or machine)</strong> write an initial core schema as specified in this document, including versioned <code>@core</code> requests for all directives they use</li>
 <li><strong>Machine processors</strong> can process core schemas and output new core schemas. The versioning of directives and associated schema elements provided by the <code>@core</code> allows processors to operate on directives they understand and pass through directives they do not.</li>
 <li><strong>Human readers</strong> can examine the core schema at various stages of processing. At any stage, they can examine the <code>@core</code> directives and follow URLs to the specification, receiving an explanation of the requirements of the specification and what new directives, types, and other schema objects are available within the document.</li>
-<li><strong>Data cores</strong> can then pick up the processed core schema and provide some data&#8208;layer service with it. Typically this means serving the export schema as a GraphQL endpoint, using metadata defined by machinery to inform how it processes operations it receives. However, data cores may perform other tasks described in the core schema, such as routing to backend services, caching commonly&#8208;accessed fields and queries, and so on. The term &ldquo;data core&rdquo; is intended to capture this multiplicity of possible activities.</li>
+<li><strong>Data cores</strong> can then pick up the processed core schema and provide some data&#8208;layer service with it. Typically this means serving the schema&rsquo;s API as a GraphQL endpoint, using metadata defined by machinery to inform how it processes operations it receives. However, data cores may perform other tasks described in the core schema, such as routing to backend services, caching commonly&#8208;accessed fields and queries, and so on. The term &ldquo;data core&rdquo; is intended to capture this multiplicity of possible activities.</li>
 </ul>
 </section>
 <section id="sec-The-Basics" secid="4">
@@ -1257,7 +1257,7 @@ pre[class*="language-"] {
 
 <span class="token comment"># `@another` is unspecified. Core processors will not extract metadata from</span>
 <span class="token comment"># it, but its definition and all usages within the schema will be exposed</span>
-<span class="token comment"># in the export schema.</span>
+<span class="token comment"># in the API.</span>
 <span class="token keyword">directive</span> <span class="token directive function">@another</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
 </code></pre>
 </figure></section>
@@ -1341,7 +1341,7 @@ pre[class*="language-"] {
 </section>
 <section id="@core__export" secid="5.2">
 <h2 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export">5.2</a></span>@core__export</h2>
-<p>Control the export of individual schema elements.</p>
+<p>Specify whether the annotated element is exported to the API.</p>
 <figure id="example-d2d8d"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core__export</span><span class="token punctuation">(</span><span class="token attr-name">isExport</span><span class="token punctuation">:</span> Boolean <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
   <span class="token keyword">repeatable</span> <span class="token keyword">on</span>
   <span class="token operator">|</span> <span class="token constant">SCALAR</span>
@@ -1355,10 +1355,10 @@ pre[class*="language-"] {
   <span class="token operator">|</span> <span class="token constant">INPUT_OBJECT</span>
   <span class="token operator">|</span> <span class="token constant">INPUT_FIELD_DEFINITION</span>
 </code></pre>
-</figure><p><code>@core__export</code> can occur at any type system location. Elements with <code>@core__export</code> will always be included in the export schema. Elements with <code>@core__export(isExport: false)</code> will always be excluded from the export schema.</p>
+</figure><p><code>@core__export</code> can occur at any type system location. Elements with <code>@core__export</code> will always be included in the API. Elements with <code>@core__export(isExport: false)</code> will always be excluded from the API.</p>
 <section id="@core__export/isExport-Boolean" secid="5.2.1">
 <h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export/isExport-Boolean">5.2.1</a></span>isExport: Boolean</h3>
-<p>If true, the element is always exported, regardless of whether the feature which defines it is exported. If false, the element is never exported. </p>
+<p>If true, the element is always exported, regardless of whether the feature which defines it is exported. If false, the element is never exported.</p>
 </section>
 </section>
 </section>
