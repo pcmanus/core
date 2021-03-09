@@ -17,6 +17,7 @@
   --grammar-indent: 0rem;
   --highlight-background: #FBF8D0;
   --highlight-border-color: transparent;
+  --sidebar-width: min(320px, calc(100vw - 48px));
 }
 
 @media (min-width: 720px) {
@@ -356,7 +357,7 @@ footer {
   position: fixed;
   right: 0;
   top: 0;
-  width: min(320px, calc(100vw - 48px));
+  width: var(--sidebar-width);
   font-size: 14px;
   line-height: 1.75;
   overflow-y: scroll;
@@ -1657,11 +1658,11 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 </figure></section>
 <section id="sec-Assign-Namespaces" secid="11.3">
 <h2><span class="spec-secid" title="link to this section"><a href="#sec-Assign-Namespaces">11.3</a></span>Assign Namespaces</h2>
-<p>Create a map of <var data-name="element">element</var>: <em>Any Named Element</em> &rarr; <var data-name="featureName">featureName</var>: <code>String</code> | <span class="spec-keyword">null</span>, associating every named schema element within the document with the name of a feature, or <span class="spec-keyword">null</span> if it is not associated with a feature.</p>
+<p>Create a map of <var data-name="element">element</var>: <em>Any Named Element</em> &rarr; <var data-name="feature">feature</var>: <code>Directive</code> | <span class="spec-keyword">null</span>, associating every named schema element within the document with a feature directive, or <span class="spec-keyword">null</span> if it is not associated with a feature.</p>
 <div class="spec-algo" id="AssignNamespaces()">
 <span class="spec-call"><a href="#AssignNamespaces()" data-name="AssignNamespaces">AssignNamespaces</a>(<var data-name="document">document</var>)</span><ol>
 <li>Let <var data-name="namespaces">namespaces</var> be the result of collecting namespaces via <span class="spec-call"><a href="#CollectNamespaces()" data-name="CollectNamespaces">CollectNamespaces</a>(<var data-name="document">document</var>)</span></li>
-<li>Let <var data-name="assignments">assignments</var> be a map of (<var data-name="element">element</var>: <em>Any Named Element</em>) &rarr; <var data-name="featureName">featureName</var>: <code>String</code> | <span class="spec-keyword">null</span>, initally empty</li>
+<li>Let <var data-name="assignments">assignments</var> be a map of (<var data-name="element">element</var>: <em>Any Named Element</em>) &rarr; <var data-name="feature">feature</var>: <code>Directive</code> | <span class="spec-keyword">null</span>, initally empty</li>
 <li>For each named schema element <var data-name="e">e</var> within the <var data-name="document">document</var><ol>
 <li>Let <var data-name="name">name</var> be the name of the <var data-name="e">e</var></li>
 <li>If <var data-name="name">name</var> begins with <span class="spec-string">"__"</span>,<ol>
