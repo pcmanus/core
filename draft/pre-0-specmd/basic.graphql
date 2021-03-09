@@ -1,0 +1,18 @@
+schema
+  @core(feature: "https://lib.apollo.dev/core/v0.1")
+  @core(feature: "https://specs.example.com/example/v1.0")
+{
+  query: Query
+}
+
+type SomeType {
+  field: Int @example
+}
+
+directive @example on FIELD
+
+directive @core(feature: core__FeatureUrl, as: String, export: Boolean)
+  repeatable on SCHEMA
+
+scalar core__FeatureUrl
+  @specifiedBy(url: "https://lib.apollo.dev/core/v0.1#core__FeatureUrl")
