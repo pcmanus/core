@@ -510,6 +510,10 @@ figcaption {
   text-align: right;
 }
 
+figcaption code {
+  font-size: 10pt;
+}
+
 .spec-example-num {
   display: block;
   float: left;
@@ -885,7 +889,14 @@ var {
 .spec-lookahead.set::after {
   content: '}]';
 }
-</style>
+
+/** RFC 2119 Requirements **/
+
+.spec-requirement {
+  font-variant: small-caps;
+  text-transform: lowercase;
+  color: black;
+}</style>
 <style>
 /**
  * prism.js default theme for JavaScript, CSS and HTML
@@ -1142,8 +1153,8 @@ pre[class*="language-"] {
 <h1><span class="spec-secid" title="link to this section"><a href="#sec-Parts-of-a-Core-Schema">1</a></span>Parts of a Core Schema</h1>
 <p>When talking about a core schema, we can broadly break it into two pieces:</p>
 <ul>
-<li>an <strong>API</strong> consisting of exported schema elements (objects, interfaces, enums, directives, etc.) which SHOULD be served to clients, and</li>
-<li><strong>machinery</strong> containing document metadata. This typically consists of directives and associated input types (such as enums and input objects), but may include any schema element. Machinery MUST NOT be served to clients. Specifically, machinery MUST NOT be included in introspection responses or used to validate or execute queries.</li>
+<li>an <strong>API</strong> consisting of exported schema elements (objects, interfaces, enums, directives, etc.) which <a href="https://tools.ietf.org/html/rfc2119#section-3" class="spec-requirement recommended">SHOULD</a> be served to clients, and</li>
+<li><strong>machinery</strong> containing document metadata. This typically consists of directives and associated input types (such as enums and input objects), but may include any schema element. Machinery <a href="https://tools.ietf.org/html/rfc2119#section-2" class="spec-requirement required negated">MUST NOT</a> be served to clients. Specifically, machinery <a href="https://tools.ietf.org/html/rfc2119#section-2" class="spec-requirement required negated">MUST NOT</a> be included in introspection responses or used to validate or execute queries.</li>
 </ul>
 <p>This reflects how core schemas are used: a core schema contains a GraphQL interface (the <em>API</em>) along with metadata about how to implement that interface (the <em>machinery</em>). Exposing the machinery to clients is unnecessary, and may in some cases constitute a security issue (for example, the machinery for a public&#8208;facing graph router will likely reference internal services, possibly exposing network internals which should not be visible to the general public).</p>
 <p>A key feature of core schemas is that it is always possible to derive a core schema&rsquo;s API without any knowledge of the features used by the document (with the exception of the <code>core</code> feature itself).</p>
@@ -1188,11 +1199,11 @@ pre[class*="language-"] {
 <h1><span class="spec-secid" title="link to this section"><a href="#sec-Basic-Requirements">3</a></span>Basic Requirements</h1>
 <p>Core schemas:</p>
 <ol>
-<li>MUST be valid GraphQL schema documents,</li>
-<li>MUST contain exactly one <code>SchemaDefinition</code>, and</li>
-<li>MUST use the <var data-name="@core">@core</var> directive on their schema definition to declare any features they reference by using <var data-name="@core">@core</var> to reference a <a href="#core__FeatureUrl">well&#8208;formed feature URL</a>.</li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be valid GraphQL schema documents,</li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> contain exactly one <code>SchemaDefinition</code>, and</li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> use the <var data-name="@core">@core</var> directive on their schema definition to declare any features they reference by using <var data-name="@core">@core</var> to reference a <a href="#core__FeatureUrl">well&#8208;formed feature URL</a>.</li>
 </ol>
-<p>The first <var data-name="@core">@core</var> directive on the schema MUST reference the core spec itself, i.e. this document.</p>
+<p>The first <var data-name="@core">@core</var> directive on the schema <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> reference the core spec itself, i.e. this document.</p>
 <figure id="example-Basic-core-schema-using-@core-and" class="spec-example"><figcaption><a href="#example-Basic-core-schema-using-@core-and"><span class="spec-example-num">Example № 2</span> Basic core schema using <var data-name="@core">@core</var> and <code>@example</code></a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1"</span><span class="token punctuation">)</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/example/v1.0"</span><span class="token punctuation">)</span>
@@ -1259,25 +1270,25 @@ pre[class*="language-"] {
   <span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token punctuation">)</span>
   <span class="token keyword">repeatable</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span>
 </code></pre>
-</figure><p>Documents MUST include a definition for the <var data-name="@core">@core</var> directive. The provided definition must be <em>compatible</em> with the definition above, but may:</p>
+</figure><p>Documents <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> include a definition for the <var data-name="@core">@core</var> directive. The provided definition must be <em>compatible</em> with the definition above, but may:</p>
 <ul>
 <li><strong>Omit optional arguments</strong> if they are never used in the document,</li>
 <li><strong>Omit locations</strong> where the directive never occurs,</li>
 <li><strong>Introduce new directive locations</strong>, the behavior of which is unspecified here.</li>
-<li><strong>Introduce new arguments.</strong> New arguments MUST be prefixed, e.g. <code>example__extensionArgument: Bool</code>. The prefix MUST be the name of a feature referenced with this or another <var data-name="@core">@core</var> directive within the document.</li>
-<li><strong>Use <code>String</code> in place of custom scalars.</strong> This is an ease&#8208;of&#8208;authoring affordance which allows document authors to omit the definitions of custom scalar types provided by features. Processors MUST continue to interpret such arguments and fields according to the encoding and decoding rules of the custom scalar type. For example, <var data-name="@core">@core</var> may be defined as follows, with no change to the behavior:</li>
+<li><strong>Introduce new arguments.</strong> New arguments <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be prefixed, e.g. <code>example__extensionArgument: Bool</code>. The prefix <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be the name of a feature referenced with this or another <var data-name="@core">@core</var> directive within the document.</li>
+<li><strong>Use <code>String</code> in place of custom scalars.</strong> This is an ease&#8208;of&#8208;authoring affordance which allows document authors to omit the definitions of custom scalar types provided by features. Processors <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> continue to interpret such arguments and fields according to the encoding and decoding rules of the custom scalar type. For example, <var data-name="@core">@core</var> may be defined as follows, with no change to the behavior:</li>
 </ul>
 <figure id="example-@core-definition-taking-a-String-feature" class="spec-example"><figcaption><a href="#example-@core-definition-taking-a-String-feature"><span class="spec-example-num">Example № 5</span> <var data-name="@core">@core</var> definition taking a String feature</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> String<span class="token punctuation">)</span>
 </code></pre>
 </figure><section id="@core/feature-core__FeatureUrl" secid="4.1.1">
 <h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core/feature-core__FeatureUrl">4.1.1</a></span>feature: core__FeatureUrl</h3>
-<p>A <a href="#core__FeatureUrl">feature URL</a> specifying the directive and associated schema elements. When viewed, the URL SHOULD provide the content of the appropriate version of the specification in some human&#8208;readable form. In short, a human reader should be able to click the link and go to the docs for the version in use. There are <a href="#core__FeatureUrl">specific requirements</a> on the format of the URL, but it is not required that the <em>content</em> be machine&#8208;readable in any particular way.</p>
+<p>A <a href="#core__FeatureUrl">feature URL</a> specifying the directive and associated schema elements. When viewed, the URL <a href="https://tools.ietf.org/html/rfc2119#section-3" class="spec-requirement recommended">SHOULD</a> provide the content of the appropriate version of the specification in some human&#8208;readable form. In short, a human reader should be able to click the link and go to the docs for the version in use. There are <a href="#core__FeatureUrl">specific requirements</a> on the format of the URL, but it is not required that the <em>content</em> be machine&#8208;readable in any particular way.</p>
 <p>Feature URLs contain information about the spec&rsquo;s <a href="#sec-Prefixing">prefix</a> and <a href="#sec-Versioning">version</a>, and should be generated and processed in accordance with the <a href="#core__FeatureUrl">requirements on the structure of feature URLs</a>.</p>
 </section>
 <section id="@core/as-String" secid="4.1.2">
 <h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core/as-String">4.1.2</a></span>as: String</h3>
-<p>Change the <a href="#sec-Prefixing">names</a> of directives and schema elements from this specification. The specified string MUST be a valid GraphQL identifier and MUST NOT contain the namespace separator (two underscores, <span class="spec-string">"__"</span>).</p>
-<p>When <code>as:</code> is provided, processors MUST replace the default name prefix on the names of all <a href="#sec-Elements-which-must-be-prefixed">prefixed schema elements</a> with the specified name.</p>
+<p>Change the <a href="#sec-Prefixing">names</a> of directives and schema elements from this specification. The specified string <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be a valid GraphQL identifier and <a href="https://tools.ietf.org/html/rfc2119#section-2" class="spec-requirement required negated">MUST NOT</a> contain the namespace separator (two underscores, <span class="spec-string">"__"</span>).</p>
+<p>When <code>as:</code> is provided, processors <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> replace the default name prefix on the names of all <a href="#sec-Elements-which-must-be-prefixed">prefixed schema elements</a> with the specified name.</p>
 <figure id="example-Using-@core-to-use-a-feature-with-a-custom-name" class="spec-example"><figcaption><a href="#example-Using-@core-to-use-a-feature-with-a-custom-name"><span class="spec-example-num">Example № 6</span> Using <var data-name="@core">@core</var><code>(feature:, as:)</code> to use a feature with a custom name</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/core/v1.0"</span><span class="token punctuation">)</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1.0"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"eg"</span><span class="token punctuation">)</span>
@@ -1340,18 +1351,18 @@ pre[class*="language-"] {
 </figure><p>Feature URLs serve two main purposes:</p>
 <ul>
 <li>Directing human readers to documentation about the feature</li>
-<li>Providing tools with information about the specs in use, along with enough information to select and invoke an implementation Feature URLs SHOULD be <a href="https://tools.ietf.org/html/rfc3986">RFC 3986 URLs</a>. When viewed, the URL SHOULD provide the specification of the selected version of the feature in some human&#8208;readable form; a human reader should be able to click the link and go to the correct version of the docs.</li>
+<li>Providing tools with information about the specs in use, along with enough information to select and invoke an implementation Feature URLs <a href="https://tools.ietf.org/html/rfc2119#section-3" class="spec-requirement recommended">SHOULD</a> be <a href="https://tools.ietf.org/html/rfc3986">RFC 3986 URLs</a>. When viewed, the URL <a href="https://tools.ietf.org/html/rfc2119#section-3" class="spec-requirement recommended">SHOULD</a> provide the specification of the selected version of the feature in some human&#8208;readable form; a human reader should be able to click the link and go to the correct version of the docs.</li>
 </ul>
 <p>Although they are not prohibited from doing so, it&rsquo;s assumed that processors will not load the content of feature URLs. Published specifications are not required to be machine&#8208;readable, and <a href=".">this spec</a> places no requirements on the structure or syntax of the content to be found there.</p>
 <p>There are, however, requirements on the structure of the URL itself:</p>
 <figure id="fig-Basic-anatomy-of-a-feature-URL"><figcaption><a href="#fig-Basic-anatomy-of-a-feature-URL"> Basic anatomy of a feature URL</a></figcaption><code class=anatomy>  
   <span class=pink style='--depth: 2'>https://spec.example.com/a/b/c/<span>exampleFeature<aside>name</aside></span><aside>identity</aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span>
 </code>
-</figure><p>The final two segments of the URL&rsquo;s <a href="https://tools.ietf.org/html/rfc3986#section-3.3">path</a> MUST contain the feature&rsquo;s name and a <a href="#sec-Versioning">version tag</a>. The content of the URL up to and including the prefix&mdash;but excluding the version tag and trailing <code>/</code>&mdash;is the feature&rsquo;s <em>identity</em>. For the above example, <dl> <dt><code>identity: &quot;https://spec.example.com/a/b/c/exampleFeature&quot;</code></dt> <dd>A global identifier for the feature. Processors can treat this as an opaque string identifying the feature (but not the version of the feature) for purposes of selecting an appropriate implementation.</dd> <dt><code>name: &quot;exampleFeature&quot;</code></dt> <dd>The feature&rsquo;s name, for purposes of <a href="#sec-Prefixing">prefixing</a> schema elements it defines or extends.</dd> <dt><code>version: &quot;v1.0&quot;</code></dt> <dd>The tag for the <a href="#sec-Versioning">version</a> of the feature used to author the document. Processors MUST select an implementation of the feature which can <a href="#sec-Satisfaction">satisfy</a> the specified version.</dd> </dl></p>
-<p>The version tag MUST be a valid <span class="spec-nt"><a href="#VersionTag" data-name="VersionTag">VersionTag</a></span>.</p>
+</figure><p>The final two segments of the URL&rsquo;s <a href="https://tools.ietf.org/html/rfc3986#section-3.3">path</a> <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> contain the feature&rsquo;s name and a <a href="#sec-Versioning">version tag</a>. The content of the URL up to and including the prefix&mdash;but excluding the version tag and trailing <code>/</code>&mdash;is the feature&rsquo;s <em>identity</em>. For the above example, <dl> <dt><code>identity: &quot;https://spec.example.com/a/b/c/exampleFeature&quot;</code></dt> <dd>A global identifier for the feature. Processors can treat this as an opaque string identifying the feature (but not the version of the feature) for purposes of selecting an appropriate implementation.</dd> <dt><code>name: &quot;exampleFeature&quot;</code></dt> <dd>The feature&rsquo;s name, for purposes of <a href="#sec-Prefixing">prefixing</a> schema elements it defines or extends.</dd> <dt><code>version: &quot;v1.0&quot;</code></dt> <dd>The tag for the <a href="#sec-Versioning">version</a> of the feature used to author the document. Processors <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> select an implementation of the feature which can <a href="#sec-Satisfaction">satisfy</a> the specified version.</dd> </dl></p>
+<p>The version tag <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be a valid <span class="spec-nt"><a href="#VersionTag" data-name="VersionTag">VersionTag</a></span>.</p>
 <section id="sec-Ignore-meaningless-URL-components" secid="5.1.1">
 <h3><span class="spec-secid" title="link to this section"><a href="#sec-Ignore-meaningless-URL-components">5.1.1</a></span>Ignore meaningless URL components</h3>
-<p>When extracting the URL&rsquo;s <code>name</code> and <code>version</code>, processors MUST ignore any url components which are not assigned a meaning. This spec assigns meaning to the final two segments of the <a href="https://tools.ietf.org/html/rfc3986#section-3.3">path</a>. Other URL components&mdash;particularly query strings and fragments, if present&mdash;MUST be ignored for the purposes of extracting the <code>name</code> and <code>version</code>.</p>
+<p>When extracting the URL&rsquo;s <code>name</code> and <code>version</code>, processors <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> ignore any url components which are not assigned a meaning. This spec assigns meaning to the final two segments of the <a href="https://tools.ietf.org/html/rfc3986#section-3.3">path</a>. Other URL components&mdash;particularly query strings and fragments, if present&mdash;<a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be ignored for the purposes of extracting the <code>name</code> and <code>version</code>.</p>
 <figure id="fig-Ignoring-meaningless-parts-of-a-URL"><figcaption><a href="#fig-Ignoring-meaningless-parts-of-a-URL"> Ignoring meaningless parts of a URL</a></figcaption><code class=anatomy>
   <span class=pink style='--depth: 2'>https://example.com/<span>exampleSpec<aside>name</aside></span><aside>identity</aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span><span class=grey>?key=val&k2=v2#frag<aside>ignored</aside></span>
 </code>
@@ -1364,14 +1375,14 @@ pre[class*="language-"] {
 </section>
 <section id="sec-Prefixing" secid="6">
 <h1><span class="spec-secid" title="link to this section"><a href="#sec-Prefixing">6</a></span>Prefixing</h1>
-<p>With the exception of a single root directive, core feature specifications MUST prefix all schema elements they introduce. The prefix:</p>
+<p>With the exception of a single root directive, core feature specifications <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> prefix all schema elements they introduce. The prefix:</p>
 <ol>
-<li>MUST match the default name of the feature as derived from the feature&rsquo;s specification URL,</li>
-<li>MUST be a string of characters valid within GraphQL names, and</li>
-<li>MUST NOT contain the core namespace separator, which is two underscores (<span class="spec-string">"__"</span>).</li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> match the default name of the feature as derived from the feature&rsquo;s specification URL,</li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be a string of characters valid within GraphQL names, and</li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-2" class="spec-requirement required negated">MUST NOT</a> contain the core namespace separator, which is two underscores (<span class="spec-string">"__"</span>).</li>
 </ol>
 <p>Prefixed names consist of the name of the feature, followed by two underscores, followed by the name of the element (which can be any valid GraphQL identifier). For instance, the <code>core</code> specification (which you are currently reading) introduces elements named <a href="#core__FeatureUrl"><var data-name="core__FeatureUrl">core__FeatureUrl</var></a> and <a href="#@core__export"><var data-name="@core__export">@core__export</var></a>.</p>
-<p>A feature&rsquo;s <em>root directive</em> is an exception to the prefixing requirements. Feature specifications MAY introduce a single directive which carries only the name of the feature, with no prefix required. For example, the <code>core</code> specification introduces a <var data-name="@core">@core</var> directive. This directive has the same name as the feature (&rdquo;<code>core</code>&rdquo;), and so requires no prefix.</p>
+<p>A feature&rsquo;s <em>root directive</em> is an exception to the prefixing requirements. Feature specifications <a href="https://tools.ietf.org/html/rfc2119#section-5" class="spec-requirement optional">MAY</a> introduce a single directive which carries only the name of the feature, with no prefix required. For example, the <code>core</code> specification introduces a <var data-name="@core">@core</var> directive. This directive has the same name as the feature (&rdquo;<code>core</code>&rdquo;), and so requires no prefix.</p>
 <figure id="example-Using-the-@core-directive-with-a-spec-s-default-name" class="spec-example"><figcaption><a href="#example-Using-the-@core-directive-with-a-spec-s-default-name"><span class="spec-example-num">Example № 7</span> Using the @core directive with a spec&rsquo;s default name</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span> <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1.0"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
   <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
 <span class="token punctuation">}</span>
@@ -1388,10 +1399,10 @@ pre[class*="language-"] {
 
 <span class="token keyword">directive</span> <span class="token directive function">@example</span><span class="token punctuation">(</span><span class="token attr-name">data</span><span class="token punctuation">:</span> example__Data<span class="token punctuation">)</span> <span class="token keyword">on</span> <span class="token class-name">FIELD</span>
 </code></pre>
-</figure><p>The prefix MUST NOT be elided within documentation; definitions of schema elements provided within the spec MUST include the default prefix.</p>
+</figure><p>The prefix <a href="https://tools.ietf.org/html/rfc2119#section-2" class="spec-requirement required negated">MUST NOT</a> be elided within documentation; definitions of schema elements provided within the spec <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> include the default prefix.</p>
 <section id="sec-Elements-which-must-be-prefixed" secid="6.1">
 <h2><span class="spec-secid" title="link to this section"><a href="#sec-Elements-which-must-be-prefixed">6.1</a></span>Elements which must be prefixed</h2>
-<p>Feature specs MUST prefix the following schema elements:</p>
+<p>Feature specs <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> prefix the following schema elements:</p>
 <ul>
 <li>the names of any object types, interfaces, unions, enums, or input object types defined by the feature</li>
 <li>the names of any fields the spec introduces on <em>foreign types</em> defined in a different feature</li>
@@ -1483,13 +1494,13 @@ Root directives are named after their feature
 <div class="spec-production" id="PositiveDigit">
 <span class="spec-nt"><a href="#PositiveDigit" data-name="PositiveDigit">PositiveDigit</a></span><div class="spec-rhs"><span class="spec-prose">1</span><span class="spec-t">|</span><span class="spec-prose">2</span><span class="spec-t">|</span><span class="spec-prose">3</span><span class="spec-t">|</span><span class="spec-prose">4</span><span class="spec-t">|</span><span class="spec-prose">5</span><span class="spec-t">|</span><span class="spec-prose">6</span><span class="spec-t">|</span><span class="spec-prose">7</span><span class="spec-t">|</span><span class="spec-prose">8</span><span class="spec-t">|</span><span class="spec-prose">9</span></div>
 </div>
-<p>Specs are versioned with a <strong>subset</strong> of a <a href="https://semver.org/spec/v2.0.0.html">Semantic Version Number</a> containing only the major and minor parts. Thus, specifications SHOULD provide a version of the form <span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span>, where both integers &ge; 0.</p>
+<p>Specs are versioned with a <strong>subset</strong> of a <a href="https://semver.org/spec/v2.0.0.html">Semantic Version Number</a> containing only the major and minor parts. Thus, specifications <a href="https://tools.ietf.org/html/rfc2119#section-3" class="spec-requirement recommended">SHOULD</a> provide a version of the form <span class="spec-nt"><a href="#Major" data-name="Major">Major</a></span>.<span class="spec-nt"><a href="#Minor" data-name="Minor">Minor</a></span>, where both integers &ge; 0.</p>
 <figure id="example-Valid-version-tags" class="spec-example"><figcaption><a href="#example-Valid-version-tags"><span class="spec-example-num">Example № 9</span> Valid version tags</a></figcaption><pre class="text" data-language="text"><code>v2.2
 v1.0
 v1.1
 v0.1
 </code></pre>
-</figure><p>As specified by semver, spec authors SHOULD increment the:</p>
+</figure><p>As specified by semver, spec authors <a href="https://tools.ietf.org/html/rfc2119#section-3" class="spec-requirement recommended">SHOULD</a> increment the:</p>
 <div class="spec-added"><ul>
 <li>MAJOR version when you make incompatible API changes,</li>
 <li>MINOR version when you add functionality in a backwards compatible manner</li>
@@ -1529,13 +1540,13 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 </section>
 <section id="sec-Referencing-versions-and-activating-implementations" secid="7.3">
 <h2><span class="spec-secid" title="link to this section"><a href="#sec-Referencing-versions-and-activating-implementations">7.3</a></span>Referencing versions and activating implementations</h2>
-<p>Schema documents MUST reference a feature version which supports all the schema elements and behaviors required by the document. As a practical matter, authors should generally prefer to reference the <a href="#sec-Ordering">lowest</a> versions which can <a href="#sec-Satisfaction">satisfy</a> their requirements, as this imposes the fewest constraints on processors and is thus more likely to be supported. Authors MAY choose a higher version which they believe has sufficient support.</p>
-<p>If a processor chooses to activate support for a feature, the processor MUST activate an implementation which can <a href="#sec-Satisfaction">satisfy</a> the version required by the document.</p>
+<p>Schema documents <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> reference a feature version which supports all the schema elements and behaviors required by the document. As a practical matter, authors should generally prefer to reference the <a href="#sec-Ordering">lowest</a> versions which can <a href="#sec-Satisfaction">satisfy</a> their requirements, as this imposes the fewest constraints on processors and is thus more likely to be supported. Authors <a href="https://tools.ietf.org/html/rfc2119#section-5" class="spec-requirement optional">MAY</a> choose a higher version which they believe has sufficient support.</p>
+<p>If a processor chooses to activate support for a feature, the processor <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> activate an implementation which can <a href="#sec-Satisfaction">satisfy</a> the version required by the document.</p>
 </section>
 </section>
 <section id="sec-Extensibility" secid="8">
 <h1><span class="spec-secid" title="link to this section"><a href="#sec-Extensibility">8</a></span>Extensibility</h1>
-<p>Any directives, scalars, enums, input objects, and other schema elements defined by specs MAY be <strong>extensible</strong>. This means that their definitions within a core schema document do not have to exactly match definitions provided by specs. Instead, definitions should match all usages within the document.</p>
+<p>Any directives, scalars, enums, input objects, and other schema elements defined by specs <a href="https://tools.ietf.org/html/rfc2119#section-5" class="spec-requirement optional">MAY</a> be <strong>extensible</strong>. This means that their definitions within a core schema document do not have to exactly match definitions provided by specs. Instead, definitions should match all usages within the document.</p>
 <p>Standard extensibility rules:</p>
 <ul>
 <li><strong>Directives</strong> may be defined as taking additional arguments, provided those arguments are <a href="#sec-Prefixing">prefixed</a> with the name of a document feature followed by two underscores (<span class="spec-string">"__"</span>). These arguments are interpreted as metadata&#8208;on&#8208;metadata, and are routed to the declaring spec for interpretation</li>
@@ -1554,10 +1565,10 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <p>The general guidance for processor behavior is: don&rsquo;t react to what you don&rsquo;t understand.</p>
 <p>Specifically, processors:</p>
 <ul>
-<li>SHOULD pass through <var data-name="@core">@core</var> directives which reference unknown feature URLs</li>
-<li>SHOULD pass through prefixed directives, types, and other schema elements </li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-3" class="spec-requirement recommended">SHOULD</a> pass through <var data-name="@core">@core</var> directives which reference unknown feature URLs</li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-3" class="spec-requirement recommended">SHOULD</a> pass through prefixed directives, types, and other schema elements </li>
 </ul>
-<p>An exception to this is processors which prepare the schema for final public consumption. Such processors MAY choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives&mdash;such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case&#8208;by&#8208;case basis.</p>
+<p>An exception to this is processors which prepare the schema for final public consumption. Such processors <a href="https://tools.ietf.org/html/rfc2119#section-5" class="spec-requirement optional">MAY</a> choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives&mdash;such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case&#8208;by&#8208;case basis.</p>
 </section>
 <section id="sec-Validations-amp-Algorithms" secid="10">
 <h1><span class="spec-secid" title="link to this section"><a href="#sec-Validations-amp-Algorithms">10</a></span>Validations &amp; Algorithms</h1>
