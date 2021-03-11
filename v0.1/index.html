@@ -1112,6 +1112,7 @@ pre[class*="language-"] {
 </ol>
 </li>
 <li><a href="#@core/as"><span class="spec-secid">4.1.2</span>as: String</a></li>
+<li><a href="#@core/export"><span class="spec-secid">4.1.3</span>export: Boolean! = false</a></li>
 </ol>
 </li>
 <li><a href="#@core__export"><span class="spec-secid">4.2</span>@core__export</a><ol>
@@ -1258,10 +1259,10 @@ pre[class*="language-"] {
 <section id="@core" secid="4.1">
 <h2 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core">4.1</a></span>@core</h2>
 <p>Declare a core feature present in this schema.</p>
-<figure id="example-aba4e" class="spec-definition"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span>
+<figure id="example-c9303" class="spec-definition"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core</span><span class="token punctuation">(</span>
   <span class="token attr-name">feature</span><span class="token punctuation">:</span> String<span class="token operator">!</span><span class="token punctuation">,</span>
   <span class="token attr-name">as</span><span class="token punctuation">:</span> String<span class="token punctuation">,</span>
-  <span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token punctuation">)</span>
+  <span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token operator">!</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
   <span class="token keyword">repeatable</span> <span class="token keyword">on</span> <span class="token class-name">SCHEMA</span>
 </code></pre>
 </figure><p>Documents <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> include a definition for the <var data-name="@core">@core</var> directive. The provided definition must be <em>compatible</em> with the definition above, but may:</p>
@@ -1305,7 +1306,7 @@ pre[class*="language-"] {
 <h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core/as">4.1.2</a></span>as: String</h3>
 <p>Change the <a href="#sec-Prefixing">names</a> of directives and schema elements from this specification. The specified string <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be a valid GraphQL identifier and <a href="https://tools.ietf.org/html/rfc2119#section-2" class="spec-requirement not required">MUST NOT</a> contain the namespace separator (two underscores, <span class="spec-string">"__"</span>).</p>
 <p>When <a href="#@core/as"><code>as:</code></a> is provided, processors <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> replace the default name prefix on the names of all <a href="#sec-Elements-which-must-be-prefixed">prefixed schema elements</a> with the specified name.</p>
-<figure id="example-Using-@core-to-use-a-feature-with-a-custom-name" class="spec-example"><figcaption><a href="#example-Using-@core-to-use-a-feature-with-a-custom-name"><span class="spec-example-num">Example № 6</span> Using <var data-name="@core">@core</var><code>(feature:, as:)</code> to use a feature with a custom name</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
+<figure id="example-Using-@core-feature-as-to-use-a-feature-with-a-custom-name" class="spec-example"><figcaption><a href="#example-Using-@core-feature-as-to-use-a-feature-with-a-custom-name"><span class="spec-example-num">Example № 6</span> Using <var data-name="@core">@core</var>(feature:, as:) to use a feature with a custom name</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/core/v1.0"</span><span class="token punctuation">)</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1.0"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"eg"</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
@@ -1333,6 +1334,12 @@ pre[class*="language-"] {
 <span class="token comment"># (...other definitions omitted...)</span>
 </code></pre>
 </figure></section>
+<section id="@core/export" secid="4.1.3">
+<h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core/export">4.1.3</a></span>export: Boolean! = false</h3>
+<p>Control whether the entire feature is exported to the API.</p>
+<p>If <span class="spec-keyword">true</span>, all schema elements&mdash;including all directive usages&mdash;from this feature will be included in the schema&rsquo;s API <em>unless</em> they are annotated with <var data-name="@core__export">@core__export</var><code>(isExport: false)</code>.</p>
+<p>If <span class="spec-keyword">false</span> (the default), no schema elements from this feature will be included in the schema&rsquo;s API <em>unless</em> they are annotated with <var data-name="@core__export">@core__export</var>.</p>
+</section>
 </section>
 <section id="@core__export" secid="4.2">
 <h2 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export">4.2</a></span>@core__export</h2>
@@ -1702,6 +1709,7 @@ Written in <a href="https://spec-md.com" target="_blank">Spec Markdown</a>.</foo
 </ol>
 </li>
 <li id="_sidebar_4.1.2"><a href="#@core/as"><span class="spec-secid">4.1.2</span>as: String</a></li>
+<li id="_sidebar_4.1.3"><a href="#@core/export"><span class="spec-secid">4.1.3</span>export: Boolean! = false</a></li>
 </ol>
 </li>
 <li id="_sidebar_4.2"><a href="#@core__export"><span class="spec-secid">4.2</span>@core__export</a>
