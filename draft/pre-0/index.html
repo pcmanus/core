@@ -1235,7 +1235,7 @@ pre[class*="language-"] {
 </figure></section>
 <section id="sec-Renaming-core-itself" secid="3.2">
 <h2><span class="spec-secid" title="link to this section"><a href="#sec-Renaming-core-itself">3.2</a></span>Renaming core itself</h2>
-<p>It is possible to rename the core feature itself with the same <code>as:</code> mechanism used for all features:</p>
+<p>It is possible to rename the core feature itself with the same <a href="#@core/as"><code>as:</code></a> mechanism used for all features:</p>
 <figure id="example-Renaming-@core-to-@coreSchema" class="spec-example"><figcaption><a href="#example-Renaming-@core-to-@coreSchema"><span class="spec-example-num">Example № 4</span> Renaming <var data-name="@core">@core</var> to <var data-name="@coreSchema">@coreSchema</var></a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
   <span class="token directive function">@coreSchema</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://lib.apollo.dev/core/v0.1"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"coreSchema"</span><span class="token punctuation">)</span>
   <span class="token directive function">@coreSchema</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://example.com/example/v1.0"</span><span class="token punctuation">)</span>
@@ -1304,7 +1304,7 @@ pre[class*="language-"] {
 <section id="@core/as" secid="4.1.2">
 <h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core/as">4.1.2</a></span>as: String</h3>
 <p>Change the <a href="#sec-Prefixing">names</a> of directives and schema elements from this specification. The specified string <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be a valid GraphQL identifier and <a href="https://tools.ietf.org/html/rfc2119#section-2" class="spec-requirement not required">MUST NOT</a> contain the namespace separator (two underscores, <span class="spec-string">"__"</span>).</p>
-<p>When <code>as:</code> is provided, processors <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> replace the default name prefix on the names of all <a href="#sec-Elements-which-must-be-prefixed">prefixed schema elements</a> with the specified name.</p>
+<p>When <a href="#@core/as"><code>as:</code></a> is provided, processors <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> replace the default name prefix on the names of all <a href="#sec-Elements-which-must-be-prefixed">prefixed schema elements</a> with the specified name.</p>
 <figure id="example-Using-@core-to-use-a-feature-with-a-custom-name" class="spec-example"><figcaption><a href="#example-Using-@core-to-use-a-feature-with-a-custom-name"><span class="spec-example-num">Example № 6</span> Using <var data-name="@core">@core</var><code>(feature:, as:)</code> to use a feature with a custom name</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/core/v1.0"</span><span class="token punctuation">)</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://spec.example.com/example/v1.0"</span><span class="token punctuation">,</span> <span class="token attr-name">as</span><span class="token punctuation">:</span> <span class="token string">"eg"</span><span class="token punctuation">)</span>
@@ -1563,9 +1563,9 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <div class="spec-algo" id="Bootstrap()">
 <span class="spec-call"><a href="#Bootstrap()" data-name="Bootstrap">Bootstrap</a>(<var data-name="document">document</var>)</span><ol>
 <li>For each directive <var data-name="d">d</var> on the SchemaDefinition within <var data-name="document">document</var>,<ol>
-<li>If <var data-name="d">d</var> has a <code>feature:</code> argument whose value is &ldquo;https://lib.apollo.dev/core/v0.1&rdquo;, <em>and either</em>:<ol>
-<li>&#8230;<var data-name="d">d</var> has an <code>as:</code> argument whose value is equal to <var data-name="d">d</var>&lsquo;s name</li>
-<li>&#8230;<em>or</em> <var data-name="d">d</var> does not have an <code>as:</code> argument and <var data-name="d">d</var>&lsquo;s name is <code>core</code></li>
+<li>If <var data-name="d">d</var> has a <a href="#@core/feature"><code>feature:</code></a> argument whose value is &ldquo;https://lib.apollo.dev/core/v0.1&rdquo;, <em>and either</em>:<ol>
+<li>&#8230;<var data-name="d">d</var> has an <a href="#@core/as"><code>as:</code></a> argument whose value is equal to <var data-name="d">d</var>&lsquo;s name</li>
+<li>&#8230;<em>or</em> <var data-name="d">d</var> does not have an <a href="#@core/as"><code>as:</code></a> argument and <var data-name="d">d</var>&lsquo;s name is <code>core</code></li>
 <li><em>then</em> <strong>Return</strong> <code>coreName</code> = <var data-name="d">d</var>&lsquo;s name</li>
 </ol>
 </li>
@@ -1583,7 +1583,7 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <li>Let <var data-name="coreName">coreName</var> be the name of the core feature found via <span class="spec-call"><a href="#Bootstrap()" data-name="Bootstrap">Bootstrap</a>(<var data-name="document">document</var>)</span></li>
 <li>Let <var data-name="features">features</var> be a map of <var data-name="featureName">featureName</var>: <code>String</code> &rarr; <code>Directive</code>, initially empty.</li>
 <li>For each directive <var data-name="d">d</var> named <code>coreName</code> on the SchemaDefinition within <var data-name="document">document</var>,<ol>
-<li>Let <var data-name="name">name</var> be the spec&rsquo;s <a href="#sec-Prefixing">name</a> as specified by the directive&rsquo;s <code>as:</code> argument or, if the argument is not present, the default name from the <a href="#@core/feature">feature url</a>.</li>
+<li>Let <var data-name="name">name</var> be the spec&rsquo;s <a href="#sec-Prefixing">name</a> as specified by the directive&rsquo;s <a href="#@core/as"><code>as:</code></a> argument or, if the argument is not present, the default name from the <a href="#@core/feature">feature url</a>.</li>
 <li>If <var data-name="name">name</var> exists within <var data-name="features">features</var>, the <strong><em>Name Uniqueness</em> validation fails</strong>.</li>
 <li>Insert <var data-name="name">name</var> &rArr; <var data-name="d">d</var> into <var data-name="features">features</var></li>
 </ol>
@@ -1604,7 +1604,7 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <span class="token punctuation">{</span>
   <span class="token attr-name">query</span><span class="token punctuation">:</span> Query
 <span class="token punctuation">}</span></code></pre>
-</figure><p>Without the explicit <code>as:</code>, the above would be invalid:</p>
+</figure><p>Without the explicit <a href="#@core/as"><code>as:</code></a>, the above would be invalid:</p>
 <figure id="example-Non-unique-prefixes-with-multiple-versions-of-the-same-spec" class="spec-counter-example"><figcaption><a href="#example-Non-unique-prefixes-with-multiple-versions-of-the-same-spec"><span class="spec-example-num">Counter Example № 12</span> Non&#8208;unique prefixes with multiple versions of the same spec</a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/1.0"</span><span class="token punctuation">)</span> <span class="token comment"># name is A</span>
   <span class="token directive function">@core</span><span class="token punctuation">(</span><span class="token attr-name">feature</span><span class="token punctuation">:</span> <span class="token string">"https://specs.example.com/A/2.0"</span><span class="token punctuation">)</span> <span class="token comment"># name is A</span>
