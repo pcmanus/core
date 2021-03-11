@@ -1116,7 +1116,7 @@ pre[class*="language-"] {
 </ol>
 </li>
 <li><a href="#@core__export"><span class="spec-secid">4.2</span>@core__export</a><ol>
-<li><a href="#@core__export/isExport"><span class="spec-secid">4.2.1</span>isExport: Boolean</a></li>
+<li><a href="#@core__export/export"><span class="spec-secid">4.2.1</span>export: Boolean</a></li>
 </ol>
 </li>
 </ol>
@@ -1157,11 +1157,11 @@ pre[class*="language-"] {
 <ul>
 <li>Any elements named <code>something__likeThis</code> are <strong>not exported</strong>, unless&#8230;<ul>
 <li>&#8230;the feature which provides them (&rdquo;<code>something</code>&rdquo;) has <code>export: true</code> on its <code>@core(feature:)</code> declaration, <em>or</em></li>
-<li>&#8230;they are annotated with <var data-name="@core__export">@core__export</var> (or explicitly, <var data-name="@core__export">@core__export</var><code>(isExport: true)</code>).</li>
+<li>&#8230;they are annotated with <var data-name="@core__export">@core__export</var> (or explicitly, <var data-name="@core__export">@core__export</var><code>(export: true)</code>).</li>
 </ul>
 </li>
 <li>Any elements with <code>normalNames</code> are <strong>exported</strong>, unless&#8230;<ul>
-<li>&#8230;the element is annotated with <var data-name="@core__export">@core__export</var><code>(isExport: false)</code>, <em>or</em></li>
+<li>&#8230;the element is annotated with <var data-name="@core__export">@core__export</var><code>(export: false)</code>, <em>or</em></li>
 <li>&#8230;the element is a directive or directive definition whose name matches the name of a feature, in which case, it is exported only if the entire feature is exported (having been brought in with <var data-name="@core">@core</var><code>(feature:, export: true)</code>).</li>
 </ul>
 </li>
@@ -1334,14 +1334,14 @@ pre[class*="language-"] {
 <section id="@core/export" secid="4.1.3">
 <h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core/export">4.1.3</a></span>export: Boolean! = false</h3>
 <p>Control whether the entire feature is exported to the API.</p>
-<p>If <span class="spec-keyword">true</span>, all schema elements&mdash;including all directive usages&mdash;from this feature will be included in the schema&rsquo;s API <em>unless</em> they are annotated with <var data-name="@core__export">@core__export</var><code>(isExport: false)</code>.</p>
+<p>If <span class="spec-keyword">true</span>, all schema elements&mdash;including all directive usages&mdash;from this feature will be included in the schema&rsquo;s API <em>unless</em> they are annotated with <var data-name="@core__export">@core__export</var><code>(export: false)</code>.</p>
 <p>If <span class="spec-keyword">false</span> (the default), no schema elements from this feature will be included in the schema&rsquo;s API <em>unless</em> they are annotated with <var data-name="@core__export">@core__export</var>.</p>
 </section>
 </section>
 <section id="@core__export" secid="4.2">
 <h2 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export">4.2</a></span>@core__export</h2>
 <p>Specify whether the annotated element is exported to the API.</p>
-<figure id="example-174f1" class="spec-definition"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core__export</span><span class="token punctuation">(</span><span class="token attr-name">isExport</span><span class="token punctuation">:</span> Boolean<span class="token operator">!</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+<figure id="example-95562" class="spec-definition"><pre class="graphql" data-language="graphql"><code><span class="token keyword">directive</span> <span class="token directive function">@core__export</span><span class="token punctuation">(</span><span class="token attr-name">export</span><span class="token punctuation">:</span> Boolean<span class="token operator">!</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
   <span class="token keyword">repeatable</span> <span class="token keyword">on</span>
   <span class="token operator">|</span> <span class="token constant">SCALAR</span>
   <span class="token operator">|</span> <span class="token constant">OBJECT</span>
@@ -1354,10 +1354,10 @@ pre[class*="language-"] {
   <span class="token operator">|</span> <span class="token constant">INPUT_OBJECT</span>
   <span class="token operator">|</span> <span class="token constant">INPUT_FIELD_DEFINITION</span>
 </code></pre>
-</figure><p><var data-name="@core__export">@core__export</var> can occur at any type system location. Elements with <var data-name="@core__export">@core__export</var> will always be included in the API. Elements with <var data-name="@core__export">@core__export</var><code>(isExport: false)</code> will always be excluded from the API.</p>
-<section id="@core__export/isExport" secid="4.2.1">
-<h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export/isExport">4.2.1</a></span>isExport: Boolean</h3>
-<p>If true, the element is always exported, regardless of whether the feature which defines it is exported. If false, the element is never exported.</p>
+</figure><p><var data-name="@core__export">@core__export</var> can occur at any type system location. Elements with <var data-name="@core__export">@core__export</var> will always be included in the API. Elements with <var data-name="@core__export">@core__export</var><code>(export: false)</code> will always be excluded from the API.</p>
+<section id="@core__export/export" secid="4.2.1">
+<h3 class="spec-definition-head"><span class="spec-secid" title="link to this section"><a href="#@core__export/export">4.2.1</a></span>export: Boolean</h3>
+<p>If true, the element is always exported, regardless of whether the feature which defines it <a href="#@core/export">is exported</a>. If false, the element is never exported.</p>
 </section>
 </section>
 </section>
@@ -1662,8 +1662,8 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <li>Let <var data-name="assignments">assignments</var> be the result of assigning features to elements via <span class="spec-call"><a href="#AssignFeatures()" data-name="AssignFeatures">AssignFeatures</a>(<var data-name="document">document</var>)</span></li>
 <li>For each Directive <var data-name="d">d</var> on <var data-name="element">element</var>,<ol>
 <li>If <var data-name="d">d</var>&lsquo;s name is <var data-name="coreName">coreName</var><code>__export</code>,<ol>
-<li>If <var data-name="d">d</var> does not have an <code>isExport:</code> argument <em>or</em> <code>isExport:</code> is <span class="spec-keyword">true</span>, <strong>Return</strong> <span class="spec-keyword">true</span></li>
-<li>If <var data-name="d">d</var> has an <code>isExport:</code> argument whose value is <span class="spec-keyword">false</span>, <strong>Return</strong> <span class="spec-keyword">false</span></li>
+<li>If <var data-name="d">d</var> does not have an <code>export:</code> argument <em>or</em> <code>export:</code> is <span class="spec-keyword">true</span>, <strong>Return</strong> <span class="spec-keyword">true</span></li>
+<li>If <var data-name="d">d</var> has an <code>export:</code> argument whose value is <span class="spec-keyword">false</span>, <strong>Return</strong> <span class="spec-keyword">false</span></li>
 </ol>
 </li>
 </ol>
@@ -1712,7 +1712,7 @@ Written in <a href="https://spec-md.com" target="_blank">Spec Markdown</a>.</foo
 <li id="_sidebar_4.2"><a href="#@core__export"><span class="spec-secid">4.2</span>@core__export</a>
 <input hidden class="toggle" type="checkbox" id="_toggle_4.2" /><label for="_toggle_4.2"></label>
 <ol>
-<li id="_sidebar_4.2.1"><a href="#@core__export/isExport"><span class="spec-secid">4.2.1</span>isExport: Boolean</a></li>
+<li id="_sidebar_4.2.1"><a href="#@core__export/export"><span class="spec-secid">4.2.1</span>export: Boolean</a></li>
 </ol>
 </li>
 </ol>
