@@ -1,6 +1,6 @@
 # Core Schemas
 
-<h2>extensible GraphQL schemas for powering data cores</h2>
+<h2>flexible metadata for GraphQL schemas</h2>
 
 ```raw html
 <table class=spec-data>
@@ -37,13 +37,13 @@ A basic core schema:
 :::[example](basic.graphql) -- A basic core schema
 
 **Core schemas** provide a concise mechanism for schema documents to specify the metadata they provide. Metadata is grouped into **features**, which typically define directives and associated types (e.g. scalars and inputs which serve as directive inputs). Additionally, core schemas provide:
-  - [**Flexible namespacing rules.**](#sec-Prefixing) It is always possible to represent any GraphQL schema within a core schema document. Additionally, documents can [choose the names](#@core/as-String) they use for the features they reference, guaranteeing that namespace collisions can always be resolved.
+  - [**Flexible namespacing rules.**](#sec-Prefixing) It is always possible to represent any GraphQL schema within a core schema document. Additionally, documents can [choose the names](#@core/as) they use for the features they reference, guaranteeing that namespace collisions can always be resolved.
   - [**Versioning.**](#sec-Versioning) Feature specifications follow [semver-like semantic versioning principles](#sec-Versioning), which helps schema processors determine if they are able to correctly interpret a document's metadata.
   - [**Standard rules for extensibility**](#sec-Extensibility) of directives and their associated input types. These rules allow specs to annotate each others' metadata, effectively providing "directives on directives," which are otherwise impossible within GraphQL schemas
 
 **Core schemas are not a new language.** All core schema documents are valid GraphQL schema documents. However, this specification introduces new requirements, so not all valid GraphQL schemas are valid core schemas.
 
-The broad intention behind core schemas is to provide a *single document* which provides all the necessary configuration of a *data core*—some program which serves the schema to GraphQL clients, primarily by following directives in order to determine how to resolve queries made against that schema.
+The broad intention behind core schemas is to provide a *single document* which provides all the necessary configuration for programs that process and serve serves the schema to GraphQL clients, primarily by following directives in order to determine how to resolve queries made against that schema.
 
 # Parts of a Core Schema
 
@@ -65,7 +65,7 @@ Approximately, the process is:
 
 A formal description is provided by the [is exported](#sec-Is-Exported-) algorithm.
 
-# Roles
+# Actors
 
 ```mermaid diagram -- Actors who may be interested in the core schemas
 graph TB
@@ -93,13 +93,13 @@ graph TB
 Core schemas:
   1. MUST be valid GraphQL schema documents,
   2. MUST contain exactly one `SchemaDefinition`, and
-  3. MUST use the {@core} directive on their schema definition to declare any features they reference by using {@core} to reference a [well-formed feature URL](#core__FeatureUrl).
+  3. MUST use the {@core} directive on their schema definition to declare any features they reference by using {@core} to reference a [well-formed feature URL](#core/feature).
 
 The first {@core} directive on the schema MUST reference the core spec itself, i.e. this document.
 
 :::[example](basic.graphql) -- Basic core schema using {@core} and `@example`
 
-## Unspecified directives are passed through
+## Unspecified directives are passed through by default
 
 Existing schemas likely contain definitions for directives which are not versioned, have no specification document, and are intended mainly to be passed through. This is the default behavior for core schema processors:
 
@@ -147,7 +147,7 @@ Declare a core feature present in this schema.
 
 ```graphql definition
 directive @core(
-  feature: core__FeatureUrl!,
+  feature: String!,
   as: String,
   export: Boolean)
   repeatable on SCHEMA
@@ -156,7 +156,6 @@ directive @core(
 Documents MUST include a definition for the {@core} directive. The provided definition must be *compatible* with the definition above, but may:
 - **Omit optional arguments** if they are never used in the document,
 - **Omit locations** where the directive never occurs,
-- **Introduce new directive locations**, the behavior of which is unspecified here.
 - **Introduce new arguments.** New arguments MUST be prefixed, e.g. `example__extensionArgument: Bool`. The prefix MUST be the name of a feature referenced with this or another {@core} directive within the document.
 - **Use `String` in place of custom scalars.** This is an ease-of-authoring affordance which allows document authors to omit the definitions of custom scalar types provided by features. Processors MUST continue to interpret such arguments and fields according to the encoding and decoding rules of the custom scalar type. For example, {@core} may be defined as follows, with no change to the behavior:
 
@@ -164,11 +163,53 @@ Documents MUST include a definition for the {@core} directive. The provided defi
 directive @core(feature: String)
 ```
 
-###! feature: core__FeatureUrl
+###! feature: String!
 
-A [feature URL](#core__FeatureUrl) specifying the directive and associated schema elements. When viewed, the URL SHOULD provide the content of the appropriate version of the specification in some human-readable form. In short, a human reader should be able to click the link and go to the docs for the version in use. There are [specific requirements](#core__FeatureUrl) on the format of the URL, but it is not required that the *content* be machine-readable in any particular way.
+A feature URL specifying the directive and associated schema elements. When viewed, the URL SHOULD provide the content of the appropriate version of the specification in some human-readable form. In short, a human reader should be able to click the link and go to the docs for the version in use. There are specific requirements on the format of the URL, but it is not required that the *content* be machine-readable in any particular way.
 
-Feature URLs contain information about the spec's [prefix](#sec-Prefixing) and [version](#sec-Versioning), and should be generated and processed in accordance with the [requirements on the structure of feature URLs](#core__FeatureUrl).
+Feature URLs contain information about the spec's [prefix](#sec-Prefixing) and [version](#sec-Versioning).
+
+Feature URLs serve two main purposes:
+  - Directing human readers to documentation about the feature
+  - Providing tools with information about the specs in use, along with enough information to select and invoke an implementation
+  
+Feature URLs SHOULD be [RFC 3986 URLs](https://tools.ietf.org/html/rfc3986). When viewed, the URL SHOULD provide the specification of the selected version of the feature in some human-readable form; a human reader should be able to click the link and go to the correct version of the docs.
+
+Although they are not prohibited from doing so, it's assumed that processors will not load the content of feature URLs. Published specifications are not required to be machine-readable, and [this spec](.) places no requirements on the structure or syntax of the content to be found there.
+
+There are, however, requirements on the structure of the URL itself:
+
+```html diagram -- Basic anatomy of a feature URL
+<code class=anatomy>  
+  <span class=pink style='--depth: 2'>https://spec.example.com/a/b/c/<span>exampleFeature<aside>name</aside></span><aside>identity</aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span>
+</code>
+```
+
+The final two segments of the URL's [path](https://tools.ietf.org/html/rfc3986#section-3.3) MUST contain the feature's name and a [version tag](#sec-Versioning). The content of the URL up to and including the prefix—but excluding the version tag and trailing `/`—is the feature's *identity*. For the above example,
+<dl>
+  <dt>`identity: "https://spec.example.com/a/b/c/exampleFeature"`</dt>
+  <dd>A global identifier for the feature. Processors can treat this as an opaque string identifying the feature (but not the version of the feature) for purposes of selecting an appropriate implementation.</dd>
+  <dt>`name: "exampleFeature"`</dt>
+  <dd>The feature's name, for purposes of [prefixing](#sec-Prefixing) schema elements it defines or extends.</dd>
+  <dt>`version: "v1.0"`</dt>
+  <dd>The tag for the [version](#sec-Versioning) of the feature used to author the document. Processors MUST select an implementation of the feature which can [satisfy](#sec-Satisfaction) the specified version.</dd>
+</dl>
+
+The version tag MUST be a valid {VersionTag}.
+
+#### Ignore meaningless URL components
+
+When extracting the URL's `name` and `version`, processors MUST ignore any url components which are not assigned a meaning. This spec assigns meaning to the final two segments of the [path](https://tools.ietf.org/html/rfc3986#section-3.3). Other URL components—particularly query strings and fragments, if present—MUST be ignored for the purposes of extracting the `name` and `version`.
+
+```html diagram -- Ignoring meaningless parts of a URL
+<code class=anatomy>
+  <span class=pink style='--depth: 2'>https://example.com/<span>exampleSpec<aside>name</aside></span><aside>identity</aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span><span class=grey>?key=val&k2=v2#frag<aside>ignored</aside></span>
+</code>
+```
+
+#### Why is versioning in the URL, not a directive argument?
+
+The version is in the URL because when a human reader visits the URL, we would like them to be taken to the documentation for the *version of the feature used by this document*. Many text editors will turn URLs into hyperlinks, and it's highly desirable that clicking the link takes the user to the correct version of the docs. Putting the version information in a separate argument to the {@core} directive would prevent this.
 
 ###! as: String
 
@@ -230,57 +271,6 @@ directive @core__export(isExport: Boolean! = true)
 
 If true, the element is always exported, regardless of whether the feature which defines it is exported. If false, the element is never exported.
 
-# Scalars
-
-##! core__FeatureUrl
-
-```graphql definition
-scalar core__FeatureUrl
-  @specifiedBy(url: "https://lib.apollo.dev/core/v0.1#core__FeatureUrl")
-```
-
-Feature URLs serve two main purposes:
-  - Directing human readers to documentation about the feature
-  - Providing tools with information about the specs in use, along with enough information to select and invoke an implementation
-  
-Feature URLs SHOULD be [RFC 3986 URLs](https://tools.ietf.org/html/rfc3986). When viewed, the URL SHOULD provide the specification of the selected version of the feature in some human-readable form; a human reader should be able to click the link and go to the correct version of the docs.
-
-Although they are not prohibited from doing so, it's assumed that processors will not load the content of feature URLs. Published specifications are not required to be machine-readable, and [this spec](.) places no requirements on the structure or syntax of the content to be found there.
-
-There are, however, requirements on the structure of the URL itself:
-
-```html diagram -- Basic anatomy of a feature URL
-<code class=anatomy>  
-  <span class=pink style='--depth: 2'>https://spec.example.com/a/b/c/<span>exampleFeature<aside>name</aside></span><aside>identity</aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span>
-</code>
-```
-
-The final two segments of the URL's [path](https://tools.ietf.org/html/rfc3986#section-3.3) MUST contain the feature's name and a [version tag](#sec-Versioning). The content of the URL up to and including the prefix—but excluding the version tag and trailing `/`—is the feature's *identity*. For the above example,
-<dl>
-  <dt>`identity: "https://spec.example.com/a/b/c/exampleFeature"`</dt>
-  <dd>A global identifier for the feature. Processors can treat this as an opaque string identifying the feature (but not the version of the feature) for purposes of selecting an appropriate implementation.</dd>
-  <dt>`name: "exampleFeature"`</dt>
-  <dd>The feature's name, for purposes of [prefixing](#sec-Prefixing) schema elements it defines or extends.</dd>
-  <dt>`version: "v1.0"`</dt>
-  <dd>The tag for the [version](#sec-Versioning) of the feature used to author the document. Processors MUST select an implementation of the feature which can [satisfy](#sec-Satisfaction) the specified version.</dd>
-</dl>
-
-The version tag MUST be a valid {VersionTag}.
-
-### Ignore meaningless URL components
-
-When extracting the URL's `name` and `version`, processors MUST ignore any url components which are not assigned a meaning. This spec assigns meaning to the final two segments of the [path](https://tools.ietf.org/html/rfc3986#section-3.3). Other URL components—particularly query strings and fragments, if present—MUST be ignored for the purposes of extracting the `name` and `version`.
-
-```html diagram -- Ignoring meaningless parts of a URL
-<code class=anatomy>
-  <span class=pink style='--depth: 2'>https://example.com/<span>exampleSpec<aside>name</aside></span><aside>identity</aside></span>/<span style='--depth: 2' class=green>v1.0<aside>version</aside></span><span class=grey>?key=val&k2=v2#frag<aside>ignored</aside></span>
-</code>
-```
-
-### Why is versioning in the URL, not a directive argument?
-
-The version is in the URL because when a human reader visits the URL, we would like them to be taken to the documentation for the *version of the feature used by this document*. Many text editors will turn URLs into hyperlinks, and it's highly desirable that clicking the link takes the user to the correct version of the docs. Putting the version information in a separate argument to the {@core} directive would prevent this.
-
 # Prefixing
 
 With the exception of a single root directive, core feature specifications MUST prefix all schema elements they introduce. The prefix:
@@ -288,7 +278,7 @@ With the exception of a single root directive, core feature specifications MUST 
   2. MUST be a string of characters valid within GraphQL names, and
   3. MUST NOT contain the core namespace separator, which is two underscores ({"__"}).
 
-Prefixed names consist of the name of the feature, followed by two underscores, followed by the name of the element (which can be any valid GraphQL identifier). For instance, the `core` specification (which you are currently reading) introduces elements named [{core__FeatureUrl}](#core__FeatureUrl) and [{@core__export}](#@core__export).
+Prefixed names consist of the name of the feature, followed by two underscores, followed by the name of the element (which can be any valid GraphQL identifier). For instance, the `core` specification (which you are currently reading) introduces elements named [{@core}](#@core) [{@core__export}](#@core__export).
 
 A feature's *root directive* is an exception to the prefixing requirements. Feature specifications MAY introduce a single directive which carries only the name of the feature, with no prefix required. For example, the `core` specification introduces a {@core} directive. This directive has the same name as the feature ("`core`"), and so requires no prefix.
 
@@ -417,8 +407,11 @@ The general guidance for processor behavior is: don't react to what you don't un
 Specifically, processors:
   - SHOULD pass through {@core} directives which reference unknown feature URLs
   - SHOULD pass through prefixed directives, types, and other schema elements  
+  - SHOULD pass through directives which are not [associated with](#AssignFeatures) a {@core} feature
 
-An exception to this is processors which prepare the schema for final public consumption. Such processors MAY choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives—such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case-by-case basis.
+Processors MAY accept configuration which overrides these default behaviors.
+
+Additionally, processors which prepare the schema for final public consumption MAY choose to eliminate all unknown directives and prefixed types in order to hide schema implementation details within the published schema. This will impair the operation of tooling which relies on these directives—such tools will not be able to run on the output schema, so the benefits and costs of this kind of information hiding should be weighed carefully on a case-by-case basis.
 
 # Validations &amp; Algorithms
 
@@ -444,7 +437,7 @@ CollectFeatures(document) :
   - Let {coreName} be the name of the core feature found via {Bootstrap(document)}
   - Let {features} be a map of {featureName}: `String` -> `Directive`, initially empty.
   - For each directive {d} named `coreName` on the SchemaDefinition within {document},
-    - Let {name} be the spec's [name](#sec-Prefixing) as specified by the directive's `as:` argument or, if the argument is not present, the default name from the [feature url](#core__FeatureUrl).
+    - Let {name} be the spec's [name](#sec-Prefixing) as specified by the directive's `as:` argument or, if the argument is not present, the default name from the [feature url](#core/feature).
     - If {name} exists within {features}, the ***Name Uniqueness* validation fails**.
     - Insert {name} => {d} into {features}
   - **Return** {features}
