@@ -1195,7 +1195,7 @@ pre[class*="language-"] {
 <ol>
 <li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> be valid GraphQL schema documents,</li>
 <li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> contain exactly one <code>SchemaDefinition</code>, and</li>
-<li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> use the <var data-name="@core">@core</var> directive on their schema definition to declare any features they reference by using <var data-name="@core">@core</var> to reference a <a href="#core/feature">well&#8208;formed feature URL</a>.</li>
+<li><a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> use the <var data-name="@core">@core</var> directive on their schema definition to declare any features they reference by using <var data-name="@core">@core</var> to reference a <a href="#@core/feature">well&#8208;formed feature URL</a>.</li>
 </ol>
 <p>The first <var data-name="@core">@core</var> directive on the schema <a href="https://tools.ietf.org/html/rfc2119#section-1" class="spec-requirement required">MUST</a> reference the core spec itself, i.e. this document.</p>
 <figure id="example-Basic-core-schema-using-@core-and" class="spec-example"><figcaption><a href="#example-Basic-core-schema-using-@core-and"><span class="spec-example-num">Example № 2</span> Basic core schema using <var data-name="@core">@core</var> and <code>@example</code></a></figcaption><pre class="graphql" data-language="graphql"><code><span class="token keyword">schema</span>
@@ -1581,7 +1581,7 @@ This ordering does <em>not</em> guarantee that if A &gt; B then A can satisfy a 
 <li>Let <var data-name="coreName">coreName</var> be the name of the core feature found via <span class="spec-call"><a href="#Bootstrap()" data-name="Bootstrap">Bootstrap</a>(<var data-name="document">document</var>)</span></li>
 <li>Let <var data-name="features">features</var> be a map of <var data-name="featureName">featureName</var>: <code>String</code> &rarr; <code>Directive</code>, initially empty.</li>
 <li>For each directive <var data-name="d">d</var> named <code>coreName</code> on the SchemaDefinition within <var data-name="document">document</var>,<ol>
-<li>Let <var data-name="name">name</var> be the spec&rsquo;s <a href="#sec-Prefixing">name</a> as specified by the directive&rsquo;s <code>as:</code> argument or, if the argument is not present, the default name from the <a href="#core/feature">feature url</a>.</li>
+<li>Let <var data-name="name">name</var> be the spec&rsquo;s <a href="#sec-Prefixing">name</a> as specified by the directive&rsquo;s <code>as:</code> argument or, if the argument is not present, the default name from the <a href="#@core/feature">feature url</a>.</li>
 <li>If <var data-name="name">name</var> exists within <var data-name="features">features</var>, the <strong><em>Name Uniqueness</em> validation fails</strong>.</li>
 <li>Insert <var data-name="name">name</var> &rArr; <var data-name="d">d</var> into <var data-name="features">features</var></li>
 </ol>
